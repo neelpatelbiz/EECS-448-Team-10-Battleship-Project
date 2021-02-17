@@ -33,5 +33,60 @@ int main()
       cout << selection << " is not a valid choice, try again." << endl;
     }
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	int size = 10;
+ char** grid = new char*[size];
+
+ for (int i = 0; i < size; i++)
+ {
+	 grid[i] = new char[size];
+ }
+
+ for (int i = 0; i < size; i++)
+ {
+	 for (int j = 0; j < size; j++)
+	 {
+		grid[i][j] = '.';
+	 cout << grid[i][j] << " ";
+	 }
+	 cout << std::endl;
+ }
+
+ for (int i = 0; i < size; i++)
+ {
+	delete[] grid[i];
+ }
+	delete[] grid;
+}
+
 	return (0);
+
 }
