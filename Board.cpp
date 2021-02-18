@@ -1,3 +1,4 @@
+#include "Board.h"
 Board::Board()
 {
   size = 11;
@@ -65,6 +66,7 @@ void Board::Display()
     {
       cout << grid[i][j];
     }
+    cout << endl;
   }
 }
 
@@ -78,11 +80,12 @@ void Board::clearScreen()
 
 void Board::addShip(Ships s, int row, int column, bool v, int size)
 {
+    char* ship = s.getShip();
   if(v == true)
   {
     for(int i = 0; row < size; i++)
     {
-      grid[row][column] = s.getShip[i];
+      grid[row][column] = '0';
       row++;
     }
   }
@@ -90,7 +93,7 @@ void Board::addShip(Ships s, int row, int column, bool v, int size)
   {
     for(int i = 0; column < size; i++)
     {
-      grid[row][column] = s.getShip[i];
+      grid[row][column] = '0';
       column++;
     }
   }
