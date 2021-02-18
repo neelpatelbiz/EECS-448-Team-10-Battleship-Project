@@ -9,10 +9,13 @@ class Board
 public:
   Board();
   ~Board();
-  
+  void Display();
+  void clearScreen();
+
 
 private:
-
+  string** grid;
+  int size;
 
 };
 #endif
