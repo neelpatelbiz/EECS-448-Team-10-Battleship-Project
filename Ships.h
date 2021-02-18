@@ -2,6 +2,7 @@
 #define SHIPS_H
 
 #include <iostream>
+#include <string>
 
 class Ships
 {
@@ -10,7 +11,7 @@ public:
   ~Ships();
   void setSize(int s);
   void setShip();
-  void hit(int position);
+  void hit(string position);
   bool isDestroyed();
 
 private:

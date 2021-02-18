@@ -34,6 +34,8 @@ int main()
     }
   }
 	int numberOfShips = 0;
+	int row;
+	char column;
 	cout << "Enter the number of ships you would like to play with, up to a total of 6." << endl;
 	cin >> numberOfShips;
 	cout << "HIDE THE SCREEN SO ONLY ONE PLAYER CAN SEE IT" << endl;
@@ -41,9 +43,43 @@ int main()
 	for(int i = 0; i < numberOfShips; i++)
 	{
 		cout << "Enter in the position of where you would like to place each ship, starting with a 1x1 and ending with a 1x" << numberOfShips << "." << endl;
-		cout << "Rows are labeled A-J, and columns are 1-10" << endl;
+		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
+		cout << "Enter in the row value." << endl;
+		cin >> row;
+		while(row < 1 || row > 10)
+		{
+			cout << "Not a valid row position, try again." << endl;
+			cin >> row;
+		}
+		cout << "Enter in the column value." << endl;
+		cin >> column;
+		while(column < 'A' || column > 'J')
+		{
+			cout << "Not a valid column position, try again." << endl;
+			cin >> column;
+		}
 	}
-
+	cout << "SWITCH PLAYERS" << endl;
+	cout << "PLAYER 2" << endl;
+	for(int i = 0; i < numberOfShips; i++)
+	{
+		cout << "Enter in the position of where you would like to place each ship, starting with a 1x1 ship and ending with a 1x" << numberOfShips << "." << endl;
+		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
+		cout << "Enter in the row value." << endl;
+		cin >> row;
+		while(row < 1 || row > 10)
+		{
+			cout << "Not a valid row position, try again." << endl;
+			cin >> row;
+		}
+		cout << "Enter in the column value." << endl;
+		cin >> column;
+		while(column < 'A' || column > 'J')
+		{
+			cout << "Not a valid column position, try again." << endl;
+			cin >> column;
+		}
+	}
 
 
 
