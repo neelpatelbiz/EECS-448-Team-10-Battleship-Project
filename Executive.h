@@ -12,7 +12,7 @@ public:
   ~Executive();
 
 private:
-
+  void PrintMenu();
 
 };
 #endif
