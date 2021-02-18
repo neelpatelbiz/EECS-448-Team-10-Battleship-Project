@@ -7,6 +7,7 @@
 class Executive
 {
 public:
+  void run();
   Executive();
   ~Executive();
 
