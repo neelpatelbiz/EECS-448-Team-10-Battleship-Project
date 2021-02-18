@@ -162,4 +162,51 @@ int main()
 			p2Ships.addShip(p2Carrier, row, column, vert, i + 1);
 		}
 	}
+
+ //SAMPLE PROMPTS: ALL OF THESE NEED TO BE CODED INTO THEIR RESPECITVE SPOTS
+	//ADD code to make actually affect board.
+	cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
+	cout << endl;
+	cout << endl;
+	int turn = 1;
+
+	//Turn Text with turn counter
+	cout << "PLAYER 1 TURN [" << turn << "]";
+	cout << endl;
+	//stuff happens
+	cout << "PLAYER 2 TURN [" << turn << "]";
+	cout << endl;
+
+ //Player ship sunk
+	cout << "YOUR " <<  "insert ship name" << " SUNK!";
+	cout << endl;
+
+//Player ship hit
+	cout << "YOUR " << "insert ship name" << " WAS HIT!";
+  cout << endl;
+
+//Enemy ship hit
+	cout << "HIT!";
+  cout << endl;
+
+//Enemy ship miss
+cout << "MISS!";
+cout << endl;
+
+
+//Enemy ship sunk
+cout << "YOU SUNK A " << "insert ship name" <<"!";
+cout << endl;
+
+ cout << "PLAYER 1 LOST!";
+ cout << endl;
+
+ cout << "PLAYER 2 LOST!";
+ cout << endl;
+
+ cout << "PLAYER 1 WON!";
+ cout << endl;
+
+ cout << "PLAYER 2 WON!";
+ cout << endl;
 }
