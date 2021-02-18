@@ -86,18 +86,18 @@ int main()
 	 {
 	   if (i == 0)
 	   {
-//	Add ASCII
-		grid[i][0] = '|';
-		grid[i][1] = 'A';
-		grid[i][2] = 'B';
-		grid[i][3] = 'C';
-		grid[i][4] = 'D';
-		grid[i][5] = 'E';
-		grid[i][6] = 'F';
-		grid[i][7] = 'G';
-		grid[i][8] = 'H';
-		grid[i][9] = 'I';
-		grid[i][10] = 'J';
+//	Convert to ASCII For Loop
+			grid[i][0] = '|';
+			grid[i][1] = 'A';
+			grid[i][2] = 'B';
+			grid[i][3] = 'C';
+			grid[i][4] = 'D';
+			grid[i][5] = 'E';
+			grid[i][6] = 'F';
+			grid[i][7] = 'G';
+			grid[i][8] = 'H';
+			grid[i][9] = 'I';
+			grid[i][10] = 'J';
 	   }
 	   else if (j == 0)
 	   {
@@ -118,7 +118,7 @@ int main()
 	   }
 	 std::cout << grid[i][j] << " ";
 	 }
-	 std::cout << std::endl;
+	std::cout << std::endl;
 	 //ADD in later
 // 	 for (int i = 0; i < size; i++)
 //  {
@@ -126,4 +126,64 @@ int main()
 //  }
 // 	delete[] grid;
  }
+
+ std::cout << std::endl;
+ std::cout << std::endl;
+
+//2ND GRID
+
+ int size2 = 11;
+ char** gridb = new char*[size2];
+
+ for (int i = 0; i < size2; i++)
+ {
+	 gridb[i] = new char[size2];
+ }
+
+ for (int i = 0; i < size2; i++)
+ {
+	 for (int j = 0; j < size2; j++)
+	 {
+	   if (i == 0)
+	   {
+ //Convert to ASCII For loop
+		gridb[i][0] = '|';
+		gridb[i][1] = 'A';
+		gridb[i][2] = 'B';
+		gridb[i][3] = 'C';
+		gridb[i][4] = 'D';
+		gridb[i][5] = 'E';
+		gridb[i][6] = 'F';
+		gridb[i][7] = 'G';
+		gridb[i][8] = 'H';
+		gridb[i][9] = 'I';
+		gridb[i][10] = 'J';
+	   }
+	   else if (j == 0)
+	   {
+	    gridb[1][j] = '1';
+	    gridb[2][j] = '2';
+	    gridb[3][j] = '3';
+	    gridb[4][j] = '4';
+	    gridb[5][j] = '5';
+	    gridb[6][j] = '6';
+	    gridb[7][j] = '7';
+	    gridb[8][j] = '8';
+	    gridb[9][j] = '9';
+	    gridb[10][j] = '0';
+	  }
+	  else
+	  {
+		 gridb[i][j] = '.';
+	  }
+	  std::cout << gridb[i][j] << " ";
+	 }
+	 std::cout << std::endl;
+ }
+ //ADD in later
+// 	 for (int i = 0; i < size; i++)
+//  {
+// 	delete[] grid[i];
+//  }
+// 	delete[] grid;
 }
