@@ -78,23 +78,22 @@ void Board::clearScreen()
   }
 }
 
-void Board::addShip(Ships s, int row, int column, bool v, int size)
+void Board::addShip(int row, int column, int v, int size)
 {
-    char* ship = s.getShip();
-  if(v == true)
+  if(v == 1)
   {
-    for(int i = 0; row < size; i++)
-    {
-      grid[row][column] = '0';
-      row++;
-    }
+      for(int i = 0; i < size; i++)
+      {
+          grid[row][column] = "0";
+          row++;
+      }
   }
   else
   {
-    for(int i = 0; column < size; i++)
-    {
-      grid[row][column] = '0';
-      column++;
-    }
+      for (int i = 0; i < size; i++)
+      {
+          grid[row][column] = "0";
+          column++;
+      }
   }
 }

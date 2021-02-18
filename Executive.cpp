@@ -124,103 +124,146 @@ Executive::PrintMenu()
 
 Executive::PrintPlacement()
 {
-  cout << "HIDE THE SCREEN SO ONLY ONE PLAYER CAN SEE IT" << endl;
-  cout << "PLAYER 1" << endl;
-  for(int i = 0; i < numberOfShips; i++)
-  {
-    cout << "Enter in the position of where you would like to place each ship, starting with a 1x1 and ending with a 1x" << numberOfShips << "." << endl;
-    cout << "Columns are labeled A-J, and rows are 1-10" << endl;
-    cout << "Enter in the row value." << endl;
-    cin >> row;
-    while(row < 1 || row > 10)
-    {
-      cout << "Not a valid row position, try again." << endl;
-      cin >> row;
-    }
-    cout << "Enter in the column value." << endl;
-    cin >> column;
-    while(column < 'A' || column > 'J')
-    {
-      cout << "Not a valid column position, try again." << endl;
-      cin >> column;
-    }
-    int trueColumn = (int)column;
-    cout << "Enter any value if you want the ship to be oriented vertically, 0 for horizontal." << endl;
-    cin >> vert;
-    if(i == 0)
-    {
-      p1Ships.addShip(p1Sub, row, trueColumn, vert, i + 1);
-    }
-    else if(i == 1)
-    {
-      p1Ships.addShip(p1Patrol, row, trueColumn, vert, i + 1);
-    }
-    else if(i == 2)
-    {
-      p1Ships.addShip(p1Cruiser, row, trueColumn, vert, i + 1);
-    }
-    else if(i == 3)
-    {
-      p1Ships.addShip(p1Destroyer, row, trueColumn, vert, i + 1);
-    }
-    else if(i == 4)
-    {
-      p1Ships.addShip(p1BattleShip, row, trueColumn, vert, i + 1);
-    }
-    else if(i == 5)
-    {
-      p1Ships.addShip(p1Carrier, row, trueColumn, vert, i + 1);
-    }
-  }
-  p1Ships.Display();
-  cout << "SWITCH PLAYERS" << endl;
-  cout << "PLAYER 2" << endl;
-  for(int i = 0; i < numberOfShips; i++)
-  {
-    cout << "Enter in the position of where you would like to place each ship, starting with a 1x1 ship and ending with a 1x" << numberOfShips << "." << endl;
-    cout << "Columns are labeled A-J, and rows are 1-10" << endl;
-    cout << "Enter in the row value." << endl;
-    cin >> row;
-    while(row < 1 || row > 10)
-    {
-      cout << "Not a valid row position, try again." << endl;
-      cin >> row;
-    }
-    cout << "Enter in the column value." << endl;
-    cin >> column;
-    while(column < 'A' || column > 'J')
-    {
-      cout << "Not a valid column position, try again." << endl;
-      cin >> column;
-    }
-    int trueColumn = (int)column;
-    cout << "Enter any value if you want the ship to be oriented vertically, 0 for horizontal." << endl;
-    cin >> vert;
-    if(i == 0)
-    {
-      p2Ships.addShip(p2Sub, row, trueColumn, vert, i + 1);
-    }
-    else if(i == 1)
-    {
-      p2Ships.addShip(p2Patrol, row, trueColumn, vert, i + 1);
-    }
-    else if(i == 2)
-    {
-      p2Ships.addShip(p2Cruiser, row, trueColumn, vert, i + 1);
-    }
-    else if(i == 3)
-    {
-      p2Ships.addShip(p2Destroyer, row, trueColumn, vert, i + 1);
-    }
-    else if(i == 4)
-    {
-      p2Ships.addShip(p2BattleShip, row, trueColumn, vert, i + 1);
-    }
-    else if(i == 5)
-    {
-      p2Ships.addShip(p2Carrier, row, trueColumn, vert, i + 1);
-    }
-  }
+  int numberOfShips = 0;
+	int row;
+	char column;
+	int vert;
+	cout << "Enter the number of ships you would like to play with, up to a total of 6." << endl;
+	cin >> numberOfShips;
+	cout << "HIDE THE SCREEN SO ONLY ONE PLAYER CAN SEE IT" << endl;
+	cout << "PLAYER 1" << endl;
+	for(int i = 0; i < numberOfShips; i++)
+	{
+		cout << "Enter in the position of where you would like to place your 1x" << i + 1 << " ship." << endl;
+		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
+		cout << "Enter in the row value." << endl;
+		cin >> row;
+		while(row < 1 || row > 10)
+		{
+			cout << "Not a valid row position, try again." << endl;
+			cin >> row;
+		}
+		cout << "Enter in the column value." << endl;
+		cin >> column;
+		while(column < 'A' || column > 'J')
+		{
+			cout << "Not a valid column position, try again." << endl;
+			cin >> column;
+		}
+		int trueColumn = 0;
+		if (column == 'A')
+		{
+			trueColumn = 1;
+		}
+		else if (column == 'B')
+		{
+			trueColumn = 2;
+		}
+		else if (column == 'C')
+		{
+			trueColumn = 3;
+		}
+		else if (column == 'D')
+		{
+			trueColumn = 4;
+		}
+		else if (column == 'E')
+		{
+			trueColumn = 5;
+		}
+		else if (column == 'F')
+		{
+			trueColumn = 6;
+		}
+		else if (column == 'G')
+		{
+			trueColumn = 7;
+		}
+		else if (column == 'H')
+		{
+			trueColumn = 8;
+		}
+		else if (column == 'I')
+		{
+			trueColumn = 9;
+		}
+		else if (column == 'J')
+		{
+			trueColumn = 10;
+		}
+		cout << "Enter a 1 if you want the ship to be oriented vertically, 0 for horizontal." << endl;
+		cin >> vert;
+
+		p1Ships.addShip(row, trueColumn, vert, i + 1);
+		p1Ships.Display();
+	}
+	//p1Ships.clearScreen();
+	cout << "SWITCH PLAYERS" << endl;
+	cout << "PLAYER 2" << endl;
+	for(int i = 0; i < numberOfShips; i++)
+	{
+		cout << "Enter in the position of where you would like to place your 1x" << i + 1 << " ship." << endl;
+		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
+		cout << "Enter in the row value." << endl;
+		cin >> row;
+		while(row < 1 || row > 10)
+		{
+			cout << "Not a valid row position, try again." << endl;
+			cin >> row;
+		}
+		cout << "Enter in the column value." << endl;
+		cin >> column;
+		while(column < 'A' || column > 'J')
+		{
+			cout << "Not a valid column position, try again." << endl;
+			cin >> column;
+		}
+		int trueColumn = 0;
+		if (column == 'A')
+		{
+			trueColumn = 1;
+		}
+		else if (column == 'B')
+		{
+			trueColumn = 2;
+		}
+		else if (column == 'C')
+		{
+			trueColumn = 3;
+		}
+		else if (column == 'D')
+		{
+			trueColumn = 4;
+		}
+		else if (column == 'E')
+		{
+			trueColumn = 5;
+		}
+		else if (column == 'F')
+		{
+			trueColumn = 6;
+		}
+		else if (column == 'G')
+		{
+			trueColumn = 7;
+		}
+		else if (column == 'H')
+		{
+			trueColumn = 8;
+		}
+		else if (column == 'I')
+		{
+			trueColumn = 9;
+		}
+		else if (column == 'J')
+		{
+			trueColumn = 10;
+		}
+		cout << "Enter a 1 if you want the ship to be oriented vertically, 0 for horizontal." << endl;
+		cin >> vert;
+		p2Ships.addShip(row, trueColumn, vert, i + 1);
+		p2Ships.Display();
+	}
 }
 
 Executive::PrintGame()
