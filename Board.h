@@ -9,10 +9,12 @@ class Board
 public:
   Board();
   ~Board();
-  
+  void Display();
+
 
 private:
-
+  string** grid;
+  int size;
 
 };
 #endif
