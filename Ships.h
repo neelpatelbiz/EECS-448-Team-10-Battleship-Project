@@ -13,6 +13,7 @@ public:
   void setSize(int s);
   void hit(string position);
   bool isDestroyed();
+  char* getShip();
 
 private:
   int size;

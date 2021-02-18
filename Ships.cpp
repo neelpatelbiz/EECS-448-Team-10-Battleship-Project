@@ -50,3 +50,8 @@ bool Ships::isDestroyed()
   destroyed = (count == size);
   return destroyed;
 }
+
+char* Ships::getShip()
+{
+  return ship;
+}

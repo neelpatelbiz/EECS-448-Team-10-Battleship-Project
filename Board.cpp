@@ -75,3 +75,23 @@ void Board::clearScreen()
     cout << endl;
   }
 }
+
+void Board::addShip(Ships s, int row, int column, bool v, int size)
+{
+  if(v == true)
+  {
+    for(int i = 0; row < size; i++)
+    {
+      grid[row][column] = s.getShip[i];
+      row++;
+    }
+  }
+  else
+  {
+    for(int i = 0; column < size; i++)
+    {
+      grid[row][column] = s.getShip[i];
+      column++;
+    }
+  }
+}

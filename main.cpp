@@ -13,6 +13,10 @@ int main()
 	//exe.run();
 	bool loop = true;
 	int selection = 0;
+	Board p1HitOrMiss;
+	Board p1Ships;
+	Board p2HitOrMiss;
+	Board p2Ships;
   cout << "  WELCOME TO" << endl;
   cout << " //BATTLESHIP//" << endl << endl << endl;
   while(loop)
@@ -38,7 +42,8 @@ int main()
   }
 	int numberOfShips = 0;
 	int row;
-	char column;
+	int column;
+	bool vert;
 	cout << "Enter the number of ships you would like to play with, up to a total of 6." << endl;
 	cin >> numberOfShips;
 	switch(numberOfShips)
@@ -83,6 +88,32 @@ int main()
 			cout << "Not a valid column position, try again." << endl;
 			cin >> column;
 		}
+		cout << "Enter any value if you want the ship to be oriented vertically, 0 for horizontal." << endl;
+		cin >> vert;
+		if(i == 0)
+		{
+			p1Ships.addShip(p1Sub, row, column, vert, i + 1);
+		}
+		else if(i == 1)
+		{
+			p1Ships.addShip(p1Patrol, row, column, vert, i + 1);
+		}
+		else if(i == 2)
+		{
+			p1Ships.addShip(p1Cruiser, row, column, vert, i + 1);
+		}
+		else if(i == 3)
+		{
+			p1Ships.addShip(p1Destroyer, row, column, vert, i + 1);
+		}
+		else if(i == 4)
+		{
+			p1Ships.addShip(p1BattleShip, row, column, vert, i + 1);
+		}
+		else if(i == 5)
+		{
+			p1Ships.addShip(p1Carrier, row, column, vert, i + 1);
+		}
 	}
 	cout << "SWITCH PLAYERS" << endl;
 	cout << "PLAYER 2" << endl;
@@ -103,6 +134,32 @@ int main()
 		{
 			cout << "Not a valid column position, try again." << endl;
 			cin >> column;
+		}
+		cout << "Enter any value if you want the ship to be oriented vertically, 0 for horizontal." << endl;
+		cin >> vert;
+		if(i == 0)
+		{
+			p2Ships.addShip(p2Sub, row, column, vert, i + 1);
+		}
+		else if(i == 1)
+		{
+			p2Ships.addShip(p2Patrol, row, column, vert, i + 1);
+		}
+		else if(i == 2)
+		{
+			p2Ships.addShip(p2Cruiser, row, column, vert, i + 1);
+		}
+		else if(i == 3)
+		{
+			p2Ships.addShip(p2Destroyer, row, column, vert, i + 1);
+		}
+		else if(i == 4)
+		{
+			p2Ships.addShip(p2BattleShip, row, column, vert, i + 1);
+		}
+		else if(i == 5)
+		{
+			p2Ships.addShip(p2Carrier, row, column, vert, i + 1);
 		}
 	}
 }

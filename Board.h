@@ -11,6 +11,7 @@ public:
   ~Board();
   void Display();
   void clearScreen();
+  void addShip(Ships, int, int, bool, int);
 
 
 private:
