@@ -8,9 +8,9 @@ class Ships
 {
 public:
   Ships();
+  Ships(int);
   ~Ships();
   void setSize(int s);
-  void setShip();
   void hit(string position);
   bool isDestroyed();
 
