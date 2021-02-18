@@ -8,7 +8,18 @@
 
 Ships::Ships()
 {
+
+}
+
+Ships::Ships(int s)
+{
   destroyed = false;
+  size = s;
+  ship = new char[size];
+  for(int i = 0; i < size; i++)
+  {
+    ship[i] = '0';
+  }
 }
 
 Ships::~Ships()
@@ -19,15 +30,6 @@ Ships::~Ships()
 void Ships::setSize(int s)
 {
   size = s;
-}
-
-void Ships::setShip()
-{
-  ship = new char[size];
-  for(int i = 0; i < size; i++)
-  {
-    ship[i] = '0';
-  }
 }
 
 void Ships::hit(int position)
