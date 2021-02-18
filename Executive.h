@@ -13,6 +13,7 @@ public:
 
 private:
   void PrintMenu();
+  void PrintPlacement();
 
 };
 #endif

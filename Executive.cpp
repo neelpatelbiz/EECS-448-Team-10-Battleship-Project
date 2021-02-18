@@ -14,13 +14,83 @@ Executive::Executive()
 
 void Executive::run()
 {
-  PrintMenu();
-  bool loop = true;
-  int selection = 0;
   Board p1HitOrMiss;
   Board p1Ships;
   Board p2HitOrMiss;
   Board p2Ships;
+
+  Ships p1Carrier(6);
+  Ships p2Carrier(6);
+  Ships p1BattleShip(5);
+  Ships p2BattleShip(5);
+  Ships p1Destroyer(4);
+  Ships p2Destroyer(4);
+  Ships p1Cruiser(3);
+  Ships p2Cruiser(3);
+  Ships p1Patrol(2);
+  Ships p2Patrol(2);
+  Ships p1Sub(1);
+  Ships p2Sub(1);
+
+  PrintMenu();
+  PrintPlacement();
+  PrintGame();
+
+
+ //SAMPLE PROMPTS: ALL OF THESE NEED TO BE CODED INTO THEIR RESPECITVE SPOTS
+  //ADD code to make actually affect board.
+  cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
+  cout << endl;
+  cout << endl;
+  int turn = 1;
+
+  //Turn Text with turn counter
+  cout << "PLAYER 1 TURN [" << turn << "]";
+  cout << endl;
+  //stuff happens
+  cout << "PLAYER 2 TURN [" << turn << "]";
+  cout << endl;
+
+ //Player ship sunk
+  cout << "YOUR " <<  "insert ship name" << " SUNK!";
+  cout << endl;
+
+ //Player ship hit
+  cout << "YOUR " << "insert ship name" << " WAS HIT!";
+  cout << endl;
+
+ //Enemy ship hit
+  cout << "HIT!";
+  cout << endl;
+
+ //Enemy ship miss
+ cout << "MISS!";
+ cout << endl;
+
+
+ //Enemy ship sunk
+ cout << "YOU SUNK A " << "insert ship name" <<"!";
+ cout << endl;
+
+ cout << "PLAYER 1 LOST!";
+ cout << endl;
+
+ cout << "PLAYER 2 LOST!";
+ cout << endl;
+
+ cout << "PLAYER 1 WON!";
+ cout << endl;
+
+ cout << "PLAYER 2 WON!";
+ cout << endl;
+
+ //CHECK TO SEE IF BOAT IS PLACED ON TOP OF ANOTHER BOAT
+}
+
+Executive::PrintMenu()
+{
+  bool loop = true;
+  int selection = 0;
   cout << "  WELCOME TO" << endl;
   cout << " //BATTLESHIP//" << endl << endl << endl;
   while(loop)
@@ -50,18 +120,10 @@ void Executive::run()
   bool vert;
   cout << "Enter the number of ships you would like to play with, up to a total of 6." << endl;
   cin >> numberOfShips;
-  Ships p1Carrier(6);
-  Ships p2Carrier(6);
-  Ships p1BattleShip(5);
-  Ships p2BattleShip(5);
-  Ships p1Destroyer(4);
-  Ships p2Destroyer(4);
-  Ships p1Cruiser(3);
-  Ships p2Cruiser(3);
-  Ships p1Patrol(2);
-  Ships p2Patrol(2);
-  Ships p1Sub(1);
-  Ships p2Sub(1);
+}
+
+Executive::PrintPlacement()
+{
   cout << "HIDE THE SCREEN SO ONLY ONE PLAYER CAN SEE IT" << endl;
   cout << "PLAYER 1" << endl;
   for(int i = 0; i < numberOfShips; i++)
@@ -159,61 +221,13 @@ void Executive::run()
       p2Ships.addShip(p2Carrier, row, trueColumn, vert, i + 1);
     }
   }
-
- //SAMPLE PROMPTS: ALL OF THESE NEED TO BE CODED INTO THEIR RESPECITVE SPOTS
-  //ADD code to make actually affect board.
-  cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
-  cout << endl;
-  cout << endl;
-  int turn = 1;
-
-  //Turn Text with turn counter
-  cout << "PLAYER 1 TURN [" << turn << "]";
-  cout << endl;
-  //stuff happens
-  cout << "PLAYER 2 TURN [" << turn << "]";
-  cout << endl;
-
- //Player ship sunk
-  cout << "YOUR " <<  "insert ship name" << " SUNK!";
-  cout << endl;
-
- //Player ship hit
-  cout << "YOUR " << "insert ship name" << " WAS HIT!";
-  cout << endl;
-
- //Enemy ship hit
-  cout << "HIT!";
-  cout << endl;
-
- //Enemy ship miss
- cout << "MISS!";
- cout << endl;
-
-
- //Enemy ship sunk
- cout << "YOU SUNK A " << "insert ship name" <<"!";
- cout << endl;
-
- cout << "PLAYER 1 LOST!";
- cout << endl;
-
- cout << "PLAYER 2 LOST!";
- cout << endl;
-
- cout << "PLAYER 1 WON!";
- cout << endl;
-
- cout << "PLAYER 2 WON!";
- cout << endl;
-
- //CHECK TO SEE IF BOAT IS PLACED ON TOP OF ANOTHER BOAT
 }
 
-Executive::PrintMenu()
+Executive::PrintGame()
 {
 
 }
+
 Executive::~Executive()
 {
 }
