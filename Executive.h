@@ -14,6 +14,6 @@ public:
 private:
   void PrintMenu();
   void PrintPlacement();
-
+  void PrintGame();
 };
 #endif
