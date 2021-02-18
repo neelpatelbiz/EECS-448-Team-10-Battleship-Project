@@ -10,6 +10,7 @@ public:
   Board();
   ~Board();
   void Display();
+  void clearScreen();
 
 
 private:
