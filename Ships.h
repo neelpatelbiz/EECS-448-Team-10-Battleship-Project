@@ -8,10 +8,10 @@ class Ships
 {
 public:
   Ships();
-  Ships(int);
+  void buildShip(int);
   ~Ships();
   void setSize(int s);
-  void hit(string position);
+  void hit(int position);
   bool isDestroyed();
   char* getShip();
 

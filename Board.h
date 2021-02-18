@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <string>
+#include "Ships.h"
+using namespace std;
 
 class Board
 {
@@ -11,7 +13,7 @@ public:
   ~Board();
   void Display();
   void clearScreen();
-  void addShip(Ships, int, int, bool, int);
+  void addShip(int, int, int, int);
 
 
 private:

@@ -1,9 +1,3 @@
-/**
-*	@author
-*	@date
-*	@file
-*	@brief
-*/
 #include <iostream>
 #include "Executive.h"
 #include "Board.h"
@@ -11,6 +5,6 @@
 using namespace std;
 int main()
 {
-	Executive exe();
+	Executive exe;
 	exe.run();
 }

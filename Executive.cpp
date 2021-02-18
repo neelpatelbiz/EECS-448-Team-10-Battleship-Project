@@ -4,127 +4,115 @@
 *	@file
 *	@brief
 */
-//#include "Board.h"
+#include "Board.h"
 #include "Executive.h"
+#include "Ships.h"
 #include <string>
 #include <iostream>
 Executive::Executive()
 {
+	p1Carrier.buildShip(6);
+	p2Carrier.buildShip(6);
+	p1BattleShip.buildShip(5);
+	p2BattleShip.buildShip(5);
+	p1Destroyer.buildShip(4);
+	p2Destroyer.buildShip(4);
+	p1Cruiser.buildShip(3);
+	p2Cruiser.buildShip(3);
+	p1Patrol.buildShip(2);
+	p2Patrol.buildShip(2);
+	p1Sub.buildShip(1);
+	p2Sub.buildShip(1);
 }
 
 void Executive::run()
 {
-  Board p1HitOrMiss;
-  Board p1Ships;
-  Board p2HitOrMiss;
-  Board p2Ships;
-
-  Ships p1Carrier(6);
-  Ships p2Carrier(6);
-  Ships p1BattleShip(5);
-  Ships p2BattleShip(5);
-  Ships p1Destroyer(4);
-  Ships p2Destroyer(4);
-  Ships p1Cruiser(3);
-  Ships p2Cruiser(3);
-  Ships p1Patrol(2);
-  Ships p2Patrol(2);
-  Ships p1Sub(1);
-  Ships p2Sub(1);
-
-  PrintMenu();
-  PrintPlacement();
-  PrintGame();
+	PrintMenu();
+	Game();
 
 
- //SAMPLE PROMPTS: ALL OF THESE NEED TO BE CODED INTO THEIR RESPECITVE SPOTS
-  //ADD code to make actually affect board.
-  cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
-  cout << endl;
-  cout << endl;
-  int turn = 1;
+	//SAMPLE PROMPTS: ALL OF THESE NEED TO BE CODED INTO THEIR RESPECITVE SPOTS
+	 //ADD code to make actually affect board.
+	cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
+	cout << endl;
+	cout << endl;
+	int turn = 1;
 
-  //Turn Text with turn counter
-  cout << "PLAYER 1 TURN [" << turn << "]";
-  cout << endl;
-  //stuff happens
-  cout << "PLAYER 2 TURN [" << turn << "]";
-  cout << endl;
+	//Turn Text with turn counter
+	cout << "PLAYER 1 TURN [" << turn << "]";
+	cout << endl;
+	//stuff happens
+	cout << "PLAYER 2 TURN [" << turn << "]";
+	cout << endl;
 
- //Player ship sunk
-  cout << "YOUR " <<  "insert ship name" << " SUNK!";
-  cout << endl;
+	//Player ship sunk
+	cout << "YOUR " << "insert ship name" << " SUNK!";
+	cout << endl;
 
- //Player ship hit
-  cout << "YOUR " << "insert ship name" << " WAS HIT!";
-  cout << endl;
+	//Player ship hit
+	cout << "YOUR " << "insert ship name" << " WAS HIT!";
+	cout << endl;
 
- //Enemy ship hit
-  cout << "HIT!";
-  cout << endl;
+	//Enemy ship hit
+	cout << "HIT!";
+	cout << endl;
 
- //Enemy ship miss
- cout << "MISS!";
- cout << endl;
+	//Enemy ship miss
+	cout << "MISS!";
+	cout << endl;
 
 
- //Enemy ship sunk
- cout << "YOU SUNK A " << "insert ship name" <<"!";
- cout << endl;
+	//Enemy ship sunk
+	cout << "YOU SUNK A " << "insert ship name" << "!";
+	cout << endl;
 
- cout << "PLAYER 1 LOST!";
- cout << endl;
+	cout << "PLAYER 1 LOST!";
+	cout << endl;
 
- cout << "PLAYER 2 LOST!";
- cout << endl;
+	cout << "PLAYER 2 LOST!";
+	cout << endl;
 
- cout << "PLAYER 1 WON!";
- cout << endl;
+	cout << "PLAYER 1 WON!";
+	cout << endl;
 
- cout << "PLAYER 2 WON!";
- cout << endl;
+	cout << "PLAYER 2 WON!";
+	cout << endl;
 
- //CHECK TO SEE IF BOAT IS PLACED ON TOP OF ANOTHER BOAT
+	//CHECK TO SEE IF BOAT IS PLACED ON TOP OF ANOTHER BOAT
 }
 
-Executive::PrintMenu()
+void Executive::PrintMenu()
 {
-  bool loop = true;
-  int selection = 0;
-  cout << "  WELCOME TO" << endl;
-  cout << " //BATTLESHIP//" << endl << endl << endl;
-  while(loop)
-  {
-    cout << "Enter in number to navigate menu" << endl;
-    cout << "1: Start Game" << endl;
-    cout << "2: How to Play" << endl;
-    cin >> selection;
-    switch (selection)
-    {
-      case 1:
-        loop = false;
-        break;
-      case 2:
-        cout << "BASIC RULES" << endl;
-        cout << "The goal of the game is to eliminate all of your opponent's ships ";
-        cout << "by selecting spots on the game board to see if you hit or miss." << endl;
-        cout << "The game is over when one player loses all of their ships." << endl;
-        break;
-      default:
-      cout << selection << " is not a valid choice, try again." << endl;
-    }
-  }
-  int numberOfShips = 0;
-  int row;
-  char column;
-  bool vert;
-  cout << "Enter the number of ships you would like to play with, up to a total of 6." << endl;
-  cin >> numberOfShips;
+	bool loop = true;
+	int selection = 0;
+	cout << "  WELCOME TO" << endl;
+	cout << " //BATTLESHIP//" << endl << endl << endl;
+	while (loop)
+	{
+		cout << endl << "Enter in number to navigate menu" << endl;
+		cout << "1: Start Game" << endl;
+		cout << "2: How to Play" << endl;
+		cin >> selection;
+		switch (selection)
+		{
+		case 1:
+			loop = false;
+			break;
+		case 2:
+			cout << "BASIC RULES" << endl;
+			cout << "The goal of the game is to eliminate all of your opponent's ships ";
+			cout << "by selecting spots on the game board to see if you hit or miss." << endl;
+			cout << "The game is over when one player loses all of their ships." << endl;
+			break;
+		default:
+			cout << selection << " is not a valid choice, try again." << endl;
+		}
+	}
 }
 
-Executive::PrintPlacement()
+void Executive::Game()
 {
-  int numberOfShips = 0;
+	int numberOfShips = 0;
 	int row;
 	char column;
 	int vert;
@@ -132,20 +120,20 @@ Executive::PrintPlacement()
 	cin >> numberOfShips;
 	cout << "HIDE THE SCREEN SO ONLY ONE PLAYER CAN SEE IT" << endl;
 	cout << "PLAYER 1" << endl;
-	for(int i = 0; i < numberOfShips; i++)
+	for (int i = 0; i < numberOfShips; i++)
 	{
 		cout << "Enter in the position of where you would like to place your 1x" << i + 1 << " ship." << endl;
 		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
 		cout << "Enter in the row value." << endl;
 		cin >> row;
-		while(row < 1 || row > 10)
+		while (row < 1 || row > 10)
 		{
 			cout << "Not a valid row position, try again." << endl;
 			cin >> row;
 		}
 		cout << "Enter in the column value." << endl;
 		cin >> column;
-		while(column < 'A' || column > 'J')
+		while (column < 'A' || column > 'J')
 		{
 			cout << "Not a valid column position, try again." << endl;
 			cin >> column;
@@ -200,20 +188,20 @@ Executive::PrintPlacement()
 	//p1Ships.clearScreen();
 	cout << "SWITCH PLAYERS" << endl;
 	cout << "PLAYER 2" << endl;
-	for(int i = 0; i < numberOfShips; i++)
+	for (int i = 0; i < numberOfShips; i++)
 	{
 		cout << "Enter in the position of where you would like to place your 1x" << i + 1 << " ship." << endl;
 		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
 		cout << "Enter in the row value." << endl;
 		cin >> row;
-		while(row < 1 || row > 10)
+		while (row < 1 || row > 10)
 		{
 			cout << "Not a valid row position, try again." << endl;
 			cin >> row;
 		}
 		cout << "Enter in the column value." << endl;
 		cin >> column;
-		while(column < 'A' || column > 'J')
+		while (column < 'A' || column > 'J')
 		{
 			cout << "Not a valid column position, try again." << endl;
 			cin >> column;
@@ -264,11 +252,6 @@ Executive::PrintPlacement()
 		p2Ships.addShip(row, trueColumn, vert, i + 1);
 		p2Ships.Display();
 	}
-}
-
-Executive::PrintGame()
-{
-
 }
 
 Executive::~Executive()

@@ -11,7 +11,7 @@ Ships::Ships()
 
 }
 
-Ships::Ships(int s)
+void Ships::buildShip(int s)
 {
   destroyed = false;
   size = s;
