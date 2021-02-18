@@ -23,14 +23,28 @@ void Ships::setSize(int s)
 
 void Ships::setShip()
 {
-  ship = new int[size];
+  ship = new char[size];
   for(int i = 0; i < size; i++)
   {
-    ship[i] = 0;
+    ship[i] = '0';
   }
 }
 
 void Ships::hit(int position)
 {
-  ship[position] = 1;
+  ship[position] = '1';
+}
+
+bool isDestroyed()
+{
+  int count = 0;
+  for(int i = 0; i < size; i++)
+  {
+    if(ship[i] == '1')
+    {
+      count++;
+    }
+  }
+  destroyed = (count == size);
+  return destroyed;
 }

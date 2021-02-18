@@ -15,7 +15,7 @@ public:
 
 private:
   int size;
-  int* ship;
+  char* ship;
   bool destroyed;
 
 };

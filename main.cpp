@@ -33,6 +33,16 @@ int main()
       cout << selection << " is not a valid choice, try again." << endl;
     }
   }
+	int numberOfShips = 0;
+	cout << "Enter the number of ships you would like to play with, up to a total of 6." << endl;
+	cin >> numberOfShips;
+	cout << "HIDE THE SCREEN SO ONLY ONE PLAYER CAN SEE IT" << endl;
+	cout << "PLAYER 1" << endl;
+	for(int i = 0; i < numberOfShips; i++)
+	{
+		cout << "Enter in the position of where you would like to place each ship, starting with a 1x1 and ending with a 1x" << numberOfShips << "." << endl;
+		cout << "Rows are labeled A-J, and columns are 1-10" << endl;
+	}
 
 
 
