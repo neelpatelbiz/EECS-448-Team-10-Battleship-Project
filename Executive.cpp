@@ -9,6 +9,8 @@
 #include "Ships.h"
 #include <string>
 #include <iostream>
+#include <chrono>
+#include <thread>
 Executive::Executive()
 {
 	p1Carrier.buildShip(6);
@@ -142,6 +144,7 @@ void Executive::Game()
 			i--;
 		}
 		p1Ships.Display();
+		std::this_thread::sleep_for(10s);
 	}
 	p1Ships.clearScreen();
 	cout << "SWITCH PLAYERS" << endl;
@@ -217,8 +220,8 @@ void Executive::Game()
 			i--;
 		}
 		p2Ships.Display();
+		std::this_thread::sleep_for(10s);
 	}
-	//add in delay time as second player will not see last ship placed.
 	p2Ships.clearScreen();
 	cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
 	cout << endl << endl;
@@ -394,6 +397,7 @@ void Executive::Game()
 
 		cout << "PLAYER 2 TURN [" << turn << "]";
 		cout << endl;
+		std::this_thread::sleep_for(10s);
 
 		cout << "YOUR SHIPS:";
 		cout << endl << endl;
@@ -542,7 +546,7 @@ void Executive::Game()
 		{
 			winner = true;
 		}
-
+		std::this_thread::sleep_for(10s);
 		turn++;
 	}
 
