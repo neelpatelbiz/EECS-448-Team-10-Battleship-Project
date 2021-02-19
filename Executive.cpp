@@ -29,56 +29,6 @@ void Executive::run()
 {
 	PrintMenu();
 	Game();
-
-
-	//SAMPLE PROMPTS: ALL OF THESE NEED TO BE CODED INTO THEIR RESPECITVE SPOTS
-	 //ADD code to make actually affect board.
-	cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
-	cout << endl;
-	cout << endl;
-	int turn = 1;
-
-	//Turn Text with turn counter
-	cout << "PLAYER 1 TURN [" << turn << "]";
-	cout << endl;
-	//stuff happens
-	cout << "PLAYER 2 TURN [" << turn << "]";
-	cout << endl;
-
-	//Player ship sunk
-	cout << "YOUR " << "insert ship name" << " SUNK!";
-	cout << endl;
-
-	//Player ship hit
-	cout << "YOUR " << "insert ship name" << " WAS HIT!";
-	cout << endl;
-
-	//Enemy ship hit
-	cout << "HIT!";
-	cout << endl;
-
-	//Enemy ship miss
-	cout << "MISS!";
-	cout << endl;
-
-
-	//Enemy ship sunk
-	cout << "YOU SUNK A " << "insert ship name" << "!";
-	cout << endl;
-
-	cout << "PLAYER 1 LOST!";
-	cout << endl;
-
-	cout << "PLAYER 2 LOST!";
-	cout << endl;
-
-	cout << "PLAYER 1 WON!";
-	cout << endl;
-
-	cout << "PLAYER 2 WON!";
-	cout << endl;
-
-	//CHECK TO SEE IF BOAT IS PLACED ON TOP OF ANOTHER BOAT
 }
 
 void Executive::PrintMenu()
@@ -275,6 +225,8 @@ void Executive::Game()
 
 	bool winner = false;
 	int turn = 1;
+	int totalDestroyed1 = 0;
+	int totalDestroyed2 = 0;
 
 	std::string ready = "";
 	do
@@ -369,42 +321,247 @@ void Executive::Game()
 			if (spot == "S")
 			{
 				p2Sub.hit();
+				if (p2Sub.isDestroyed() == true)
+				{
+					totalDestroyed1++;
+					cout << "YOU SUNK A SUBMARINE!";
+					cout << endl;
+				}
 			}
 			if (spot == "P")
 			{
 				p2Patrol.hit();
+				if (p2Patrol.isDestroyed() == true)
+				{
+					totalDestroyed1++;
+					cout << "YOU SUNK A PATROL BOAT!";
+					cout << endl;
+				}
 			}
 			if (spot == "c")
 			{
 				p2Cruiser.hit();
+				if (p2Cruiser.isDestroyed() == true)
+				{
+					totalDestroyed1++;
+					cout << "YOU SUNK A CRUISER!";
+					cout << endl;
+				}
 			}
 			if (spot == "D")
 			{
 				p2Destroyer.hit();
+				if (p2Destroyer.isDestroyed() == true)
+				{
+					totalDestroyed1++;
+					cout << "YOU SUNK A DESTROYER!";
+					cout << endl;
+				}
 			}
 			if (spot == "B")
 			{
 				p2BattleShip.hit();
+				if (p2BattleShip.isDestroyed() == true)
+				{
+					totalDestroyed1++;
+					cout << "YOU SUNK A BATTLESHIP!";
+					cout << endl;
+				}
 			}
 			if (spot == "C")
 			{
 				p2Carrier.hit();
+				if (p2Carrier.isDestroyed() == true)
+				{
+					totalDestroyed1++;
+					cout << "YOU SUNK A CARRIER!";
+					cout << endl;
+				}
 			}
-			p1HitOrMiss.update(row, column, "H");
+			p1HitOrMiss.update(row, trueColumn, "H");
 		}
 		else
 		{
 			cout << "MISS!";
 			cout << endl;
-			p1HitOrMiss.update(row, column, "M");
+			p1HitOrMiss.update(row, trueColumn, "M");
 		}
 
-		//stuff happens
+		if (totalDestroyed1 == numberOfShips)
+		{
+			winner = true;
+		}
+
 		cout << "PLAYER 2 TURN [" << turn << "]";
 		cout << endl;
+
+		cout << "YOUR SHIPS:";
+		cout << endl << endl;
+
+		p2Ships.Display();
+
+		cout << endl << endl;
+
+		cout << "ENEMY SHIPS:";
+		cout << endl << endl;
+
+		p2HitOrMiss.Display();
+		cout << endl << endl;
+		cout << "Enter in the position of where you would like to attack." << endl;
+		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
+		cout << "Enter in the row value." << endl;
+		cin >> row;
+		while (row < 1 || row > 10)
+		{
+			cout << "Not a valid row position, try again." << endl;
+			cin >> row;
+		}
+		cout << "Enter in the column value." << endl;
+		cin >> column;
+		while (column < 'A' || column > 'J')
+		{
+			cout << "Not a valid column position, try again." << endl;
+			cin >> column;
+		}
+		trueColumn = 0;
+		if (column == 'A')
+		{
+			trueColumn = 1;
+		}
+		else if (column == 'B')
+		{
+			trueColumn = 2;
+		}
+		else if (column == 'C')
+		{
+			trueColumn = 3;
+		}
+		else if (column == 'D')
+		{
+			trueColumn = 4;
+		}
+		else if (column == 'E')
+		{
+			trueColumn = 5;
+		}
+		else if (column == 'F')
+		{
+			trueColumn = 6;
+		}
+		else if (column == 'G')
+		{
+			trueColumn = 7;
+		}
+		else if (column == 'H')
+		{
+			trueColumn = 8;
+		}
+		else if (column == 'I')
+		{
+			trueColumn = 9;
+		}
+		else if (column == 'J')
+		{
+			trueColumn = 10;
+		}
+		spot = p1Ships.checkHit(row, trueColumn);
+		if (spot != ".")
+		{
+			cout << "HIT!";
+			cout << endl;
+			if (spot == "S")
+			{
+				p1Sub.hit();
+				if (p1Sub.isDestroyed() == true)
+				{
+					totalDestroyed2++;
+					cout << "YOU SUNK A SUBMARINE!";
+					cout << endl;
+				}
+			}
+			if (spot == "P")
+			{
+				p1Patrol.hit();
+				if (p1Patrol.isDestroyed() == true)
+				{
+					totalDestroyed2++;
+					cout << "YOU SUNK A PATROL BOAT!";
+					cout << endl;
+				}
+			}
+			if (spot == "c")
+			{
+				p1Cruiser.hit();
+				if (p1Cruiser.isDestroyed() == true)
+				{
+					totalDestroyed2++;
+					cout << "YOU SUNK A CRUISER!";
+					cout << endl;
+				}
+			}
+			if (spot == "D")
+			{
+				p1Destroyer.hit();
+				if (p1Destroyer.isDestroyed() == true)
+				{
+					totalDestroyed2++;
+					cout << "YOU SUNK A DESTROYER!";
+					cout << endl;
+				}
+			}
+			if (spot == "B")
+			{
+				p1BattleShip.hit();
+				if (p1BattleShip.isDestroyed() == true)
+				{
+					totalDestroyed2++;
+					cout << "YOU SUNK A BATTLESHIP!";
+					cout << endl;
+				}
+			}
+			if (spot == "C")
+			{
+				p1Carrier.hit();
+				if (p1Carrier.isDestroyed() == true)
+				{
+					totalDestroyed2++;
+					cout << "YOU SUNK A CARRIER!";
+					cout << endl;
+				}
+			}
+			p2HitOrMiss.update(row, trueColumn, "H");
+		}
+		else
+		{
+			cout << "MISS!";
+			cout << endl;
+			p2HitOrMiss.update(row, trueColumn, "M");
+		}
+
+		if (totalDestroyed2 == numberOfShips)
+		{
+			winner = true;
+		}
+
+		turn++;
 	}
 
+	if (totalDestroyed1 == numberOfShips)
+	{
+		cout << "PLAYER 2 LOST!";
+		cout << endl;
 
+		cout << "PLAYER 1 WON!";
+		cout << endl;
+	}
+	else
+	{
+		cout << "PLAYER 1 LOST!";
+		cout << endl;
+
+		cout << "PLAYER 2 WON!";
+		cout << endl;
+	}
 }
 
 
