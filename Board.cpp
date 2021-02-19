@@ -82,64 +82,62 @@ void Board::clearScreen()
 bool Board::addShip(int row, int column, int v, int size)
 {
   bool added = false;
-  bool tested = true;
-  int testRow = row;
-  int testColumn = column;
-  if(v == 1)
-  {
-      if (size + column > 10)
-      {
-          tested = false;
-      }
-      else if (size + row > 10)
-      {
-          tested = false;
-      }
-      for (int i = 0; i < size; i++)
-      {
-          if (grid[testRow][column] == "0")
-          {
-              tested = false;;
-          }
-          testRow++;
-      }
-      if (tested == true)
-      {
-          for (int i = 0; i < size; i++)
-          {
-              grid[row][column] = "0";
-              row++;
-          }
-          added = true;
-      }
-  }
-  else
-  {
-      if (size + row > 10)
-      {
-          tested = false;
-      }
-      else if (size + column > 10)
-      {
-          tested = false;
-      }
-      for (int i = 0; i < size; i++)
-      {
-          if (grid[row][testColumn] == "0")
-          {
-              tested == false;
-          }
-          testColumn++;
-      }
-      if (tested == true)
-      {
-          for (int i = 0; i < size; i++)
-          {
-              grid[row][column] = "0";
-              column++;
-          }
-          added = true;
-      }
-  }
-  return added;
+    bool tested = true;
+    int testRow = row;
+    int testColumn = column;
+    if(v == 1)
+    {
+        if ((size + row) > 11)
+        {
+            tested = false;
+        }
+        if (tested == true)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                if (grid[testRow][column] == "0")
+                {
+                    tested = false;;
+                }
+                testRow++;
+            }
+        }
+        if (tested == true)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                grid[row][column] = "0";
+                row++;
+            }
+            added = true;
+        }
+    }
+    else
+    {
+        if ((size + column) > 11)
+        {
+            tested = false;
+        }
+        if (tested == true)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                if (grid[row][testColumn] == "0")
+                {
+                    tested == false;
+                }
+                testColumn++;
+            }
+        }
+        if (tested == true)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                grid[row][column] = "0";
+                column++;
+            }
+            added = true;
+        }
+    }
+    return added;
 }
