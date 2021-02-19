@@ -98,7 +98,7 @@ void Executive::PrintMenu()
 
 void Executive::Game()
 {
-	int numberOfShips = 0;
+  int numberOfShips = 0;
 	int row;
 	char column;
 	int vert;
@@ -172,10 +172,14 @@ void Executive::Game()
 		cout << "Enter a 1 if you want the ship to be oriented vertically, 0 for horizontal." << endl;
 		cin >> vert;
 
-		p1Ships.addShip(row, trueColumn, vert, i + 1);
+		if ((p1Ships.addShip(row, trueColumn, vert, i + 1)) == false)
+		{
+			cout << "SHIP WAS UNABLE TO BE ADDED, TRY AGAIN." << endl;
+			i--;
+		}
 		p1Ships.Display();
 	}
-	//p1Ships.clearScreen();
+	p1Ships.clearScreen();
 	cout << "SWITCH PLAYERS" << endl;
 	cout << "PLAYER 2" << endl;
 	for (int i = 0; i < numberOfShips; i++)
@@ -243,8 +247,13 @@ void Executive::Game()
 		}
 		cout << "Enter a 1 if you want the ship to be oriented vertically, 0 for horizontal." << endl;
 		cin >> vert;
-		p2Ships.addShip(row, trueColumn, vert, i + 1);
+		if ((p2Ships.addShip(row, trueColumn, vert, i + 1)) == false)
+		{
+			cout << "SHIP WAS UNABLE TO BE ADDED, TRY AGAIN." << endl;
+			i--;
+		}
 		p2Ships.Display();
+	}
 		//add in delay time as second player will not see last ship placed.
 		p2Ships.clearScreen();
 		cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";

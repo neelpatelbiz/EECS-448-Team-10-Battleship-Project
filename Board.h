@@ -13,7 +13,7 @@ public:
   ~Board();
   void Display();
   void clearScreen();
-  void addShip(int, int, int, int);
+  bool addShip(int, int, int, int);
 
 
 private:
