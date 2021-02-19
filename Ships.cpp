@@ -15,16 +15,12 @@ void Ships::buildShip(int s)
 {
   destroyed = false;
   size = s;
-  ship = new char[size];
-  for(int i = 0; i < size; i++)
-  {
-    ship[i] = '0';
-  }
+  hits = 0;
 }
 
 Ships::~Ships()
 {
-  delete [] ship;
+
 }
 
 void Ships::setSize(int s)
@@ -32,26 +28,16 @@ void Ships::setSize(int s)
   size = s;
 }
 
-void Ships::hit(int position)
+void Ships::hit()
 {
-  ship[position] = '1';
+    hits++;
 }
 
 bool Ships::isDestroyed()
 {
-  int count = 0;
-  for(int i = 0; i < size; i++)
-  {
-    if(ship[i] == '1')
+    if (hits == size)
     {
-      count++;
+        destroyed = true;
     }
-  }
-  destroyed = (count == size);
   return destroyed;
-}
-
-char* Ships::getShip()
-{
-  return ship;
 }
