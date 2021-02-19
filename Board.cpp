@@ -1,4 +1,5 @@
 #include "Board.h"
+using namespace std;
 Board::Board()
 {
   size = 11;
