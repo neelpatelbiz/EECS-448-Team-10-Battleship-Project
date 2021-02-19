@@ -151,6 +151,13 @@ void Executive::Game()
 		}
 		cout << "Enter a 1 if you want the ship to be oriented vertically, 0 for horizontal." << endl;
 		cin >> vert;
+		while (cin.fail() || vert > 1 || vert < 0)
+		{
+			cout << "Not a valid orientation, try again." << endl;
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cin >> vert;
+		}
 
 		if ((p1Ships.addShip(row, trueColumn, vert, i + 1, i)) == false)
 		{
@@ -228,6 +235,13 @@ void Executive::Game()
 		}
 		cout << "Enter a 1 if you want the ship to be oriented vertically, 0 for horizontal." << endl;
 		cin >> vert;
+		while (cin.fail() || vert > 1 || vert < 0)
+		{
+			cout << "Not a valid orientation, try again." << endl;
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cin >> vert;
+		}
 		if ((p2Ships.addShip(row, trueColumn, vert, i + 1, i)) == false)
 		{
 			cout << "SHIP WAS UNABLE TO BE ADDED, TRY AGAIN." << endl;
