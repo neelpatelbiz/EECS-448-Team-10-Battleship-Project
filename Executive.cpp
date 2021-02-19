@@ -1,3 +1,9 @@
+/**
+*	@author
+*	@date
+*	@file
+*	@brief
+*/
 #include "Board.h"
 #include "Executive.h"
 #include "Ships.h"
@@ -27,9 +33,17 @@ void Executive::run()
 
 	//SAMPLE PROMPTS: ALL OF THESE NEED TO BE CODED INTO THEIR RESPECITVE SPOTS
 	 //ADD code to make actually affect board.
+	cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
+	cout << endl;
+	cout << endl;
+	int turn = 1;
 
 	//Turn Text with turn counter
-
+	cout << "PLAYER 1 TURN [" << turn << "]";
+	cout << endl;
+	//stuff happens
+	cout << "PLAYER 2 TURN [" << turn << "]";
+	cout << endl;
 
 	//Player ship sunk
 	cout << "YOUR " << "insert ship name" << " SUNK!";
@@ -98,7 +112,7 @@ void Executive::PrintMenu()
 
 void Executive::Game()
 {
-  int numberOfShips = 0;
+	int numberOfShips = 0;
 	int row;
 	char column;
 	int vert;
@@ -172,7 +186,7 @@ void Executive::Game()
 		cout << "Enter a 1 if you want the ship to be oriented vertically, 0 for horizontal." << endl;
 		cin >> vert;
 
-		if ((p1Ships.addShip(row, trueColumn, vert, i + 1)) == false)
+		if ((p1Ships.addShip(row, trueColumn, vert, i + 1, i)) == false)
 		{
 			cout << "SHIP WAS UNABLE TO BE ADDED, TRY AGAIN." << endl;
 			i--;
@@ -247,30 +261,34 @@ void Executive::Game()
 		}
 		cout << "Enter a 1 if you want the ship to be oriented vertically, 0 for horizontal." << endl;
 		cin >> vert;
-		if ((p2Ships.addShip(row, trueColumn, vert, i + 1)) == false)
+		if ((p2Ships.addShip(row, trueColumn, vert, i + 1, i)) == false)
 		{
 			cout << "SHIP WAS UNABLE TO BE ADDED, TRY AGAIN." << endl;
 			i--;
 		}
 		p2Ships.Display();
 	}
-		//add in delay time as second player will not see last ship placed.
-		p2Ships.clearScreen();
-		cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
-		cout << endl << endl;
+	//add in delay time as second player will not see last ship placed.
+	p2Ships.clearScreen();
+	cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
+	cout << endl << endl;
 
-		std::string ready = "";
-		do
-		{
-			cout << "Are you ready to begin the game? (y/n)";
-			cout << endl;
-			cin >> ready;
+	bool winner = false;
+	int turn = 1;
 
-		} while (ready != "yes" && ready != "y");
+	std::string ready = "";
+	do
+	{
+		cout << "Are you ready to begin the game? (y/n)";
+		cout << endl;
+		cin >> ready;
 
-		cout << endl << endl;
+	} while (ready != "yes" && ready != "y");
 
-		int turn = 1;
+	cout << endl << endl;
+
+	while (winner == false)
+	{
 		cout << "PLAYER 1 TURN [" << turn << "]";
 		cout << endl << endl;
 
@@ -284,7 +302,7 @@ void Executive::Game()
 		cout << "ENEMY SHIPS:";
 		cout << endl << endl;
 
-		p2Ships.Display();
+		p1HitOrMiss.Display();
 		cout << endl << endl;
 		cout << "Enter in the position of where you would like to attack." << endl;
 		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
@@ -302,7 +320,7 @@ void Executive::Game()
 			cout << "Not a valid column position, try again." << endl;
 			cin >> column;
 		}
-		trueColumn = 0;
+		int trueColumn = 0;
 		if (column == 'A')
 		{
 			trueColumn = 1;
@@ -343,14 +361,52 @@ void Executive::Game()
 		{
 			trueColumn = 10;
 		}
+		string spot = p2Ships.checkHit(row, trueColumn);
+		if (spot != ".")
+		{
+			cout << "HIT!";
+			cout << endl;
+			if (spot == "S")
+			{
+				p2Sub.hit();
+			}
+			if (spot == "P")
+			{
+				p2Patrol.hit();
+			}
+			if (spot == "c")
+			{
+				p2Cruiser.hit();
+			}
+			if (spot == "D")
+			{
+				p2Destroyer.hit();
+			}
+			if (spot == "B")
+			{
+				p2BattleShip.hit();
+			}
+			if (spot == "C")
+			{
+				p2Carrier.hit();
+			}
+			p1HitOrMiss.update(row, column, "H");
+		}
+		else
+		{
+			cout << "MISS!";
+			cout << endl;
+			p1HitOrMiss.update(row, column, "M");
+		}
 
 		//stuff happens
 		cout << "PLAYER 2 TURN [" << turn << "]";
 		cout << endl;
-
-
 	}
+
+
 }
+
 
 Executive::~Executive()
 {

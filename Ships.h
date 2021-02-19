@@ -11,13 +11,12 @@ public:
   void buildShip(int);
   ~Ships();
   void setSize(int s);
-  void hit(int position);
+  void hit();
   bool isDestroyed();
-  char* getShip();
 
 private:
   int size;
-  char* ship;
+  int hits;
   bool destroyed;
 
 };

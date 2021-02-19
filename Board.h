@@ -13,8 +13,9 @@ public:
   ~Board();
   void Display();
   void clearScreen();
-  bool addShip(int, int, int, int);
-
+  bool addShip(int, int, int, int, int);
+  string checkHit(int, int);
+  void update(int, int, string);
 
 private:
   string** grid;

@@ -1,5 +1,4 @@
 #include "Board.h"
-using namespace std;
 Board::Board()
 {
   size = 11;
@@ -79,7 +78,7 @@ void Board::clearScreen()
   }
 }
 
-bool Board::addShip(int row, int column, int v, int size)
+bool Board::addShip(int row, int column, int v, int size, int type)
 {
   bool added = false;
   bool tested = true;
@@ -163,4 +162,14 @@ bool Board::addShip(int row, int column, int v, int size)
       }
   }
   return added;
+}
+
+string Board::checkHit(int row, int column)
+{
+    return grid[row][column];
+}
+
+void Board::update(int row, int column, string u)
+{
+    grid[row][column] = u;
 }
