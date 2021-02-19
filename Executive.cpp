@@ -1,9 +1,3 @@
-/**
-*	@author
-*	@date
-*	@file
-*	@brief
-*/
 #include "Board.h"
 #include "Executive.h"
 #include "Ships.h"
@@ -129,6 +123,8 @@ void Executive::Game()
 		while (row < 1 || row > 10)
 		{
 			cout << "Not a valid row position, try again." << endl;
+			cin.clear();
+			cin.ignore(1000, '\n');
 			cin >> row;
 		}
 		cout << "Enter in the column value." << endl;
@@ -136,6 +132,8 @@ void Executive::Game()
 		while (column < 'A' || column > 'J')
 		{
 			cout << "Not a valid column position, try again." << endl;
+			cin.clear();
+			cin.ignore(1000, '\n');
 			cin >> column;
 		}
 		int trueColumn = 0;
@@ -197,6 +195,8 @@ void Executive::Game()
 		while (row < 1 || row > 10)
 		{
 			cout << "Not a valid row position, try again." << endl;
+			cin.clear();
+			cin.ignore(1000, '\n');
 			cin >> row;
 		}
 		cout << "Enter in the column value." << endl;
@@ -204,6 +204,8 @@ void Executive::Game()
 		while (column < 'A' || column > 'J')
 		{
 			cout << "Not a valid column position, try again." << endl;
+			cin.clear();
+			cin.ignore(1000, '\n');
 			cin >> column;
 		}
 		int trueColumn = 0;
