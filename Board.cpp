@@ -116,7 +116,7 @@ bool Board::addShip(int row, int column, int v, int size, int type)
       {
           for (int i = 0; i < size; i++)
           {
-              if (grid[testRow][column] == "0")
+              if (grid[testRow][column] != ".")
               {
                   tested = false;;
               }
@@ -143,9 +143,9 @@ bool Board::addShip(int row, int column, int v, int size, int type)
       {
           for (int i = 0; i < size; i++)
           {
-              if (grid[row][testColumn] == "0")
+              if (grid[row][testColumn] != ".")
               {
-                  tested == false;
+                  tested = false;
               }
               testColumn++;
           }
