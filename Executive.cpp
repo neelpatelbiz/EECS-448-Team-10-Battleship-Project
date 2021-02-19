@@ -51,10 +51,24 @@ void Executive::PrintMenu()
 			loop = false;
 			break;
 		case 2:
-			cout << "BASIC RULES" << endl;
+			cout << "BASIC RULES" << endl << endl;
 			cout << "The goal of the game is to eliminate all of your opponent's ships ";
 			cout << "by selecting spots on the game board to see if you hit or miss." << endl;
-			cout << "The game is over when one player loses all of their ships." << endl;
+			cout << "The game is over when one player loses all of their ships." << endl << endl;
+			cout << "At the beginning of the game, each player will set up their boats on a 10x10 grid simulating a board." << endl;
+			cout << "You will have the choice between playing with 1 to 6 ships that you will place on the board:" << endl << endl;
+			cout << "Games with 1 ship: " << endl << "Sub: (1x1)" << endl << endl;
+			cout << "2 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2)" << endl << endl;
+			cout << "3 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3)" << endl << endl;
+			cout << "4 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4)" << endl << endl;
+			cout << "5 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5)" << endl << endl;
+			cout << "6 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), ";
+			cout << "Battleship: (1x5), Carrier: (1x6)" << endl << endl;
+			cout << "On the board, there is a few symbols that represent ships, hits, misses, and the board itself:" << endl << endl;
+			cout << "'.' = PORTION OF BOARD NOT INTERACTED WITH, 'H'= HIT, 'M' = MISS" << endl;
+			cout << "'S' = SUB, 'P' = PATROL BOAT, 'c' = CRUISER, 'D' = DESTROYER, 'B' = BATTLESHIP, 'C' = CARRIER" << endl << endl;
+
+
 			break;
 		default:
 			cout << selection << " is not a valid choice, try again." << endl;
@@ -144,7 +158,7 @@ void Executive::Game()
 			i--;
 		}
 		p1Ships.Display();
-		std::this_thread::sleep_for(10s);
+		std::this_thread::sleep_for(7s);
 	}
 	p1Ships.clearScreen();
 	cout << "SWITCH PLAYERS" << endl;
@@ -220,7 +234,7 @@ void Executive::Game()
 			i--;
 		}
 		p2Ships.Display();
-		std::this_thread::sleep_for(10s);
+		std::this_thread::sleep_for(7s);
 	}
 	p2Ships.clearScreen();
 	cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
@@ -397,7 +411,7 @@ void Executive::Game()
 
 		cout << "PLAYER 2 TURN [" << turn << "]";
 		cout << endl;
-		std::this_thread::sleep_for(10s);
+		std::this_thread::sleep_for(7s);
 
 		cout << "YOUR SHIPS:";
 		cout << endl << endl;
@@ -546,7 +560,7 @@ void Executive::Game()
 		{
 			winner = true;
 		}
-		std::this_thread::sleep_for(10s);
+		std::this_thread::sleep_for(7s);
 		turn++;
 	}
 

@@ -15,7 +15,6 @@ Board::Board()
     {
       if (i == 0)
       {
-  //	Convert to ASCII For Loop
         grid[i][0] = '|';
         grid[i][1] = " A";
         grid[i][2] = "B";
