@@ -599,4 +599,21 @@ void Executive::Game()
 
 Executive::~Executive()
 {
+	delete p1HitOrMiss;
+	delete p2HitOrMiss;
+	delete p1Ships;
+	delete p2Ships;
+
+	delete p1Carrier;
+	delete p2Carrier;
+	delete p1BattleShip;
+	delete p2BattleShip;
+	delete p1Destroyer;
+	delete p2Destroyer;
+	delete p1Cruiser;
+	delete p2Cruiser;
+	delete p1Patrol;
+	delete p2Patrol;
+	delete p1Sub;
+	delete p2Sub;
 }
