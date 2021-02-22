@@ -1,0 +1,130 @@
+\hypertarget{class_board}{}\doxysection{Board Class Reference}
+\label{class_board}\index{Board@{Board}}
+
+
+{\ttfamily \#include $<$Board.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_board_a89c268a20ac8cb9a7e3d5fc5d7ca6c74}{add\+Ship}} (int, int, int, int, int)
+\item 
+\mbox{\hyperlink{class_board_a9ee491d4fea680cf69b033374a9fdfcb}{Board}} ()
+\item 
+string \mbox{\hyperlink{class_board_a8ee25e302128a5fe6c6f8bba611ea8c9}{check\+Hit}} (int, int)
+\item 
+void \mbox{\hyperlink{class_board_afa442ee5fb3a351a2c851eb39530d98c}{clear\+Screen}} ()
+\item 
+void \mbox{\hyperlink{class_board_a3cb8c4ee69aeeb9371d71d998fd5ad69}{Display}} ()
+\item 
+void \mbox{\hyperlink{class_board_ae33320c0008151e8d0be73c3844db353}{update}} (int, int, string)
+\item 
+\mbox{\hyperlink{class_board_af73f45730119a1fd8f6670f53f959e68}{$\sim$\+Board}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_board_a48b072f09159c83fe72b234954d34232}\label{class_board_a48b072f09159c83fe72b234954d34232}} 
+string $\ast$$\ast$ {\bfseries grid}
+\item 
+\mbox{\Hypertarget{class_board_aedef7105f0accc0949b601afa97e9678}\label{class_board_aedef7105f0accc0949b601afa97e9678}} 
+int {\bfseries size}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+draw the borad. deter the ship statues \begin{DoxyAuthor}{Author}
+Team 10 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+19, Feb 2021 
+\end{DoxyVersion}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_board_a9ee491d4fea680cf69b033374a9fdfcb}\label{class_board_a9ee491d4fea680cf69b033374a9fdfcb}} 
+\index{Board@{Board}!Board@{Board}}
+\index{Board@{Board}!Board@{Board}}
+\doxysubsubsection{\texorpdfstring{Board()}{Board()}}
+{\footnotesize\ttfamily Board\+::\+Board (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+store the element 
+\begin{DoxyParams}{Parameters}
+{\em grid} & it is array to store the syboml \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_board_af73f45730119a1fd8f6670f53f959e68}\label{class_board_af73f45730119a1fd8f6670f53f959e68}} 
+\index{Board@{Board}!````~Board@{$\sim$Board}}
+\index{````~Board@{$\sim$Board}!Board@{Board}}
+\doxysubsubsection{\texorpdfstring{$\sim$Board()}{~Board()}}
+{\footnotesize\ttfamily Board\+::$\sim$\+Board (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+discontructor. delete array 
+\begin{DoxyParams}{Parameters}
+{\em grid} & array to delete. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_board_a89c268a20ac8cb9a7e3d5fc5d7ca6c74}\label{class_board_a89c268a20ac8cb9a7e3d5fc5d7ca6c74}} 
+\index{Board@{Board}!addShip@{addShip}}
+\index{addShip@{addShip}!Board@{Board}}
+\doxysubsubsection{\texorpdfstring{addShip()}{addShip()}}
+{\footnotesize\ttfamily bool Board\+::add\+Ship (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{int}]{column,  }\item[{int}]{v,  }\item[{int}]{size,  }\item[{int}]{type }\end{DoxyParamCaption})}
+
+it is action to chekc how to add ship in the borad 
+\begin{DoxyParams}{Parameters}
+{\em row,column,v,size,type.} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_board_a8ee25e302128a5fe6c6f8bba611ea8c9}\label{class_board_a8ee25e302128a5fe6c6f8bba611ea8c9}} 
+\index{Board@{Board}!checkHit@{checkHit}}
+\index{checkHit@{checkHit}!Board@{Board}}
+\doxysubsubsection{\texorpdfstring{checkHit()}{checkHit()}}
+{\footnotesize\ttfamily string Board\+::check\+Hit (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{int}]{column }\end{DoxyParamCaption})}
+
+check the hit of ship , and return it back 
+\begin{DoxyParams}{Parameters}
+{\em row,column} & is from last function \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_board_afa442ee5fb3a351a2c851eb39530d98c}\label{class_board_afa442ee5fb3a351a2c851eb39530d98c}} 
+\index{Board@{Board}!clearScreen@{clearScreen}}
+\index{clearScreen@{clearScreen}!Board@{Board}}
+\doxysubsubsection{\texorpdfstring{clearScreen()}{clearScreen()}}
+{\footnotesize\ttfamily void Board\+::clear\+Screen (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+clean the screen. fill out with space 
+\begin{DoxyParams}{Parameters}
+{\em n} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_board_a3cb8c4ee69aeeb9371d71d998fd5ad69}\label{class_board_a3cb8c4ee69aeeb9371d71d998fd5ad69}} 
+\index{Board@{Board}!Display@{Display}}
+\index{Display@{Display}!Board@{Board}}
+\doxysubsubsection{\texorpdfstring{Display()}{Display()}}
+{\footnotesize\ttfamily void Board\+::\+Display (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+show the element in the array 
+\begin{DoxyParams}{Parameters}
+{\em grid} & array to show syboml \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_board_ae33320c0008151e8d0be73c3844db353}\label{class_board_ae33320c0008151e8d0be73c3844db353}} 
+\index{Board@{Board}!update@{update}}
+\index{update@{update}!Board@{Board}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Board\+::update (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{int}]{column,  }\item[{string}]{u }\end{DoxyParamCaption})}
+
+update ship action 
+\begin{DoxyParams}{Parameters}
+{\em u} & it is string which contain element. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/ankee/\+Documents/\+Git\+Hub/\+EECS-\/448-\/\+Team-\/10-\/\+Battleship-\/\+Project/Board.\+h\item 
+C\+:/\+Users/ankee/\+Documents/\+Git\+Hub/\+EECS-\/448-\/\+Team-\/10-\/\+Battleship-\/\+Project/Board.\+cpp\end{DoxyCompactItemize}

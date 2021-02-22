@@ -1,0 +1,120 @@
+\hypertarget{class_ships}{}\doxysection{Ships Class Reference}
+\label{class_ships}\index{Ships@{Ships}}
+
+
+{\ttfamily \#include $<$Ships.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_ships_a616289c0f45929976ab8b18eed78c26a}{build\+Ship}} (int)
+\item 
+void \mbox{\hyperlink{class_ships_a8da5f0296c98a9c1f7ff8905e9d6ee69}{hit}} ()
+\item 
+bool \mbox{\hyperlink{class_ships_a4cbd8b18f1f5b6c52d39bd5247dee5a3}{is\+Destroyed}} ()
+\item 
+void \mbox{\hyperlink{class_ships_a5c4308a6a3b6428c7073cab796c56aa8}{set\+Size}} (int s)
+\item 
+\mbox{\hyperlink{class_ships_ad9c30548e4446b598e187dbdbac8b1f7}{Ships}} ()
+\item 
+\mbox{\hyperlink{class_ships_ad4f6bfbee3a74fa37cbbffc899c4f50f}{$\sim$\+Ships}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_ships_a20c8cc4b2315b13ef68b20caee4c3057}\label{class_ships_a20c8cc4b2315b13ef68b20caee4c3057}} 
+bool {\bfseries destroyed}
+\item 
+\mbox{\Hypertarget{class_ships_a7fd0a7b54e131a6e953b6337df168241}\label{class_ships_a7fd0a7b54e131a6e953b6337df168241}} 
+int {\bfseries hits}
+\item 
+\mbox{\Hypertarget{class_ships_aba7e1af08dacbafaf11ca42b5a2d1f81}\label{class_ships_aba7e1af08dacbafaf11ca42b5a2d1f81}} 
+int {\bfseries size}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+draw the ship. determine how ship in the board. \begin{DoxyAuthor}{Author}
+Team 10 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+19, Feb 2021 
+\end{DoxyVersion}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_ships_ad9c30548e4446b598e187dbdbac8b1f7}\label{class_ships_ad9c30548e4446b598e187dbdbac8b1f7}} 
+\index{Ships@{Ships}!Ships@{Ships}}
+\index{Ships@{Ships}!Ships@{Ships}}
+\doxysubsubsection{\texorpdfstring{Ships()}{Ships()}}
+{\footnotesize\ttfamily Ships\+::\+Ships (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+constructor 
+\begin{DoxyParams}{Parameters}
+{\em nothing} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_ships_ad4f6bfbee3a74fa37cbbffc899c4f50f}\label{class_ships_ad4f6bfbee3a74fa37cbbffc899c4f50f}} 
+\index{Ships@{Ships}!````~Ships@{$\sim$Ships}}
+\index{````~Ships@{$\sim$Ships}!Ships@{Ships}}
+\doxysubsubsection{\texorpdfstring{$\sim$Ships()}{~Ships()}}
+{\footnotesize\ttfamily Ships\+::$\sim$\+Ships (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+distructor 
+\begin{DoxyParams}{Parameters}
+{\em nothing} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_ships_a616289c0f45929976ab8b18eed78c26a}\label{class_ships_a616289c0f45929976ab8b18eed78c26a}} 
+\index{Ships@{Ships}!buildShip@{buildShip}}
+\index{buildShip@{buildShip}!Ships@{Ships}}
+\doxysubsubsection{\texorpdfstring{buildShip()}{buildShip()}}
+{\footnotesize\ttfamily void Ships\+::build\+Ship (\begin{DoxyParamCaption}\item[{int}]{s }\end{DoxyParamCaption})}
+
+check the state of destory, draw the syboml 
+\begin{DoxyParams}{Parameters}
+{\em s} & it is symbol of ship \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_ships_a8da5f0296c98a9c1f7ff8905e9d6ee69}\label{class_ships_a8da5f0296c98a9c1f7ff8905e9d6ee69}} 
+\index{Ships@{Ships}!hit@{hit}}
+\index{hit@{hit}!Ships@{Ships}}
+\doxysubsubsection{\texorpdfstring{hit()}{hit()}}
+{\footnotesize\ttfamily void Ships\+::hit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+get the hit form the gamer 
+\begin{DoxyParams}{Parameters}
+{\em hits} & make the number get bigger. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_ships_a4cbd8b18f1f5b6c52d39bd5247dee5a3}\label{class_ships_a4cbd8b18f1f5b6c52d39bd5247dee5a3}} 
+\index{Ships@{Ships}!isDestroyed@{isDestroyed}}
+\index{isDestroyed@{isDestroyed}!Ships@{Ships}}
+\doxysubsubsection{\texorpdfstring{isDestroyed()}{isDestroyed()}}
+{\footnotesize\ttfamily bool Ships\+::is\+Destroyed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+compare the hit with size to get the is the ship destory 
+\begin{DoxyParams}{Parameters}
+{\em hit,size} & form the function before \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_ships_a5c4308a6a3b6428c7073cab796c56aa8}\label{class_ships_a5c4308a6a3b6428c7073cab796c56aa8}} 
+\index{Ships@{Ships}!setSize@{setSize}}
+\index{setSize@{setSize}!Ships@{Ships}}
+\doxysubsubsection{\texorpdfstring{setSize()}{setSize()}}
+{\footnotesize\ttfamily void Ships\+::set\+Size (\begin{DoxyParamCaption}\item[{int}]{s }\end{DoxyParamCaption})}
+
+get the size form the gamer choice 
+\begin{DoxyParams}{Parameters}
+{\em s} & of the size from the choice \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/ankee/\+Documents/\+Git\+Hub/\+EECS-\/448-\/\+Team-\/10-\/\+Battleship-\/\+Project/Ships.\+h\item 
+C\+:/\+Users/ankee/\+Documents/\+Git\+Hub/\+EECS-\/448-\/\+Team-\/10-\/\+Battleship-\/\+Project/\mbox{\hyperlink{_ships_8cpp}{Ships.\+cpp}}\end{DoxyCompactItemize}
