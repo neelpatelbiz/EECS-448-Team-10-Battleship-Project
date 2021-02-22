@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 /**
- * draw the ship. determine how ship in the board.
+ * Ship class
  * @author  Team 10
  * @version 19, Feb 2021
  */
@@ -14,32 +14,34 @@ class Ships
 public:
   /**
  * constructor
- * @param  nothing
+ * @param
  */
   Ships();
   /**
- * check the state of destory, draw the syboml
- * @param  s it is symbol of ship
+ * check the state of destory, draw the symbol
+ * @param int is the size of ship onject
+ *  Changes ship object attributes
  */
   void buildShip(int);
   /**
-* distructor
-* @param  nothing
+* destructor
+* returns memory
+* @param
 */
   ~Ships();
   /**
-* get the size form the gamer choice
-* @param  s  of the size from the choice
+* User inputs size of Ship
+* @param  int that corresponds to size
 */
   void setSize(int s);
   /**
-* get the hit form the gamer
-* @param  hits make the number get bigger.
+* Increases the hit counter by 1
+* @param
 */
   void hit();
   /**
-* compare the hit with size to get the is the ship destory
-* @param  hit, size form the function before
+* compare the hit counter with size counter to check if they equal == ship destroyed
+* @param 
 */
   bool isDestroyed();
 

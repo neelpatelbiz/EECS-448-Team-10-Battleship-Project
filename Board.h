@@ -6,7 +6,7 @@
 #include "Ships.h"
 using namespace std;
 /**
- * draw the borad. deter the ship statues
+ * Program to implement the Board.
  * @author  Team 10
  * @version 19, Feb 2021
  */
@@ -16,37 +16,38 @@ class Board
 public:
   /**
 	 * store the element
-	 * @param   grid it is array to store the syboml
+	 * @param  grid array to store instances of Ships
 	 */
   Board();
   /**
-* discontructor. delete array
+* destuctor. to delete array
 * @param   grid array to delete.
 */
   ~Board();
   /**
 * show the element in the array
-* @param   grid array to show syboml
+* @param   array index
 */
   void Display();
   /**
-* clean the screen. fill out with space
-* @param n
+* clean the screen
+* @param
 */
   void clearScreen();
   /**
-* it is action to chekc how to add ship in the borad
+* fucntion to add ship
 * @param row, column, v, size, type.
+  @return true/false
 */
   bool addShip(int, int, int, int, int);
   /**
-* check the hit of ship , and return it back
+* check if the grid index (ordinate position) has a ship object
 * @param row, column is from last function
 */
   string checkHit(int, int);
   /**
 *  update ship action
-* @param u it is string which contain element.
+* @param row, column, u it is string which contains element.
 */
   void update(int, int, string);
 
