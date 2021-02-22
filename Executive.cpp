@@ -56,6 +56,7 @@ void Executive::PrintMenu()
 			cout << "by selecting spots on the game board to see if you hit or miss." << endl;
 			cout << "The game is over when one player loses all of their ships." << endl << endl;
 			cout << "At the beginning of the game, each player will set up their boats on a 10x10 grid simulating a board." << endl;
+			cout << "Do NOT HIT the same coordinates more than one time when picking where to hit an enemy boat." << endl;
 			cout << "You will have the choice between playing with 1 to 6 ships that you will place on the board:" << endl << endl;
 			cout << "Games with 1 ship: " << endl << "Sub: (1x1)" << endl << endl;
 			cout << "2 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2)" << endl << endl;
@@ -82,6 +83,20 @@ void Executive::Game()
 	int row;
 	char column;
 	int vert;
+	bool destroyedbeforesub1 = false;
+	bool destroyedbeforesub2 = false;
+	bool destroyedbeforepatrol1 = false;
+	bool destroyedbeforepatrol2 = false;
+	bool destroyedbeforecruiser1 = false;
+	bool destroyedbeforecruiser2 = false;
+	bool destroyedbeforedestroyer1 = false;
+	bool destroyedbeforedestroyer2 = false;
+	bool destroyedbeforebattleship1 = false;
+	bool destroyedbeforebattleship2 = false;
+	bool destroyedbeforecarrier1 = false;
+	bool destroyedbeforecarrier2 = false;
+
+
 	cout << "Enter the number of ships you would like to play with, up to a total of 6." << endl;
 	cin >> numberOfShips;
 	cout << "HIDE THE SCREEN SO ONLY ONE PLAYER CAN SEE IT" << endl;
@@ -165,7 +180,7 @@ void Executive::Game()
 			i--;
 		}
 		p1Ships.Display();
-		std::this_thread::sleep_for(7s);
+		//std::this_thread::sleep_for(7s);
 	}
 	p1Ships.clearScreen();
 	cout << "SWITCH PLAYERS" << endl;
@@ -248,7 +263,7 @@ void Executive::Game()
 			i--;
 		}
 		p2Ships.Display();
-		std::this_thread::sleep_for(7s);
+		//std::this_thread::sleep_for(7s);
 	}
 	p2Ships.clearScreen();
 	cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
@@ -354,9 +369,18 @@ void Executive::Game()
 				p2Sub.hit();
 				if (p2Sub.isDestroyed() == true)
 				{
-					totalDestroyed1++;
-					cout << "YOU SUNK A SUBMARINE!";
-					cout << endl;
+					if (destroyedbeforesub2 == false)
+					{
+						destroyedbeforesub2 = true;
+						totalDestroyed1++;
+						cout << "YOU SUNK A SUBMARINE!";
+						cout << endl;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
 				}
 			}
 			if (spot == "P")
@@ -364,9 +388,18 @@ void Executive::Game()
 				p2Patrol.hit();
 				if (p2Patrol.isDestroyed() == true)
 				{
-					totalDestroyed1++;
-					cout << "YOU SUNK A PATROL BOAT!";
-					cout << endl;
+					if (destroyedbeforepatrol2 == false)
+					{
+						destroyedbeforepatrol2 = true;
+						totalDestroyed1++;
+						cout << "YOU SUNK A PATROL BOAT!";
+						cout << endl;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
 				}
 			}
 			if (spot == "c")
@@ -374,9 +407,20 @@ void Executive::Game()
 				p2Cruiser.hit();
 				if (p2Cruiser.isDestroyed() == true)
 				{
-					totalDestroyed1++;
-					cout << "YOU SUNK A CRUISER!";
-					cout << endl;
+					if (destroyedbeforecruiser2 == false)
+					{
+
+						totalDestroyed1++;
+						cout << "YOU SUNK A CRUISER!";
+						cout << endl;
+						destroyedbeforecruiser2 = true;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
+
 				}
 			}
 			if (spot == "D")
@@ -384,9 +428,19 @@ void Executive::Game()
 				p2Destroyer.hit();
 				if (p2Destroyer.isDestroyed() == true)
 				{
-					totalDestroyed1++;
-					cout << "YOU SUNK A DESTROYER!";
-					cout << endl;
+					if (destroyedbeforedestroyer2 == false)
+					{
+						totalDestroyed1++;
+						cout << "YOU SUNK A DESTROYER!";
+						cout << endl;
+						destroyedbeforedestroyer2 = true;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
+
 				}
 			}
 			if (spot == "B")
@@ -394,9 +448,18 @@ void Executive::Game()
 				p2BattleShip.hit();
 				if (p2BattleShip.isDestroyed() == true)
 				{
-					totalDestroyed1++;
-					cout << "YOU SUNK A BATTLESHIP!";
-					cout << endl;
+					if (destroyedbeforebattleship2 == false)
+					{
+						totalDestroyed1++;
+						cout << "YOU SUNK A BATTLESHIP!";
+						cout << endl;
+						destroyedbeforebattleship2 = true;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
 				}
 			}
 			if (spot == "C")
@@ -404,9 +467,19 @@ void Executive::Game()
 				p2Carrier.hit();
 				if (p2Carrier.isDestroyed() == true)
 				{
-					totalDestroyed1++;
-					cout << "YOU SUNK A CARRIER!";
-					cout << endl;
+					if (destroyedbeforecarrier2 == false)
+					{
+						totalDestroyed1++;
+						cout << "YOU SUNK A CARRIER!";
+						cout << endl;
+						destroyedbeforecarrier2 = true;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
+
 				}
 			}
 			p1HitOrMiss.update(row, trueColumn, "H");
@@ -425,7 +498,7 @@ void Executive::Game()
 
 		cout << "PLAYER 2 TURN [" << turn << "]";
 		cout << endl;
-		std::this_thread::sleep_for(7s);
+		//std::this_thread::sleep_for(7s);
 
 		cout << "YOUR SHIPS:";
 		cout << endl << endl;
@@ -506,9 +579,19 @@ void Executive::Game()
 				p1Sub.hit();
 				if (p1Sub.isDestroyed() == true)
 				{
-					totalDestroyed2++;
-					cout << "YOU SUNK A SUBMARINE!";
-					cout << endl;
+					if (destroyedbeforesub1 == false)
+					{
+						totalDestroyed1++;
+						cout << "YOU SUNK A SUBMARINE!";
+						cout << endl;
+						destroyedbeforesub1 = true;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
+
 				}
 			}
 			if (spot == "P")
@@ -516,9 +599,19 @@ void Executive::Game()
 				p1Patrol.hit();
 				if (p1Patrol.isDestroyed() == true)
 				{
-					totalDestroyed2++;
-					cout << "YOU SUNK A PATROL BOAT!";
-					cout << endl;
+					if (destroyedbeforepatrol1 == false)
+					{
+						totalDestroyed1++;
+						cout << "YOU SUNK A PATROL BOAT!";
+						cout << endl;
+						destroyedbeforepatrol1 = true;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
+
 				}
 			}
 			if (spot == "c")
@@ -526,9 +619,19 @@ void Executive::Game()
 				p1Cruiser.hit();
 				if (p1Cruiser.isDestroyed() == true)
 				{
-					totalDestroyed2++;
-					cout << "YOU SUNK A CRUISER!";
-					cout << endl;
+					if (destroyedbeforecruiser1 == false)
+					{
+						totalDestroyed1++;
+						cout << "YOU SUNK A CRUISER!";
+						cout << endl;
+						destroyedbeforecruiser1 = true;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
+
 				}
 			}
 			if (spot == "D")
@@ -536,9 +639,19 @@ void Executive::Game()
 				p1Destroyer.hit();
 				if (p1Destroyer.isDestroyed() == true)
 				{
-					totalDestroyed2++;
-					cout << "YOU SUNK A DESTROYER!";
-					cout << endl;
+					if (destroyedbeforedestroyer1 == false)
+					{
+						totalDestroyed1++;
+						cout << "YOU SUNK A DESTROYER!";
+						cout << endl;
+						destroyedbeforedestroyer1 = true;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
+
 				}
 			}
 			if (spot == "B")
@@ -546,9 +659,19 @@ void Executive::Game()
 				p1BattleShip.hit();
 				if (p1BattleShip.isDestroyed() == true)
 				{
-					totalDestroyed2++;
-					cout << "YOU SUNK A BATTLESHIP!";
-					cout << endl;
+					if (destroyedbeforebattleship1 == false)
+					{
+						totalDestroyed1++;
+						cout << "YOU SUNK A BATTLESHIP!";
+						cout << endl;
+						destroyedbeforebattleship1 = true;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
+
 				}
 			}
 			if (spot == "C")
@@ -556,9 +679,19 @@ void Executive::Game()
 				p1Carrier.hit();
 				if (p1Carrier.isDestroyed() == true)
 				{
-					totalDestroyed2++;
-					cout << "YOU SUNK A CARRIER!";
-					cout << endl;
+					if (destroyedbeforecarrier1 == false)
+					{
+						totalDestroyed1++;
+						cout << "YOU SUNK A CARRIER!";
+						cout << endl;
+						destroyedbeforecarrier1 = true;
+					}
+					else
+					{
+						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
+						cout << endl;
+					}
+
 				}
 			}
 			p2HitOrMiss.update(row, trueColumn, "H");
@@ -574,7 +707,7 @@ void Executive::Game()
 		{
 			winner = true;
 		}
-		std::this_thread::sleep_for(7s);
+		//std::this_thread::sleep_for(7s);
 		turn++;
 	}
 
@@ -599,5 +732,5 @@ void Executive::Game()
 
 Executive::~Executive()
 {
-	
+
 }
