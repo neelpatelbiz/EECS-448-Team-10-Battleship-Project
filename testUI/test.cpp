@@ -10,9 +10,9 @@ int main()
         unsigned int w = 500;
         unsigned int h = 500;
 
-        CImg<unsigned char> 
-        CImgDisplay disp(w,h,"Title", 0, false, false);
-        disp.display("10X10Grid.jpg");
+        CImg<unsigned char> background;
+        background.assign(w, h, 1, 3);
+        background.display();
         // const unsigned char bluegreen[] = {85, 78, 255 };
         // CImg<unsigned char> bg(w,h,1,3);
 

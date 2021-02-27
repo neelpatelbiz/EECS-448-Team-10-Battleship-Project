@@ -6,4 +6,4 @@ test.o: test.cpp
 	g++ -std=c++11 -g -Wall -c test.cpp
 
 clean: 
-	rm *.o test.out
+	rm *.o *.out test.out
