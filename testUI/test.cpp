@@ -11,10 +11,29 @@ int main()
         CImg<unsigned char> background;
         background.assign(W, H, 1, 3);
         background.display();
-        // const unsigned char bluegreen[] = {85, 78, 255 };
-        // CImg<unsigned char> bg(w,h,1,3);
-
-        // bg.draw_circle(w/2,h/2,100, bluegreen);
-
-        // bg.display();
+        
 }
+/*
+Button usage
+//hex 1 for left mouse button
+CImgDisplay disp(400,400);
+while (!disp.is_closed()) {
+  if (disp.button()&1) { // Left button clicked
+    ...
+  }
+  if (disp.button()&2) { // Right button clicked
+    ...
+  }
+  if (disp.button()&4) { // Middle button clicked
+    ...
+  }
+  disp.wait();
+}
+
+//mouse pos functions: returns [0, height()-1] or -1 if pointer is outside of window
+int mouse_x()const
+int mouse_y()const
+
+
+
+*/
