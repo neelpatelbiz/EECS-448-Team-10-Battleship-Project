@@ -4,25 +4,42 @@
 int main()
 {
         using namespace cimg_library;
-        const unsigned char blue[] = { 128,200,255}, red[] = { 255,0,0 }, white[] = { 255,255,255 }; 
-        unsigned int W = 500, H = 500, horOffset = 100, verOffset = 100, sqWid=W/15, sqHeight=H/15;
+        const unsigned char blue[] = { 128,200,255}, red[] = { 255,0,0 }, 
+	      white[] = { 255,255,255 }; 
+        unsigned int W = 500, H = 500, horOffset = 100, verOffset = 100, sqWid=W/15,
+		     sqHeight=H/15;
         
         //create background
         CImg<unsigned char> background(W, H, 1, 3, 255); 
-        background.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+	/*
+	CImg<unsigned char> attacked(W/15,H/15, 3, 255);
+	CImg<unsigned char> defaultTile(W/15,H/15, 3, 255);
+	CImg<unsigned char> missed(W/15,H/15, 3, 255);
+	CImg<unsigned char> carrier (W/15,H/15, 3, 255);
+	CImg<unsigned char> battleship (W/15,H/15, 3, 255);
+	CImg<unsigned char> cruiser (W/15,H/15, 3, 255);
+	CImg<unsigned char> destroyer (W/15,H/15, 3, 255);
+	CImg<unsigned char> patrol (W/15,H/15, 3, 255);
+	CImg<unsigned char> sub (W/15,H/15, 3, 255);
+	*/
+
+        background.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H)
+		.blur(2).normalize(0,128);
         //.draw_rectangle(0,0,W-1,H-1,white,1.0f,~0U);
         for(int i=0;i<10;i++)
         {
           for(int j=0;j<10;j++)
           {
-            background.draw_rectangle((W/10)*i,(W/10)*j, (W/10)*i+sqWid,(W/10)*j+sqHeight, blue);
+            background.draw_rectangle((W/12)+(W/12)*i,(H/12)*j+(H/6), 
+		(W/12)*i+(W/6), (H/12)*j+((3*H)/12), blue, 1, ~0U);
           }
         }
         
 
         //create display
         CImgDisplay disp(background,"CImg Tetris",0,false,true);
-        disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
+        disp.move((CImgDisplay::screen_width() - disp.width())/2,
+			(CImgDisplay::screen_height() - disp.height())/2);
         std::getchar();
         
 }
