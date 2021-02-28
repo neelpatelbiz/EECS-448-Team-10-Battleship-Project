@@ -10,7 +10,9 @@ int main()
 		     sqHeight=H/15;
         
         //create background
+
         CImg<unsigned char> background(W, H, 1, 3, 255); 
+        background.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
 	/*
 	CImg<unsigned char> attacked(W/15,H/15, 3, 255);
 	CImg<unsigned char> defaultTile(W/15,H/15, 3, 255);
@@ -22,9 +24,24 @@ int main()
 	CImg<unsigned char> patrol (W/15,H/15, 3, 255);
 	CImg<unsigned char> sub (W/15,H/15, 3, 255);
 	*/
+        if(cimg::dialog("BASIC RULES",
+        "The goal of the game is to eliminate all of your opponent's ships\n"
+        "by selecting spots on the game board to see if you hit or miss.\n"
+        "The game is over when one player loses all of their ships.\n\n"
+        "At the beginning of the game, each player will set up their boats on a 10x10 grid simulating a board.\n"
+        "Do NOT HIT the same coordinates more than one time when picking where to hit an enemy boat.\n"
+        "You will have the choice between playing with 1 to 6 ships that you will place on the board:\n\n"
+        "Games with 1 ship: \nSub: (1x1)\n\n"
+        "2 ships: \nSub: (1x1), Patrol Boat: (1x2)\n\n"
+        "3 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3)\n\n"
+        "4 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4)\n\n"
+        "5 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5)\n\n"
+        "6 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5), Carrier: (1x6)\n\n"
+        "On the board, there is a few symbols that represent ships, hits, misses, and the board itself:\n\n"
+        "'.' = PORTION OF BOARD NOT INTERACTED WITH, 'H'= HIT, 'M' = MISS\n", "Start", "Quit",0,0,0,0,
+        background, true))std::exit(0);
 
-        background.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H)
-		.blur(2).normalize(0,128);
+        
         //.draw_rectangle(0,0,W-1,H-1,white,1.0f,~0U);
         for(int i=0;i<10;i++)
         {
