@@ -4,8 +4,8 @@
 int main()
 {
         using namespace cimg_library;
-        const unsigned char blue[] = { 128,200,255}, red[] = { 255,0,0 }, 
-	      white[] = { 255,255,255 }; 
+        const unsigned char gridLines[] = { 128,200,255}, attacked[] = { 255,0,0 }, 
+	      defaultTile[] = { 255,255,255 }; 
         unsigned int W = 500, H = 500, horOffset = 100, verOffset = 100, sqWid=W/15,
 		     sqHeight=H/15;
         
@@ -30,14 +30,24 @@ int main()
         {
           for(int j=0;j<10;j++)
           {
-            background.draw_rectangle((W/12)+(W/12)*i,(H/12)*j+(H/6), 
-		(W/12)*i+(W/6), (H/12)*j+((3*H)/12), blue, 1, ~0U);
+            //if(p2Ships.checkHit(i+1,j+1) == "S" || 
+            //p2Ships.checkHit(i+1,j+1) == "P" ||
+            //p2Ships.checkHit(i+1,j+1) == "c" ||
+            //p2Ships.checkHit(i+1,j+1) == "D" ||
+            //p2Ships.checkHit(i+1,j+1) == "B" ||
+            //p2Ships.checkHit(i+1,j+1) == "C" ||)
+            background.draw_rectangle((W/12)+(W/12)*j+1,(H/12)*i+(H/6)+1, 
+		        (W/12)*j+(W/6)-1, (H/12)*i+((3*H)/12)-1, attacked);
+            //else if(p2Ships.checkHit(i+1, j+1) == ".")
+            
+            background.draw_rectangle((W/12)+(W/12)*j,(H/12)*i+(H/6), 
+		        (W/12)*j+(W/6), (H/12)*i+((3*H)/12), gridLines, 1, ~0U);
           }
         }
         
 
         //create display
-        CImgDisplay disp(background,"CImg Tetris",0,false,true);
+        CImgDisplay disp(background,"BattleShip",0,false,true);
         disp.move((CImgDisplay::screen_width() - disp.width())/2,
 			(CImgDisplay::screen_height() - disp.height())/2);
         std::getchar();
