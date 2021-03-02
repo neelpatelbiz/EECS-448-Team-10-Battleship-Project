@@ -12,6 +12,12 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+
+using namespace cimg_library;
+const unsigned int W = 500, H = 500;
+CImg<unsigned char> background(W, H, 1, 3, 255); 
+//background.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+
 Executive::Executive()
 {
 	p1Carrier.buildShip(6);
