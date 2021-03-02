@@ -7,6 +7,7 @@
 #include "Board.h"
 #include "Executive.h"
 #include "Ships.h"
+#include "CImg.h"
 #include <string>
 #include <iostream>
 #include <chrono>
@@ -35,46 +36,21 @@ void Executive::run()
 
 void Executive::PrintMenu()
 {
-	bool loop = true;
-	int selection = 0;
-	cout << "  WELCOME TO" << endl;
-	cout << " //BATTLESHIP//" << endl << endl << endl;
-	while (loop)
-	{
-		cout << endl << "Enter in number to navigate menu" << endl;
-		cout << "1: Start Game" << endl;
-		cout << "2: How to Play" << endl;
-		cin >> selection;
-		switch (selection)
-		{
-		case 1:
-			loop = false;
-			break;
-		case 2:
-			cout << "BASIC RULES" << endl << endl;
-			cout << "The goal of the game is to eliminate all of your opponent's ships ";
-			cout << "by selecting spots on the game board to see if you hit or miss." << endl;
-			cout << "The game is over when one player loses all of their ships." << endl << endl;
-			cout << "At the beginning of the game, each player will set up their boats on a 10x10 grid simulating a board." << endl;
-			cout << "Do NOT HIT the same coordinates more than one time when picking where to hit an enemy boat." << endl;
-			cout << "You will have the choice between playing with 1 to 6 ships that you will place on the board:" << endl << endl;
-			cout << "Games with 1 ship: " << endl << "Sub: (1x1)" << endl << endl;
-			cout << "2 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2)" << endl << endl;
-			cout << "3 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3)" << endl << endl;
-			cout << "4 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4)" << endl << endl;
-			cout << "5 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5)" << endl << endl;
-			cout << "6 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), ";
-			cout << "Battleship: (1x5), Carrier: (1x6)" << endl << endl;
-			cout << "On the board, there is a few symbols that represent ships, hits, misses, and the board itself:" << endl << endl;
-			cout << "'.' = PORTION OF BOARD NOT INTERACTED WITH, 'H'= HIT, 'M' = MISS" << endl;
-			cout << "'S' = SUB, 'P' = PATROL BOAT, 'c' = CRUISER, 'D' = DESTROYER, 'B' = BATTLESHIP, 'C' = CARRIER" << endl << endl;
-
-
-			break;
-		default:
-			cout << selection << " is not a valid choice, try again." << endl;
-		}
-	}
+	if(cimg::dialog("BASIC RULES",
+	"The goal of the game is to eliminate all of your opponent's ships\n"
+	"by selecting spots on the game board to see if you hit or miss.\n"
+	"The game is over when one player loses all of their ships.\n\n"
+	"At the beginning of the game, each player will set up their boats on a 10x10 grid simulating a board.\n"
+	"Do NOT HIT the same coordinates more than one time when picking where to hit an enemy boat.\n"
+	"You will have the choice between playing with 1 to 6 ships that you will place on the board:\n\n"
+	"Games with 1 ship: \nSub: (1x1)\n\n"
+	"2 ships: \nSub: (1x1), Patrol Boat: (1x2)\n\n"
+	"3 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3)\n\n"
+	"4 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4)\n\n"
+	"5 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5)\n\n"
+	"6 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5), Carrier: (1x6)\n\n",
+   	"Start", "Quit",0,0,0,0,
+  	background, true))std::exit(0);
 }
 
 void Executive::Game()
@@ -97,9 +73,7 @@ void Executive::Game()
 	bool destroyedbeforecarrier2 = false;
 
 
-	cout << "Enter the number of ships you would like to play with, up to a total of 6." << endl;
-	cin >> numberOfShips;
-	cout << "HIDE THE SCREEN SO ONLY ONE PLAYER CAN SEE IT" << endl;
+	numberOfShips = cimg::dialog("Number Of Ships","Enter the number of ships you would like to play with, up to a total of 6.", "1", "2","3","4","5","6", background, true) + 1;
 	cout << "PLAYER 1" << endl;
 	for (int i = 0; i < numberOfShips; i++)
 	{

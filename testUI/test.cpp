@@ -70,6 +70,11 @@ int main()
   //create display
   CImgDisplay disp(background,"BattleShip",0,false,true);
   disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
+
+  while(!disp.is_closed())
+  {
+    
+  }
   std::getchar();
         
 }
