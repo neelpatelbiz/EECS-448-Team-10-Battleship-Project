@@ -44,7 +44,7 @@ private:
  *   are Hit.
  */
     void Game();
-	Board p1HitOrMiss;	/// Instance of board that  
+	Board p1HitOrMiss; 
 	Board p1Ships;
 	Board p2HitOrMiss;
 	Board p2Ships;

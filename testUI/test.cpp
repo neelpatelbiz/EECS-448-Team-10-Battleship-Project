@@ -13,8 +13,8 @@ int main()
 
   CImg<unsigned char> background(W, H, 1, 3, 255); 
   background.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
-  CImg<unsigned char> SettingsSelect(2, 2, 1, 3, 255); 
-  background.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+  //CImg<unsigned char> SettingsSelect(2, 2, 1, 3, 255); 
+  //SettingsSelect.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
   
   // if(cimg::dialog("BASIC RULES",
   // "The goal of the game is to eliminate all of your opponent's ships\n"
@@ -58,13 +58,18 @@ int main()
   CImgDisplay disp(background,"BattleShip",0,false,true);
   disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
 
+  CImg<unsigned char> visu;
+
 
   while(!disp.is_closed())
   {
-    bool shipSelectionsMade = false, p1Turn = true, p2Turn = true;
-    int row = 0, col = 0, vert = 0;
+    
+    bool shipSelectionsMade = false;
+    int row = 0, col = 0, vert = 1;
+
     for(int i = 0; i < numberOfShips; i++)
     {
+      visu = background;
       while(shipSelectionsMade == false)
       {
         // if(((disp.mouse_x()-4)/(W/12)) >= 1 && ((disp.mouse_x()-4)/(W/12)) <=10)
@@ -75,18 +80,17 @@ int main()
         
         //hover code
         if(((disp.mouse_x()-4)/(W/12)) >= 1 && ((disp.mouse_x()-4)/(W/12)) <=10 
-        && ((disp.mouse_y()-4)/(W/12))-1 <=10 && ((disp.mouse_y()-4)/(W/12))-1 >=1 
-        && disp.button()&1 == false)
+        && ((disp.mouse_y()-4)/(H/12))-1 <=10 && ((disp.mouse_y()-4)/(H/12))-1 >=1 
+        && disp.button()&1)
         {
           if(vert == 1)//draw vertically
           {
             int startRowPos = (H/6)+((disp.mouse_y()-4)/(W/12))*W+1;//first x pos
             int startColPos = (W/12)+((disp.mouse_x()-4)/(W/12))*W+1;
-            for(int j=0; j<=i; j++)
-            {
-              background.draw_rectangle((W/12)*j+startRowPos, startColPos, (W/12)*j+(W/12)+startRowPos-2, startColPos+(H/12)-2, attacked);
-            }
-            disp.display(background);
+            
+            visu.draw_rectangle(((disp.mouse_x()-4)/(W/12))*(W/12)+1, ((disp.mouse_y()-4)/(H/12))*(H/12)+1, ((disp.mouse_x()-4)/(W/12))*(W/12)+(W/12)-1, ((disp.mouse_y()-4)/(H/12))*(H/12)+(H/12)+1, attacked);
+            visu.draw_text(0,0,"* Press a key to start round *",gridLines);
+            disp.display(visu);
           }
           else if(vert == 0)//draw horizontally
           {
@@ -94,9 +98,9 @@ int main()
             {
               int startRowPos = (H/6)+((disp.mouse_y()-4)/(W/12))*W+1;//first x pos
               int startColPos = (W/12)+((disp.mouse_x()-4)/(W/12))*W+1;
-              background.draw_rectangle(startRowPos, (H/12)*i+startColPos, startRowPos+(W/12)-2, (H/12)*i+startColPos+(H/12)-2, attacked);
+              visu.draw_rectangle(startRowPos, (H/12)*i+startColPos, startRowPos+(W/12)-2, (H/12)*i+startColPos+(H/12)-2, attacked);
             }
-            disp.display(background);
+            disp.display(visu);
           }
           
         }
@@ -105,16 +109,15 @@ int main()
         {
           vert = (vert+1)%2;
         }
-        if(p1Turn == true)
+        
+        if((disp.button()&1) == true)
         {
-          if((disp.button()&1) == true)
-          {
-            row = ((disp.mouse_x()-4)/(W/12));
-            col = ((disp.mouse_y()-4)/(W/12))-1;
+          row = ((disp.mouse_x()-4)/(W/12));
+          col = ((disp.mouse_y()-4)/(W/12))-1;
 
-            std::cout<<"tile=("<<row<<", "<<col<<")\n";
-          }
+          std::cout<<"tile=("<<row<<", "<<col<<")\n";
         }
+        
       }
     }
     

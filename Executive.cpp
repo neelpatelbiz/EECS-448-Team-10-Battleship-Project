@@ -4,14 +4,9 @@
 *	@file
 *	@brief
 */
-#include "Board.h"
 #include "Executive.h"
 #include "Ships.h"
 #include "CImg.h"
-#include <string>
-#include <iostream>
-#include <chrono>
-#include <thread>
 
 using namespace cimg_library;
 const unsigned int W = 500, H = 500;
@@ -78,12 +73,12 @@ void Executive::Game()
 	bool destroyedbeforecarrier1 = false;
 	bool destroyedbeforecarrier2 = false;
 
-
+	//this is gross
 	numberOfShips = cimg::dialog("Number Of Ships","Enter the number of ships you would like to play with, up to a total of 6.", "1", "2","3","4","5","6", background, true) + 1;
-	cout << "PLAYER 1" << endl;
+	std::cout << "PLAYER 1" << endl;
 	for (int i = 0; i < numberOfShips; i++)
 	{
-		cout << "Enter in the position of where you would like to place your 1x" << i + 1 << " ship." << endl;
+		std::cout << "Enter in the position of where you would like to place your 1x" << i + 1 << " ship." << endl;
 		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
 		cout << "Enter in the row value." << endl;
 		cin >> row;

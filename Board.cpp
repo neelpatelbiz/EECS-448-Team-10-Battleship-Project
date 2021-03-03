@@ -1,81 +1,65 @@
 #include "Board.h"
+#include "CImg.h"
+
+void Board::clearBoard()
+{
+  playerBackground->assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+  enemyBackground->assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+  for(int i=0;i<10;i++)
+  {
+    for(int j=0;j<10;j++)
+    {
+      playerBackground.draw_rectangle((W/12)+(W/12)*j,(H/12)*i+(H/6), 
+      (W/12)*j+(W/6), (H/12)*i+((3*H)/12), gridLines, 1, ~0U);
+
+      enemyBackground.draw_rectangle((W/12)+(W/12)*j,(H/12)*i+(H/6), 
+      (W/12)*j+(W/6), (H/12)*i+((3*H)/12), gridLines, 1, ~0U);
+    }
+  }
+}
+
 Board::Board()
 {
-  size = 11;
-  grid = new std::string*[size];
+  W=500;
+  H=500;
+  size = 10;
+  shipGrid = new char*[size];
+  attackGrid = new char*[size];
 
   for (int i = 0; i < size; i++)
   {
-    grid[i] = new std::string[size];
+    shipGrid[i] = new char[size];
+    attackGrid[i] = new char[size];
   }
 
   for (int i = 0; i < size; i++)
   {
     for (int j = 0; j < size; j++)
     {
-      if (i == 0)
-      {
-        grid[i][0] = '|';
-        grid[i][1] = " A";
-        grid[i][2] = "B";
-        grid[i][3] = "C";
-        grid[i][4] = "D";
-        grid[i][5] = "E";
-        grid[i][6] = "F";
-        grid[i][7] = "G";
-        grid[i][8] = "H";
-        grid[i][9] = "I";
-        grid[i][10] = "J";
-       }
-       else if (j == 0)
-       {
-        grid[1][j] = "1 ";
-        grid[2][j] = "2 ";
-        grid[3][j] = "3 ";
-        grid[4][j] = "4 ";
-        grid[5][j] = "5 ";
-        grid[6][j] = "6 ";
-        grid[7][j] = "7 ";
-        grid[8][j] = "8 ";
-        grid[9][j] = "9 ";
-        grid[10][j] = "10";
-       }
-       else
-       {
-        grid[i][j] = '.';
-       }
-     }
-   }
+      shipGrid[i] = new char[size];
+      attackGrid[i] = new char[size];  
+    }
+   
+  }
+
+  playerBackground = new CImg<unsigned char>(W, H, 1, 3, 255);
+  enemyBackground = new CImg<unsigned char>(W, H, 1, 3, 255);
+  backgrounds = new CImgList(playerBackground, enemyBackground, false);
+
 }
 
 Board::~Board()
 {
   for (int i = 0; i < size; i++)
   {
- 	  delete[] grid[i];
+ 	  delete[] shipGrid[i];
+    delete[] attackGrid[i];
+
   }
-    delete[] grid;
+  delete[] shipGrid;
+  delete[] attackGrid;
 }
 
-void Board::Display()
-{
-  for(int i = 0; i < size; i++)
-  {
-    for(int j = 0; j < size; j++)
-    {
-      cout << grid[i][j];
-    }
-    cout << endl;
-  }
-}
-
-void Board::clearScreen()
-{
-  for(int i = 0; i < 70; i++)
-  {
-    cout << endl;
-  }
-}
 
 bool Board::addShip(int row, int column, int v, int size, int type)
 {
@@ -163,12 +147,12 @@ bool Board::addShip(int row, int column, int v, int size, int type)
   return added;
 }
 
-string Board::checkHit(int row, int column)
+char Board::checkHit(int row, int column)
 {
     return grid[row][column];
 }
 
-void Board::update(int row, int column, string u)
+void Board::update(int row, int column, char u)
 {
     grid[row][column] = u;
 }
