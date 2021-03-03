@@ -73,6 +73,11 @@ int main()
 
   while(!disp.is_closed())
   {
+    if(disp.button()&1)
+    {
+      std::cout<<"tile=:"<<((disp.mouse_x()-4)/(W/12))-1<<", "<<((disp.mouse_y()-4)/(W/12))-2<<"\n";
+      
+    }
     
   }
   std::getchar();
