@@ -50,7 +50,7 @@ public:
   *  update ship action
   * @param row, column, u it is string which contains element.
   */
-  void update(int, int, string);
+  void update(int, int, char);
 
 private:
   char** shipGrid;
@@ -59,10 +59,10 @@ private:
   unsigned int W,H;
   const unsigned char[3] gridLines={128,200,255} , attacked = {255,0,0};
 
-  CImg<unsigned char>* playerBackground;
-  CImg<unsigned char>* enemyBackground;
-  CImgList<unsigned char>* backgrounds;
-  CImgDisplay playerWindow
+  // CImg<unsigned char>* playerBackground;
+  // CImg<unsigned char>* enemyBackground;
+  // CImgList<unsigned char>* backgrounds;
+  // CImgDisplay playerWindow
 
 };
 #endif

@@ -7,7 +7,7 @@ int main()
   const unsigned char gridLines[] = { 128,200,255}, attacked[] = { 255,0,0 }, 
   defaultTile[] = { 255,255,255 }; 
   unsigned int W = 500, H = 500;
-  int numberOfShips;
+  int numberOfShips = 5;
   
   //create background
 
@@ -16,27 +16,13 @@ int main()
   //CImg<unsigned char> SettingsSelect(2, 2, 1, 3, 255); 
   //SettingsSelect.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
   
-  // if(cimg::dialog("BASIC RULES",
-  // "The goal of the game is to eliminate all of your opponent's ships\n"
-  // "by selecting spots on the game board to see if you hit or miss.\n"
-  // "The game is over when one player loses all of their ships.\n\n"
-  // "At the beginning of the game, each player will set up their boats on a 10x10 grid simulating a board.\n"
-  // "Do NOT HIT the same coordinates more than one time when picking where to hit an enemy boat.\n"
-  // "You will have the choice between playing with 1 to 6 ships that you will place on the board:\n\n"
-  // "Games with 1 ship: \nSub: (1x1)\n\n"
-  // "2 ships: \nSub: (1x1), Patrol Boat: (1x2)\n\n"
-  // "3 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3)\n\n"
-  // "4 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4)\n\n"
-  // "5 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5)\n\n"
-  // "6 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5), Carrier: (1x6)\n\n"
-  // , "Start", "Quit",0,0,0,0,
-  // background, true))std::exit(0);
+  CImgList<unsigned char> backgrounds(background, background, false);
 
-  //CImg<unsigned char> shipSelect(W,H,1,3,255);
+  //CImg<unsigned char> shipSelect(W,H,1,3,255);//ship select cimg to replace popup
   //shipSelect.assign();
-  numberOfShips = cimg::dialog("Number Of Ships","Enter the number of ships you would like to play with, up to a total of 6.", "1", "2","3","4","5","6", background, true) + 1;
+  //numberOfShips = cimg::dialog("Number Of Ships","Enter the number of ships you would like to play with, up to a total of 6.", "1", "2","3","4","5","6", background, true) + 1;
 
-  std::cout<<numberOfShips;
+  //std::cout<<numberOfShips;
   
   //.draw_rectangle(0,0,W-1,H-1,white,1.0f,~0U);
   for(int i=0;i<10;i++)
@@ -44,19 +30,20 @@ int main()
     for(int j=0;j<10;j++)
     {
       //if(//checkhitmethod())
-      // background.draw_rectangle((W/12)+(W/12)*j+1,(H/12)*i+(H/6)+1, 
-      // (W/12)*j+(W/6)-1, (H/12)*i+((3*H)/12)-1, attacked);
+      background.draw_rectangle((W/12)*(j+1)+1,(H/12)*(i+2)+1, 
+      (W/12)*(j+2)-1, (H/12)*(i+3)-1, defaultTile);
       //else if(p2Ships.checkHit(i+1, j+1) == ".")
       
-      background.draw_rectangle((W/12)+(W/12)*j,(H/12)*i+(H/6), 
-      (W/12)*j+(W/6), (H/12)*i+((3*H)/12), gridLines, 1, ~0U);
+      // background.draw_rectangle((W/12)+(W/12)*j,(H/12)*i+(H/6), 
+      // (W/12)*j+(W/6), (H/12)*i+((3*H)/12), gridLines, 1, ~0U);
     }
   }
   
 
   //create display
-  CImgDisplay disp(background,"BattleShip",0,false,true);
+  CImgDisplay disp(background,"BattleShip",0,false,false);
   disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
+
 
   CImg<unsigned char> visu;
 
@@ -79,6 +66,7 @@ int main()
         // } 
         
         //hover code
+        char orientation[20];
         if(((disp.mouse_x()-4)/(W/12)) >= 1 && ((disp.mouse_x()-4)/(W/12)) <=10 
         && ((disp.mouse_y()-4)/(H/12))-1 <=10 && ((disp.mouse_y()-4)/(H/12))-1 >=1 
         && disp.button()&1)
@@ -88,19 +76,22 @@ int main()
             int startRowPos = (H/6)+((disp.mouse_y()-4)/(W/12))*W+1;//first x pos
             int startColPos = (W/12)+((disp.mouse_x()-4)/(W/12))*W+1;
             
-            visu.draw_rectangle(((disp.mouse_x()-4)/(W/12))*(W/12)+1, ((disp.mouse_y()-4)/(H/12))*(H/12)+1, ((disp.mouse_x()-4)/(W/12))*(W/12)+(W/12)-1, ((disp.mouse_y()-4)/(H/12))*(H/12)+(H/12)+1, attacked);
-            visu.draw_text(0,0,"* Press a key to start round *",gridLines);
+            if(((disp.mouse_x())/(W/12)) >= 1 && ((disp.mouse_x())/(W/12)) <=10 
+            && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y())/(H/12))-1 >=1) 
+              visu.draw_rectangle(((disp.mouse_x())/(W/12))*(W/12)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/12))*(W/12)+(W/12)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
+              
+            sprintf(orientation, "Orientation: %d", vert);
+            visu.draw_text(0,0,orientation,gridLines);
             disp.display(visu);
           }
           else if(vert == 0)//draw horizontally
           {
-            for(int j=0; j<i+1; j++)
-            {
-              int startRowPos = (H/6)+((disp.mouse_y()-4)/(W/12))*W+1;//first x pos
-              int startColPos = (W/12)+((disp.mouse_x()-4)/(W/12))*W+1;
-              visu.draw_rectangle(startRowPos, (H/12)*i+startColPos, startRowPos+(W/12)-2, (H/12)*i+startColPos+(H/12)-2, attacked);
-            }
+            if(((disp.mouse_x())/(W/12)) >= 1 && ((disp.mouse_x())/(W/12)) <=10 
+            && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y())/(H/12))-1 >=1) 
+              visu.draw_rectangle(((disp.mouse_x())/(W/12))*(W/12)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/12))*(W/12)+(W/12)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
             disp.display(visu);
+            sprintf(orientation, "Orientation: %d", vert);
+            visu.draw_text(0,0,orientation,gridLines);
           }
           
         }
