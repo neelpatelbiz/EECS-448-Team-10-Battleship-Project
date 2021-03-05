@@ -67,7 +67,8 @@ int main()
         
         //hover code
         char orientation[20];
-        if(((disp.mouse_x()-4)/(W/12)) >= 1 && ((disp.mouse_x()-4)/(W/12)) <=10 
+        if( ((((disp.mouse_x()-4)/(W/24)) >= 1 && ((disp.mouse_x()-4)/(W/24)) <=10) ||
+        (((disp.mouse_x()-4)/(W/24)) >= 13 && ((disp.mouse_x()-4)/(W/24)) <=22))
         && ((disp.mouse_y()-4)/(H/12))-1 <=10 && ((disp.mouse_y()-4)/(H/12))-1 >=1 
         && disp.button()&1)
         {
@@ -76,7 +77,8 @@ int main()
             int startRowPos = (H/6)+((disp.mouse_y()-4)/(W/12))*W+1;//first x pos
             int startColPos = (W/12)+((disp.mouse_x()-4)/(W/12))*W+1;
             
-            if(((disp.mouse_x())/(W/12)) >= 1 && ((disp.mouse_x())/(W/12)) <=10 
+            if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10)||
+            ((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=23) ))
             && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y())/(H/12))-1 >=1) 
               background.draw_rectangle(((disp.mouse_x())/(W/24))*(W/24)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/24))*(W/24)+(W/24)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
               
