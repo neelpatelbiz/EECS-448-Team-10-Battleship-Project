@@ -51,7 +51,7 @@ int main()
   while(!disp.is_closed())
   {
     
-    bool shipSelectionsMade = false;
+    bool shipSelectionsMade = false, changedOrientation = false;
     int row = 0, col = 0, vert = 1;
 
     for(int i = 0; i < numberOfShips; i++)
@@ -59,16 +59,21 @@ int main()
       
       while(shipSelectionsMade == false)
       {
-        // if(((disp.mouse_x()-4)/(W/12)) >= 1 && ((disp.mouse_x()-4)/(W/12)) <=10)
-        // {
-        //   background.draw_rectangle(1, 1, 50, 50, attacked);
-        //   disp.display(background);
-        // } 
         
-        //hover code
-        char orientation[20];
-        if( ((((disp.mouse_x()-4)/(W/24)) >= 1 && ((disp.mouse_x()-4)/(W/24)) <=10) ||
-        (((disp.mouse_x()-4)/(W/24)) >= 13 && ((disp.mouse_x()-4)/(W/24)) <=22))
+        row = ((disp.mouse_x()-4)/(H/12));
+        col = ((disp.mouse_y()-4)/(W/24))-1;
+        visu = background;
+        visu.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
+        disp.display(visu);
+        if(disp.button()&2 && changedOrientation == false)
+        {
+          vert = (vert+1)%2;
+          disp.wait();
+          changedOrientation = true;
+          changedOrientation = false;
+        }
+        if( ((((disp.mouse_x()-4)/(W/24)) >= 1 && ((disp.mouse_x()-4)/(W/24)) <=10 ) ||
+        (((disp.mouse_x()-4)/(W/24)) >= 13 && ((disp.mouse_x()-4)/(W/24)) <=22 && ((disp.mouse_x())/(W/24))>=13 && ((disp.mouse_x())/(W/24)) <=22))
         && ((disp.mouse_y()-4)/(H/12))-1 <=10 && ((disp.mouse_y()-4)/(H/12))-1 >=1 
         && disp.button()&1)
         {
@@ -82,41 +87,31 @@ int main()
             && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y())/(H/12))-1 >=1) 
               background.draw_rectangle(((disp.mouse_x())/(W/24))*(W/24)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/24))*(W/24)+(W/24)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
               
-            sprintf(orientation, "Orientation: %d", vert);
+            
             visu = background;
-            visu.draw_text(0,0,orientation,gridLines);
+            visu.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
             disp.display(visu);
+
+            
           }
           else if(vert == 0)//draw horizontally
           {
-            if(((disp.mouse_x())/(W/12)) >= 1 && ((disp.mouse_x())/(W/12)) <=10 
+            if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10)||
+            ((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=23) ))
             && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y())/(H/12))-1 >=1) 
-              visu.draw_rectangle(((disp.mouse_x())/(W/12))*(W/12)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/12))*(W/12)+(W/12)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
+              background.draw_rectangle(((disp.mouse_x())/(W/24))*(W/24)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/24))*(W/24)+(W/24)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
+            
+            visu = background;
+            visu.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
             disp.display(visu);
-            sprintf(orientation, "Orientation: %d", vert);
-            visu.draw_text(0,0,orientation,gridLines);
+            
           }
           
         }
-        
-        if(disp.button()&2)
-        {
-          vert = (vert+1)%2;
-        }
-        
-        if((disp.button()&1) == true)
-        {
-          row = ((disp.mouse_x()-4)/(H/12));
-          col = ((disp.mouse_y()-4)/(W/24))-1;
-          visu = background;
-          std::cout<<"tile=("<<row<<", "<<col<<")\n";
-        }
-        
       }
     }
     
   }
-  std::getchar();
         
 }
 

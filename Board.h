@@ -57,7 +57,7 @@ private:
   char** attackGrid;
   int size;
   unsigned int W,H;
-  const unsigned char[3] gridLines={128,200,255} , attacked = {255,0,0};
+  const unsigned char gridLines[3]={128,200,255} , attacked[3] = {255,0,0};
 
   // CImg<unsigned char>* playerBackground;
   // CImg<unsigned char>* enemyBackground;
