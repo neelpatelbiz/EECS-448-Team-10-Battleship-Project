@@ -6,7 +6,7 @@ int main()
   using namespace cimg_library;
   const unsigned char gridLines[] = { 128,200,255}, attacked[] = { 255,0,0 }, 
   defaultTile[] = { 255,255,255 }; 
-  unsigned int W = 500, H = 500;
+  unsigned int W = 1000, H = 500;
   int numberOfShips = 5;
   
   //create background
@@ -30,10 +30,12 @@ int main()
     for(int j=0;j<10;j++)
     {
       //if(//checkhitmethod())
-      background.draw_rectangle((W/12)*(j+1)+1,(H/12)*(i+2)+1, 
-      (W/12)*(j+2)-1, (H/12)*(i+3)-1, defaultTile);
+      background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+      (W/24)*(j+2)-1, (H/12)*(i+3)-1, defaultTile);
       //else if(p2Ships.checkHit(i+1, j+1) == ".")
       
+      background.draw_rectangle((W/24)*(j+13)+1,(H/12)*(i+2)+1, 
+      (W/24)*(j+14)-1, (H/12)*(i+3)-1, defaultTile);
       // background.draw_rectangle((W/12)+(W/12)*j,(H/12)*i+(H/6), 
       // (W/12)*j+(W/6), (H/12)*i+((3*H)/12), gridLines, 1, ~0U);
     }
@@ -46,8 +48,6 @@ int main()
 
 
   CImg<unsigned char> visu;
-
-
   while(!disp.is_closed())
   {
     
@@ -56,7 +56,7 @@ int main()
 
     for(int i = 0; i < numberOfShips; i++)
     {
-      visu = background;
+      
       while(shipSelectionsMade == false)
       {
         // if(((disp.mouse_x()-4)/(W/12)) >= 1 && ((disp.mouse_x()-4)/(W/12)) <=10)
@@ -78,9 +78,10 @@ int main()
             
             if(((disp.mouse_x())/(W/12)) >= 1 && ((disp.mouse_x())/(W/12)) <=10 
             && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y())/(H/12))-1 >=1) 
-              visu.draw_rectangle(((disp.mouse_x())/(W/12))*(W/12)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/12))*(W/12)+(W/12)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
+              background.draw_rectangle(((disp.mouse_x())/(W/24))*(W/24)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/24))*(W/24)+(W/24)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
               
             sprintf(orientation, "Orientation: %d", vert);
+            visu = background;
             visu.draw_text(0,0,orientation,gridLines);
             disp.display(visu);
           }
@@ -103,9 +104,9 @@ int main()
         
         if((disp.button()&1) == true)
         {
-          row = ((disp.mouse_x()-4)/(W/12));
-          col = ((disp.mouse_y()-4)/(W/12))-1;
-
+          row = ((disp.mouse_x()-4)/(H/12));
+          col = ((disp.mouse_y()-4)/(W/24))-1;
+          visu = background;
           std::cout<<"tile=("<<row<<", "<<col<<")\n";
         }
         
