@@ -1,43 +1,44 @@
 /**
-*	@author
-*	@date
-*	@file
-*	@brief
+*	@author Team 9 and 10
+*	@date 3/6/21
+*	@file Executive.cpp
+*	@brief member methods for game loops and features
 */
 #include "Executive.h"
-#include "Ships.h"
-#include "CImg.h"
-
-using namespace cimg_library;
-const unsigned int W = 500, H = 500;
-CImg<unsigned char> background(W, H, 1, 3, 255); 
-//background.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
-
 Executive::Executive()
 {
-	p1Carrier.buildShip(6);
-	p2Carrier.buildShip(6);
-	p1BattleShip.buildShip(5);
-	p2BattleShip.buildShip(5);
-	p1Destroyer.buildShip(4);
-	p2Destroyer.buildShip(4);
-	p1Cruiser.buildShip(3);
-	p2Cruiser.buildShip(3);
-	p1Patrol.buildShip(2);
-	p2Patrol.buildShip(2);
-	p1Sub.buildShip(1);
-	p2Sub.buildShip(1);
+	W=1008;
+	H=504;
+	blankGrid.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+	for(int i=0;i<10;i++)
+	{
+		for(int j=0;j<10;j++)
+		{
+			background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+			(W/24)*(j+2)-1, (H/12)*(i+3)-1, defaultTile);
+			
+			background.draw_rectangle((W/24)*(j+13)+1,(H/12)*(i+2)+1, 
+			(W/24)*(j+14)-1, (H/12)*(i+3)-1, defaultTile);
+		}
+	}
+	background = blankGrid;
+	disp.assign(background,"BattleShip",0,false,false);
+
 }
 
 void Executive::run()
 {
-	PrintMenu();
-	Game();
+	disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
+	
+	printMenu();
+	selectionPhase(p1Board);
+	cleanUp();
+	selectionPhase(p2Board);
 }
 
-void Executive::PrintMenu()
+void Executive::printMenu()
 {
-	if(cimg::dialog("BASIC RULES",
+	/*if(cimg::dialog("BASIC RULES",
 	"The goal of the game is to eliminate all of your opponent's ships\n"
 	"by selecting spots on the game board to see if you hit or miss.\n"
 	"The game is over when one player loses all of their ships.\n\n"
@@ -51,27 +52,76 @@ void Executive::PrintMenu()
 	"5 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5)\n\n"
 	"6 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5), Carrier: (1x6)\n\n",
    	"Start", "Quit",0,0,0,0,
-  	background, true))std::exit(0);
+  	background, true))std::exit(0);*/
+}
+
+void Executive::selectionPhase(Board& playerBoard)
+{
+	//disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
+	CImg<unsigned char> infoAdds;
+	int row, col, vert=0;
+	if(numberOfShips > 0)
+	{
+		if(disp.is_keyARROWUP())vert = 1;
+		if(disp.is_keyARROWDOWN())vert = 0;        
+		if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10 ) ||
+		(((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22))
+		&& ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y()-4)/(H/12)) >=2
+		&& disp.button()&1)
+		{
+			row = ((disp.mouse_y())/(H/12));
+			col = ((disp.mouse_x())/(W/24));
+			infoAdds = background;
+			infoAdds.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
+			disp.display(infoAdds);
+			if(vert == 1)//draw vertically
+			{
+				if(((disp.mouse_y()/(W/12))/*+i*/+numberOfShips)<=11 /*&& playerBoard.addShip(row,column,vert,numberOfShips,) */) 
+				{ 
+					for(int j=0; j<numberOfShips; j++)
+					background.draw_rectangle((col*(W/24))+1, (row+j)*(H/12)+1, (col*(W/24))+(W/24)-1, (row+j)*(H/12)+(H/12)-1, attacked);
+					//disp.wait();
+				}           
+			}
+			else if(vert == 0)//draw horizontally
+			{
+				if(((((disp.mouse_x()/(H/12))/*+i*/+numberOfShips)<=23 && ((disp.mouse_x()/(H/12))>=13))|| ((disp.mouse_x()/(H/12))/*+i*/+numberOfShips)<=11)
+				/*&& playerBoard.addShip(row,column,vert,numberOfShips,) */) 
+				{
+					for(int j=0; j<numberOfShips; j++)
+					background.draw_rectangle((col+j)*(W/24)+1, row*(H/12)+1, (col+j)*(W/24)+(W/24)-1, row*(H/12)+(H/12)-1, attacked);
+					//disp.wait();
+				}
+			}
+			numberOfShips--;
+		}
+	}
+
+}
+
+void Executive::cleanUp()
+{
+	background = blankGrid;
 }
 
 void Executive::Game()
 {
-	int numberOfShips = 0;
-	int row;
-	char column;
-	int vert;
-	bool destroyedbeforesub1 = false;
-	bool destroyedbeforesub2 = false;
-	bool destroyedbeforepatrol1 = false;
-	bool destroyedbeforepatrol2 = false;
-	bool destroyedbeforecruiser1 = false;
-	bool destroyedbeforecruiser2 = false;
-	bool destroyedbeforedestroyer1 = false;
-	bool destroyedbeforedestroyer2 = false;
-	bool destroyedbeforebattleship1 = false;
-	bool destroyedbeforebattleship2 = false;
-	bool destroyedbeforecarrier1 = false;
-	bool destroyedbeforecarrier2 = false;
+	// int numberOfShips = 0;
+	// int row;
+	// char column;
+	// int vert;
+	// bool destroyedbeforesub1 = false;
+	// bool destroyedbeforesub2 = false;
+	// bool destroyedbeforepatrol1 = false;
+	// bool destroyedbeforepatrol2 = false;
+	// bool destroyedbeforecruiser1 = false;
+	// bool destroyedbeforecruiser2 = false;
+	// bool destroyedbeforedestroyer1 = false;
+	// bool destroyedbeforedestroyer2 = false;
+	// bool destroyedbeforebattleship1 = false;
+	// bool destroyedbeforebattleship2 = false;
+	// bool destroyedbeforecarrier1 = false;
+	// bool destroyedbeforecarrier2 = false;
 
 	
 	/*

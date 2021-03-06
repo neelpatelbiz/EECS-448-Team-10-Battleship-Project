@@ -5,7 +5,6 @@
 #include <string>
 #include "Ships.h"
 using namespace std;
-using namespace cimg_library;
 
 /**
  * Program to implement the Board with a GUI
@@ -17,13 +16,13 @@ class Board
 {
 public:
   /**
-	 * store the element
+	 * initialize ship and attack arrays
 	 * @param  grid array to store instances of Ships
 	 */
   Board();
 
   /**
-  * destuctor. to delete array
+  * destuctor to delete arrays
   * @param   grid array to delete.
   */
   ~Board();
@@ -31,14 +30,14 @@ public:
   /**
    * helper function resets CImg's to initial background values with grid lines
    */
-  void clearBoard();
+  //void clearBoard();
 
   /**
   * fucntion to add ship
   * @param row, column, v, size, type.
   * @return true/false
   */
-  bool addShip(int, int, int, int, int);
+  bool addShip(int, int, int, int);
 
   /**
   * check if the grid index (ordinate position) has a ship object
@@ -56,9 +55,10 @@ private:
   char** shipGrid;
   char** attackGrid;
   int size;
-  unsigned int W,H;
-  const unsigned char gridLines[3]={128,200,255} , attacked[3] = {255,0,0};
-
+  
+  
+  //unsigned int W,H;
+  //const unsigned char gridLines[3]={128,200,255} , attacked[3] = {255,0,0};
   // CImg<unsigned char>* playerBackground;
   // CImg<unsigned char>* enemyBackground;
   // CImgList<unsigned char>* backgrounds;

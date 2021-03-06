@@ -4,8 +4,8 @@
 int main()
 {
   using namespace cimg_library;
-  const unsigned char gridLines[] = { 128,200,255}, attacked[] = { 255,0,0 }, 
-  defaultTile[] = { 255,255,255 }; 
+  const unsigned char gridLines[3] = { 128,200,255}, attacked[3] = { 255,0,0 }, 
+  defaultTile[3] = { 255,255,255 }; 
   unsigned int W = 1008, H = 504;
   int numberOfShips = 5;
   
@@ -16,7 +16,7 @@ int main()
   //CImg<unsigned char> SettingsSelect(2, 2, 1, 3, 255); 
   //SettingsSelect.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
   
-  CImgList<unsigned char> backgrounds(background, background, false);
+  //CImgList<unsigned char> backgrounds(background, background, false);
 
   //CImg<unsigned char> shipSelect(W,H,1,3,255);//ship select cimg to replace popup
   //shipSelect.assign();
@@ -45,98 +45,53 @@ int main()
   //create display
   CImgDisplay disp(background,"BattleShip",0,false,false);
   disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
-  bool shipSelectionsMade = false;
-
+  bool selectionPhase = true;
+  int row = 0, col = 0, vert = 1;
   CImg<unsigned char> visu;
   while(!disp.is_closed())
   {
-    
-    
-    int row = 0, col = 0, vert = 1;
-
-    for(int i = 1; i <= numberOfShips; i++)
-    {
-      
-      while(shipSelectionsMade == false)
+    //for(int i = 1; i <= numberOfShips; i++)
+    //{
+      if(numberOfShips > 0)
       {
-        
-        row = ((disp.mouse_y())/(H/12));
-        col = ((disp.mouse_x())/(W/24));
-        visu = background;
-        visu.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
-        disp.display(visu);
 
-        if(disp.wheel() > 0)
-        {
-          vert = 1;
-          disp.set_wheel();
-        }
-        else if(disp.wheel() < 0)
-        {
-          vert = 0;
-          disp.set_wheel();
-        }
-
+        if(disp.is_keyARROWUP())vert = 1;
+        if(disp.is_keyARROWDOWN())vert = 0;        
         if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10 ) ||
         (((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22))
-        && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y()-4)/(H/12))-1 >=1 
+        && ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y()-4)/(H/12)) >=2
         && disp.button()&1)
         {
+          row = ((disp.mouse_y())/(H/12));
+          col = ((disp.mouse_x())/(W/24));
+          visu = background;
+          visu.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
+          disp.display(visu);
           if(vert == 1)//draw vertically
           {
-
-            if(((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10)||
-            ((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22) ))
-            && ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y())/(H/12)) >=2
-            && ((disp.mouse_y()/(W/12))+i/*+numberOfShips*/)<=11) 
+            if(((disp.mouse_y()/(W/12))/*+i*/+numberOfShips)<=11 /*&& playerBoard.addShip(row,column,vert,numberOfShips,) */) 
             { 
-              //background.draw_rectangle(((disp.mouse_x())/(W/24))*(W/24)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/24))*(W/24)+(W/24)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
-              row = ((disp.mouse_y())/(H/12));
-              col = ((disp.mouse_x())/(W/24));
-              for(int j=0; j<i; j++)
-              {
+              for(int j=0; j<numberOfShips; j++)
                 background.draw_rectangle((col*(W/24))+1, (row+j)*(H/12)+1, (col*(W/24))+(W/24)-1, (row+j)*(H/12)+(H/12)-1, attacked);
-              }
-              disp.wait();
-            }
-            
-            visu = background;
-            visu.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
-            disp.display(visu);
-            
-            shipSelectionsMade = true;
-            
+              //disp.wait();
+            }           
           }
           else if(vert == 0)//draw horizontally
           {
-            /*if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10)||
-            ((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=23) ))
-            && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y())/(H/12))-1 >=1) */
-            if(((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10)||
-            ((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22) ))
-            && ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y())/(H/12)) >=2
-            && ((((disp.mouse_x()/(H/12))+i/*+numberOfShips*/)<=23 && ((disp.mouse_x()/(H/12))>=13))|| ((disp.mouse_x()/(H/12))+i/*+numberOfShips*/)<=11)) 
+            if(((((disp.mouse_x()/(H/12))/*+i*/+numberOfShips)<=23 && ((disp.mouse_x()/(H/12))>=13))|| ((disp.mouse_x()/(H/12))/*+i*/+numberOfShips)<=11)
+            /*&& playerBoard.addShip(row,column,vert,numberOfShips,) */) 
             {
-              row = ((disp.mouse_y())/(H/12));
-              col = ((disp.mouse_x())/(W/24));
-              for(int j=0; j<i; j++)
-              {
+              for(int j=0; j<numberOfShips; j++)
                 background.draw_rectangle((col+j)*(W/24)+1, row*(H/12)+1, (col+j)*(W/24)+(W/24)-1, row*(H/12)+(H/12)-1, attacked);
-              }
-              disp.wait();
+              //disp.wait();
             }
-            visu = background;
-            visu.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
-            disp.display(visu);
-            
-            shipSelectionsMade = true;
-            
           }
+          numberOfShips--;
         }
         
       }
       if(i<numberOfShips)shipSelectionsMade = false;
-    }
+    //}
     
   }
         
