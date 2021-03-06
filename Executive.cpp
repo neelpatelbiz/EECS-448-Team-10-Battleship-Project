@@ -73,7 +73,8 @@ void Executive::Game()
 	bool destroyedbeforecarrier1 = false;
 	bool destroyedbeforecarrier2 = false;
 
-	//this is gross
+	
+	/*
 	numberOfShips = cimg::dialog("Number Of Ships","Enter the number of ships you would like to play with, up to a total of 6.", "1", "2","3","4","5","6", background, true) + 1;
 	std::cout << "PLAYER 1" << endl;
 	for (int i = 0; i < numberOfShips; i++)
@@ -702,6 +703,7 @@ void Executive::Game()
 		cout << "PLAYER 2 WON!";
 		cout << endl;
 	}
+	*/
 }
 
 

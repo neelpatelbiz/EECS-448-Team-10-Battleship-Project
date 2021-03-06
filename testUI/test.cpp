@@ -6,7 +6,7 @@ int main()
   using namespace cimg_library;
   const unsigned char gridLines[] = { 128,200,255}, attacked[] = { 255,0,0 }, 
   defaultTile[] = { 255,255,255 }; 
-  unsigned int W = 1000, H = 500;
+  unsigned int W = 1008, H = 504;
   int numberOfShips = 5;
   
   //create background
@@ -45,70 +45,97 @@ int main()
   //create display
   CImgDisplay disp(background,"BattleShip",0,false,false);
   disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
-
+  bool shipSelectionsMade = false;
 
   CImg<unsigned char> visu;
   while(!disp.is_closed())
   {
     
-    bool shipSelectionsMade = false, changedOrientation = false;
+    
     int row = 0, col = 0, vert = 1;
 
-    for(int i = 0; i < numberOfShips; i++)
+    for(int i = 1; i <= numberOfShips; i++)
     {
       
       while(shipSelectionsMade == false)
       {
         
-        row = ((disp.mouse_x()-4)/(H/12));
-        col = ((disp.mouse_y()-4)/(W/24))-1;
+        row = ((disp.mouse_y())/(H/12));
+        col = ((disp.mouse_x())/(W/24));
         visu = background;
         visu.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
         disp.display(visu);
-        if(disp.button()&2 && changedOrientation == false)
+
+        if(disp.wheel() > 0)
         {
-          vert = (vert+1)%2;
-          disp.wait();
-          changedOrientation = true;
-          changedOrientation = false;
+          vert = 1;
+          disp.set_wheel();
         }
-        if( ((((disp.mouse_x()-4)/(W/24)) >= 1 && ((disp.mouse_x()-4)/(W/24)) <=10 ) ||
-        (((disp.mouse_x()-4)/(W/24)) >= 13 && ((disp.mouse_x()-4)/(W/24)) <=22 && ((disp.mouse_x())/(W/24))>=13 && ((disp.mouse_x())/(W/24)) <=22))
-        && ((disp.mouse_y()-4)/(H/12))-1 <=10 && ((disp.mouse_y()-4)/(H/12))-1 >=1 
+        else if(disp.wheel() < 0)
+        {
+          vert = 0;
+          disp.set_wheel();
+        }
+
+        if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10 ) ||
+        (((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22))
+        && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y()-4)/(H/12))-1 >=1 
         && disp.button()&1)
         {
           if(vert == 1)//draw vertically
           {
-            int startRowPos = (H/6)+((disp.mouse_y()-4)/(W/12))*W+1;//first x pos
-            int startColPos = (W/12)+((disp.mouse_x()-4)/(W/12))*W+1;
-            
-            if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10)||
-            ((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=23) ))
-            && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y())/(H/12))-1 >=1) 
-              background.draw_rectangle(((disp.mouse_x())/(W/24))*(W/24)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/24))*(W/24)+(W/24)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
-              
+
+            if(((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10)||
+            ((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22) ))
+            && ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y())/(H/12)) >=2
+            && ((disp.mouse_y()/(W/12))+i/*+numberOfShips*/)<=11) 
+            { 
+              //background.draw_rectangle(((disp.mouse_x())/(W/24))*(W/24)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/24))*(W/24)+(W/24)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
+              row = ((disp.mouse_y())/(H/12));
+              col = ((disp.mouse_x())/(W/24));
+              for(int j=0; j<i; j++)
+              {
+                background.draw_rectangle((col*(W/24))+1, (row+j)*(H/12)+1, (col*(W/24))+(W/24)-1, (row+j)*(H/12)+(H/12)-1, attacked);
+              }
+              disp.wait();
+            }
             
             visu = background;
             visu.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
             disp.display(visu);
-
+            
+            shipSelectionsMade = true;
             
           }
           else if(vert == 0)//draw horizontally
           {
-            if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10)||
+            /*if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10)||
             ((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=23) ))
-            && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y())/(H/12))-1 >=1) 
-              background.draw_rectangle(((disp.mouse_x())/(W/24))*(W/24)+1, ((disp.mouse_y())/(H/12))*(H/12)+1, ((disp.mouse_x())/(W/24))*(W/24)+(W/24)-1, ((disp.mouse_y())/(H/12))*(H/12)+(H/12)-1, attacked);
-            
+            && ((disp.mouse_y())/(H/12))-1 <=10 && ((disp.mouse_y())/(H/12))-1 >=1) */
+            if(((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10)||
+            ((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22) ))
+            && ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y())/(H/12)) >=2
+            && ((((disp.mouse_x()/(H/12))+i/*+numberOfShips*/)<=23 && ((disp.mouse_x()/(H/12))>=13))|| ((disp.mouse_x()/(H/12))+i/*+numberOfShips*/)<=11)) 
+            {
+              row = ((disp.mouse_y())/(H/12));
+              col = ((disp.mouse_x())/(W/24));
+              for(int j=0; j<i; j++)
+              {
+                background.draw_rectangle((col+j)*(W/24)+1, row*(H/12)+1, (col+j)*(W/24)+(W/24)-1, row*(H/12)+(H/12)-1, attacked);
+              }
+              disp.wait();
+            }
             visu = background;
             visu.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
             disp.display(visu);
             
+            shipSelectionsMade = true;
+            
           }
-          
         }
+        
       }
+      if(i<numberOfShips)shipSelectionsMade = false;
     }
     
   }
