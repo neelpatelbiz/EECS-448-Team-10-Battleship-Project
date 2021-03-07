@@ -7,7 +7,8 @@
 using namespace std;
 int main()
 {
-        Executive exe;
+  //Executive exe;
 	//exe.run();
-	Ai ai1;
+	Ai ai1(1);
+	ai1.placeShips();
 }

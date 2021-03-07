@@ -34,12 +34,11 @@ Board::Board()
 
   for (int i = 0; i < size; i++)
   {
-    for (int j = 0; j < size; j++)
-    {
-      shipGrid[i] = new char[size];
-      attackGrid[i] = new char[size];  
+    shipGrid[i] = new char[size];
+    attackGrid[i] = new char[size];
+    for(int j = 0; j < size; j ++){
+      shipGrid[i][j] = '.';
     }
-   
   }
 
   //playerBackground = new CImg<unsigned char>(W, H, 1, 3, 255);
@@ -57,6 +56,18 @@ Board::~Board()
   }
   delete[] shipGrid;
   delete[] attackGrid;
+}
+
+void Board::Display()
+{
+  for(int i = 0; i < size; i++)
+    {
+      for(int j = 0; j < size; j++)
+	{
+	  cout << shipGrid[i][j];
+	}
+      cout << endl;
+    }
 }
 
 bool Board::addShip(int row, int column, int v, int size)

@@ -15,6 +15,7 @@ using namespace std;
 class Board
 {
 public:
+  void Display();
   /**
 	 * initialize ship and attack arrays
 	 * @param  grid array to store instances of Ships

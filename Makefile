@@ -1,7 +1,7 @@
 Battleship: main.o Executive.o Ships.o Board.o Ai.o
 	g++ -std=gnu++11 -g -Wall main.o Executive.o Ships.o Board.o Ai.o -lX11 -lm -lpthread -o Battleship
 
-main.o: main.cpp Executive.cpp Executive.h
+main.o: main.cpp Executive.cpp Executive.h Ai.h
 	g++ -std=gnu++11 -g -Wall -c main.cpp
 
 Executive.o: Executive.cpp Executive.h Ships.cpp Ships.h Board.cpp Board.h
