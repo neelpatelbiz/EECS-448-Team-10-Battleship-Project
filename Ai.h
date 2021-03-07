@@ -9,12 +9,13 @@ class Ai{
  public:
   void placeShips();
 
-  
-  Ai(int diff);
+  //arguments - difficulty (1-3), numShips
+  Ai(int diff, int numberShips);
   ~Ai();
  private:
   //difficulty - 1 - easy 2 - medium 3 - hard
   int diff;
+  int numShips;
   Board aiBoard;
   Board pBoard;
 };

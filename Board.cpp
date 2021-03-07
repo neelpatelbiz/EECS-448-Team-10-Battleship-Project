@@ -75,43 +75,45 @@ bool Board::addShip(int row, int column, int v, int size)
   bool canAdd = true;
   if(v == 1)
   {
-    if ((size + row) > 10)
+    if ((size + row) >= 10)
     {
         canAdd = false;
-    }
-    for (int i = 0; i < size; i++)
-    {
-        if (shipGrid[row+i][column] != '.')
-        {
-            canAdd = false;;
-        }
+    }else{
+      for (int i = 0; i < size; i++)
+	{
+	  if (shipGrid[row+i][column] != '.')
+	    {
+	      canAdd = false;;
+	    }
+	}
     }
     if (canAdd == true)
     {
         for (int i = 0; i < size; i++)
         {
-            shipGrid[row+i][column] = size;
-        }
+            shipGrid[row+i][column] = 's';
+	}
     }
   }
   else if (v == 0)
   {
-    if ((size + column) > 11)
+    if ((size + column) >= 10)
     {
         canAdd = false;
-    }
-    for (int i = 0; i < size; i++)
-    {
-        if (shipGrid[row][column+i] != '.')
-        {
-            canAdd = false;
-        }
+    }else{
+      for (int i = 0; i < size; i++)
+	{
+	  if (shipGrid[row][column+i] != '.')
+	    {
+	      canAdd = false;
+	    }
+	}
     }
     if (canAdd == true)
     {
         for (int i = 0; i < size; i++)
         {
-            shipGrid[row][column+i] = size;
+            shipGrid[row][column+i] = 's';
         }
     }
   }

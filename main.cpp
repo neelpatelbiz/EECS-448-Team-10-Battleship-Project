@@ -9,6 +9,6 @@ int main()
 {
   //Executive exe;
 	//exe.run();
-	Ai ai1(1);
-	ai1.placeShips();
+  Ai ai1(1, 4);
+  ai1.placeShips();
 }
