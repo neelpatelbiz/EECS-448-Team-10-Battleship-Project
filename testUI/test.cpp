@@ -24,6 +24,9 @@ int main()
 
   //std::cout<<numberOfShips;
   
+
+
+  
   //.draw_rectangle(0,0,W-1,H-1,white,1.0f,~0U);
   for(int i=0;i<10;i++)
   {
@@ -52,8 +55,14 @@ int main()
   {
     //for(int i = 1; i <= numberOfShips; i++)
     //{
+      
       if(numberOfShips > 0)
       {
+        row = ((disp.mouse_y())/(H/12));
+        col = ((disp.mouse_x())/(W/24));
+        visu = background;
+        visu.draw_text(0,0,"Orientation: %d tile=%d,%d",gridLines,0,1,13,vert,row,col);
+        disp.display(visu);
 
         if(disp.is_keyARROWUP())vert = 1;
         if(disp.is_keyARROWDOWN())vert = 0;        
@@ -88,43 +97,11 @@ int main()
           }
           numberOfShips--;
         }
-        
       }
-      if(i<numberOfShips)shipSelectionsMade = false;
+      
     //}
-    
   }
+  
         
 }
 
-/*
-  The CImgList<T>::iterator type is defined as a CImg<T>*.
-  You may use it like this:
-  CImgList<> list;   // Assuming this image list is not empty
-  for (CImgList<>::iterator it = list.begin(); it<list.end(); ++it) (*it).mirror('x');
-  //if(shipArr[i][j] == //hitcondition){*it.//changestyle}
-*/
-/*
-Button usage
-//hex 1 for left mouse button
-CImgDisplay disp(400,400);
-while (!disp.is_closed()) {
-  if (disp.button()&1) { // Left button clicked
-    ...
-  }
-  if (disp.button()&2) { // Right button clicked
-    ...
-  }
-  if (disp.button()&4) { // Middle button clicked
-    ...
-  }
-  disp.wait();
-}
-
-//mouse pos functions: returns [0, height()-1] or -1 if pointer is outside of window
-int mouse_x()const
-int mouse_y()const
-
-
-
-*/

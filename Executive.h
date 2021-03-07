@@ -26,17 +26,27 @@ public:
     ~Executive();
 
 private:
-	int numberOfShips;
 	unsigned int W, H; 
 	CImg<unsigned char> background;
 	CImg<unsigned char> blankGrid;
+	CImg<unsigned char> infoAdds;
+	CImg<unsigned char> inter;
 	CImgDisplay disp;
 	const unsigned char gridLines[3]= { 128,200,255};
 	const unsigned char attacked[3] = { 255,0,0 };
 	const unsigned char defaultTile[3] = { 255,255,255 };
+	const unsigned char blue[3] = { 128,200,255}, red[3] = { 255,0,0 }, white[3] = { 255,255,255 },
+	yellow[3] = {255,255, 0};
 
+	int numberOfShips;
+	bool gameConfigured;
+	bool p1shipsSelected;
+	bool p2shipsSelected;
+	bool switchPlayer;
 	Board p1Board;
 	Board p2Board;
+
+	int vert,row,col;
 
 
 	/// Outputs a choice for instructions for the game
@@ -49,6 +59,11 @@ private:
 	 * opens CImgDisplay allowing plpayer to select ship positions
 	 */
 	void selectionPhase(Board& playerBoard);
+
+	/**
+	 * displays board which must be right-clicked to switch player turn
+	 */
+	void switchScreen();
 
 
 	/**

@@ -40,10 +40,12 @@ public:
   bool addShip(int, int, int, int);
 
   /**
-  * check if the grid index (ordinate position) has a ship object
-  * @param row, column is from last function
+  * attack given coordinate
+  * @return -1 if hit, -2 if already attacked, 1-5 representing length of ship sunk, 0 miss
+  * @param row, row coordinate
+  * @param col, column is from last function
   */
-  char checkHit(int, int);
+  int attack(int row, int col);
 
   /**
   *  update ship action
@@ -51,9 +53,30 @@ public:
   */
   void update(int, int, char);
 
+  /** 
+  * @return int corresponding to the player to whom the board belongs
+  */
+  int getPlayer();
+
+  /** 
+  * @param int corresponding to the player to whom the board belongs
+  */
+  void setPlayer(int num);
+
+  /** 
+  * @return int corresponding to the player to whom the board belongs
+  */
+  int getScore();
+
+  /** 
+  * @return int corresponding to the player to whom the board belongs
+  */
+  void incScore();
 private:
-  char** shipGrid;
-  char** attackGrid;
+  int piecesLeft[5];
+  int playerNum, score;
+  int** shipGrid;
+  int** attackGrid;
   int size;
   
   
