@@ -3,12 +3,24 @@
 #include <iostream>
 #include "Board.h"
 #include "Ships.h"
+#include <array>
 //#include "stdlib.h"
 
 class Ai{
  public:
+  /*
+    places Shipnum number of ships randomly in the aiBoard
+   */
   void placeShips();
 
+  /*
+    calls the move function corresponding with the difficulty of the ai
+    @param - Board pboard - a copy of the player's board
+   */
+  int* move();
+  int* moveEasy();
+  int* moveMedium();
+  int* moveHard();
   //arguments - difficulty (1-3), numShips
   Ai(int diff, int numberShips);
   ~Ai();
@@ -17,7 +29,10 @@ class Ai{
   int diff;
   int numShips;
   Board aiBoard;
-  Board pBoard;
+
+  int* pos = new int[2];//the next position the ai plays
+  
+  //Board pBoard;
 };
 
 
