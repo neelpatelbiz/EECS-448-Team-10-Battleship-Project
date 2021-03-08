@@ -24,7 +24,7 @@ Executive::Executive()
 	W=1008;
 	H=504;
 	inter.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
-	inter.draw_text(0,0,"* Press a RMB to start turn Player:*",white);
+	//inter.draw_text(0,0,"* Press a RMB to start turn Player:*",white);
 	blankGrid.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
 	for(int i=0;i<10;i++)
 	{
@@ -131,33 +131,41 @@ void Executive::attackPhase(Board& playerBoard)
 			}
 			else if(p2Board.attack(row-2, col-13) == 5)
 			{
-				p1CanAttack = false;
+				
 			}
 			else if(p2Board.attack(row-2, col-13) == 4)
 			{
-				p1CanAttack = false;
+				
 			}
 			else if(p2Board.attack(row-2, col-13) == 3)
 			{
-				p1CanAttack = false;
+				
 			}
 			else if(p2Board.attack(row-2, col-13) == 2)
 			{
-				p1CanAttack = false;
+				
 			}
 			else if(p2Board.attack(row-2, col-13) == 2)
 			{
-				p1CanAttack = false;
+				
 			}
 			else if(p2Board.attack(row-2, col-13) == 1)
 			{
-				p1CanAttack = false;
+				
 			}
 			else if(p2Board.attack(row-2, col-13) == -1)
 			{
-				p1CanAttack = false;
+				
 				//hit
 			}
+			// disp.display(inter);
+			// //disp.wait();
+			
+			p1CanAttack = false;
+			loadBoard(p2Board);
+			disp.display(background);
+			p2CanAttack = true;
+			
 		}
 		else if(playerBoard.getPlayer() == 2 )
 		{
@@ -167,33 +175,37 @@ void Executive::attackPhase(Board& playerBoard)
 			}
 			else if(p1Board.attack(row-2, col-13) == 5)
 			{
-				p2CanAttack = false;
 			}
 			else if(p1Board.attack(row-2, col-13) == 4)
 			{
-				p2CanAttack = false;
 			}
 			else if(p1Board.attack(row-2, col-13) == 3)
 			{
-				p2CanAttack = false;
 			}
 			else if(p1Board.attack(row-2, col-13) == 2)
 			{
-				p2CanAttack = false;
 			}
 			else if(p1Board.attack(row-2, col-13) == 2)
 			{
-				p2CanAttack = false;
 			}
 			else if(p1Board.attack(row-2, col-13) == 1)
 			{
-				p2CanAttack = false;
 			}
 			else if(p1Board.attack(row-2, col-13) == -1)
 			{
-				p2CanAttack = false;
+				
 				//hit
 			}
+			// disp.display(inter);
+			// //disp.wait();
+			if((disp.button()&2))
+			{
+				p2CanAttack = false;
+				loadBoard(p1Board);
+				disp.display(background);
+				p1CanAttack = true;
+			}
+			
 		}
 	}
 	
@@ -274,6 +286,8 @@ void Executive::selectionPhase(Board& playerBoard)
 				numberOfShips = 5;
 				p2shipsSelected = true;
 				p1CanAttack = true;
+				loadBoard(p1Board);
+				disp.display(background);
 			}	
 		}
 		
@@ -296,6 +310,11 @@ void Executive::loadBoard(const Board& board)
 			{
 				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
 				(W/24)*(j+2)-1, (H/12)*(i+3)-1, attacked);
+			}
+			else if(board.getEntry(i,j) > 0)
+			{
+				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+				(W/24)*(j+2)-1, (H/12)*(i+3)-1, blue);
 			}
 		}
 	}
