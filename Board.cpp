@@ -7,6 +7,7 @@ Board::Board()
   //H=500;
   score = 0;
   size = 10;
+  hitsToWin=0;
   shipGrid = new int*[size];
   attackGrid = new int*[size];
 
@@ -54,7 +55,7 @@ bool Board::addShip(int row, int column, int v, int size)
     {
         if (shipGrid[row+i][column] != 0)
         {
-          canAdd = false;;
+          canAdd = false;
         }
     }
     if (canAdd == true)
@@ -62,6 +63,7 @@ bool Board::addShip(int row, int column, int v, int size)
         for (int i = 0; i < size; i++)
         {
           shipGrid[row+i][column] = size;
+          hitsToWin++;
         }
     }
   }
@@ -83,6 +85,7 @@ bool Board::addShip(int row, int column, int v, int size)
         for (int i = 0; i < size; i++)
         {
           shipGrid[row][column+i] = size;
+          hitsToWin++;
         }
     }
   }
@@ -102,13 +105,20 @@ int Board::attack(int row, int col)
   else if(piecesLeft[shipSpace-1]-1 == 0) {
     piecesLeft[shipSpace-1]--;
     shipGrid[row][col] = -1;
-    return shipSpace;
+    hitsToWin--;
+    if(hitsToWin == 0)return 6;
+      else return shipSpace;
   }
   else {
     piecesLeft[shipSpace-1]--;
     shipGrid[row][col] = -1;
     return -1;
   }
+}
+
+int Board::getEntry(int row, int col)const
+{
+  return(shipGrid[row][col]);
 }
 
 int Board::getPlayer()

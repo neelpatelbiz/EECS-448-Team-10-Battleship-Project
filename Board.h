@@ -41,11 +41,19 @@ public:
 
   /**
   * attack given coordinate
-  * @return -1 if hit, -2 if already attacked, 1-5 representing length of ship sunk, 0 miss
+  * @return -1 if hit, -2 if already attacked, 1-5 representing length of ship sunk, 0 miss, 6 gameWin
   * @param row, row coordinate
   * @param col, column is from last function
   */
   int attack(int row, int col);
+
+  /**
+  * return integer representing state of tile on the board
+  * @return -1 if hit, -2 if already attacked, 1-5 representing length of ship sunk, 0 miss
+  * @param row, row coordinate
+  * @param col, column is from last function
+  */
+  int getEntry(int row, int col)const;
 
   /**
   *  update ship action
@@ -74,7 +82,7 @@ public:
   void incScore();
 private:
   int piecesLeft[5];
-  int playerNum, score;
+  int playerNum, score, hitsToWin;
   int** shipGrid;
   int** attackGrid;
   int size;

@@ -42,6 +42,8 @@ private:
 	bool gameConfigured;
 	bool p1shipsSelected;
 	bool p2shipsSelected;
+	bool p1CanAttack;
+	bool p2CanAttack;
 	bool switchPlayer;
 	Board p1Board;
 	Board p2Board;
@@ -56,15 +58,27 @@ private:
 	void printMenu();
 
 	/**
-	 * opens CImgDisplay allowing plpayer to select ship positions
+	 * opens CImgDisplay allowing player to select ship positions
 	 */
 	void selectionPhase(Board& playerBoard);
 
 	/**
+	 * opens CImgDisplay allowing player to select attack positions
+	 * @param playerBoard of player attacking
+	 */
+	void attackPhase(Board& playerBoard);
+
+	/**
 	 * displays board which must be right-clicked to switch player turn
 	 */
-	void switchScreen();
+	//void switchScreen();
 
+	/**
+	 * loads colored tiles onto CImg of battleship boards
+	 * @param board of player being attacked
+	 */
+	void loadBoard(const Board& board);
+	
 
 	/**
 	 * Restores background to its original state with blank grids.

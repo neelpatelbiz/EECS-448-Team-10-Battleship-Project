@@ -12,6 +12,8 @@ Executive::Executive()
 	gameConfigured = false;
 	p1shipsSelected = false;
 	p2shipsSelected = false;
+	p1CanAttack = false;
+	p2CanAttack = false;
 	p1Board.setPlayer(1);
 	p2Board.setPlayer(2);
 
@@ -64,21 +66,34 @@ void Executive::run()
 		{
 			selectionPhase(p2Board);
 		}
+		if(p1CanAttack == true)
+		{
+			attackPhase(p1Board);
+		}
+		if(p2CanAttack == true)
+		{
+			attackPhase(p2Board);
+		}
+		/*
+		if(p1shipsSelected && p2shipsSelected)
+		{
+			attackPhase()
+		}
+		*/
 	}
 	
 }
 
-void Executive::switchScreen()
+/*void Executive::switchScreen()
 {
 	disp.display(inter);
 	disp.wait();
 	if((disp.button()&2))
 	{
-		//switchPlayer = false;
 		cleanUp();
 		disp.display(background);
 	}
-}
+}*/
 
 void Executive::printMenu()
 {
@@ -99,7 +114,90 @@ void Executive::printMenu()
   	background, true))std::exit(0);*/
 	gameConfigured = true;
 }
-
+void Executive::attackPhase(Board& playerBoard)
+{
+	
+	if((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22)
+	&& ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y()-4)/(H/12)) >=2
+	&& disp.button()&1)
+	{
+		row = ((disp.mouse_y())/(H/12));
+		col = ((disp.mouse_x())/(W/24));
+		if(playerBoard.getPlayer() == 1)
+		{
+			if(p2Board.attack(row-2, col-13) == 6)
+			{
+				//youwin
+			}
+			else if(p2Board.attack(row-2, col-13) == 5)
+			{
+				p1CanAttack = false;
+			}
+			else if(p2Board.attack(row-2, col-13) == 4)
+			{
+				p1CanAttack = false;
+			}
+			else if(p2Board.attack(row-2, col-13) == 3)
+			{
+				p1CanAttack = false;
+			}
+			else if(p2Board.attack(row-2, col-13) == 2)
+			{
+				p1CanAttack = false;
+			}
+			else if(p2Board.attack(row-2, col-13) == 2)
+			{
+				p1CanAttack = false;
+			}
+			else if(p2Board.attack(row-2, col-13) == 1)
+			{
+				p1CanAttack = false;
+			}
+			else if(p2Board.attack(row-2, col-13) == -1)
+			{
+				p1CanAttack = false;
+				//hit
+			}
+		}
+		else if(playerBoard.getPlayer() == 2 )
+		{
+			if(p1Board.attack(row-2, col-13) == 6)
+			{
+				//youwin
+			}
+			else if(p1Board.attack(row-2, col-13) == 5)
+			{
+				p2CanAttack = false;
+			}
+			else if(p1Board.attack(row-2, col-13) == 4)
+			{
+				p2CanAttack = false;
+			}
+			else if(p1Board.attack(row-2, col-13) == 3)
+			{
+				p2CanAttack = false;
+			}
+			else if(p1Board.attack(row-2, col-13) == 2)
+			{
+				p2CanAttack = false;
+			}
+			else if(p1Board.attack(row-2, col-13) == 2)
+			{
+				p2CanAttack = false;
+			}
+			else if(p1Board.attack(row-2, col-13) == 1)
+			{
+				p2CanAttack = false;
+			}
+			else if(p1Board.attack(row-2, col-13) == -1)
+			{
+				p2CanAttack = false;
+				//hit
+			}
+		}
+	}
+	
+}
 void Executive::selectionPhase(Board& playerBoard)
 {
 	//disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
@@ -154,11 +252,9 @@ void Executive::selectionPhase(Board& playerBoard)
 	{
 		if(playerBoard.getPlayer() == 1)
 		{
-			
-			//switchPlayer = true;// need to switch player
+			inter.draw_text(0,0,"* Press RMB to start turn Player 2:*",white);
 			disp.display(inter);
 			disp.wait();
-			
 			if((disp.button()&2))
 			{
 				cleanUp();
@@ -169,16 +265,42 @@ void Executive::selectionPhase(Board& playerBoard)
 		}
 		else if(playerBoard.getPlayer() == 2)
 		{
+			inter.draw_text(0,0,"* Press RMB to start turn Player 1:*",white);
 			disp.display(inter);
 			disp.wait();
-
-			p2shipsSelected = true;
-			//switchPlayer = true;// need to switch player
+			if((disp.button()&2))
+			{
+				cleanUp();
+				numberOfShips = 5;
+				p2shipsSelected = true;
+				p1CanAttack = true;
+			}	
 		}
 		
 	}
 }
 
+void Executive::loadBoard(const Board& board)
+{
+	background = blankGrid;
+	for(int i=0; i<10; i++)
+	{
+		for(int j=0; j<10; j++)
+		{
+			if(board.getEntry(i,j) == -2)
+			{
+				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+				(W/24)*(j+2)-1, (H/12)*(i+3)-1, yellow);
+			}
+			else if(board.getEntry(i,j) == -1)
+			{
+				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+				(W/24)*(j+2)-1, (H/12)*(i+3)-1, attacked);
+			}
+		}
+	}
+	disp.display(background);
+}
 void Executive::cleanUp()
 {
 	background = blankGrid;
