@@ -17,10 +17,10 @@ class Ai{
     calls the move function corresponding with the difficulty of the ai
     @param - Board pboard - a copy of the player's board
    */
-  int* move();
+  int* move(Board* p1Board);
   int* moveEasy();
-  int* moveMedium();
-  int* moveHard();
+  int* moveMedium(Board* p1Board);
+  int* moveHard(Board* p1Board);
   //arguments - difficulty (1-3), numShips
   Ai(int diff, int numberShips);
   ~Ai();
@@ -32,7 +32,7 @@ class Ai{
 
   int* pos = new int[2];//the next position the ai plays
   
-  //Board pBoard;
+  Board pBoard;
 };
 
 

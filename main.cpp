@@ -12,7 +12,7 @@ int main()
 	//exe.run();
   Ai ai1(1, 7);
   ai1.placeShips();
-  // Board pBoard;
-  int* pos = ai1.move();
+  Board pBoard;
+  int* pos = ai1.move(&pBoard);
   std::cout<<pos[0]<<","<<pos[1];
 }

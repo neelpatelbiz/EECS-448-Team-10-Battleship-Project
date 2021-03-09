@@ -29,17 +29,16 @@ void Ai::placeShips(){
 }
 
 
-int* Ai::move(){
+int* Ai::move(Board* p1Board){
   switch(diff){
   case 1:
     pos = moveEasy();
-    std::cout<<pos[0];
     break;
   case 2:
-    pos = moveMedium();
+    pos = moveMedium(p1Board);
     break;
   case 3:
-    pos = moveHard();
+    pos = moveHard(p1Board);
     break;
   }
   return pos;
@@ -53,11 +52,18 @@ int* Ai::moveEasy(){
 }
 
 
-int* Ai::moveMedium(){
+int* Ai::moveMedium(Board* p1Board){
   return pos;
 }
 
  
-int* Ai::moveHard(){
+int* Ai::moveHard(Board* p1Board){
+  for(int i = 0; i < 10; i ++){
+    for(int j = 0; j < 10; j ++){
+      if(p1Board->checkHit(i,j)=='s'){
+	pos[0] = i; pos[1] = j;
+      }
+    }
+  }
   return pos;
 }

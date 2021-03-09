@@ -52,6 +52,7 @@ public:
   */
   void update(int, int, char);
 
+  
 private:
   char** shipGrid;
   char** attackGrid;
