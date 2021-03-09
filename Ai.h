@@ -15,12 +15,32 @@ class Ai{
 
   /*
     calls the move function corresponding with the difficulty of the ai
-    @param - Board pboard - a copy of the player's board
+    @param - Board ptr p1board - a copy of the player's board
+    @return - the array of ints [row, col] of the move made by ai
    */
   int* move(Board* p1Board);
+
+  /*
+    chooses random location to shoot at
+    @param - Board ptr p1Board, player's board
+    @return - array of ints [row, col] of move made by ai
+   */
   int* moveEasy();
+
+   /*
+     
+    @param - Board ptr p1Board, player's board
+    @return - array of ints [row, col] of move made by ai
+   */
   int* moveMedium(Board* p1Board);
+
+   /*
+    checks every location in player's board, if there is a ship there, that position is returned. Does not update any boards
+    @param - Board ptr p1Board, player's board
+    @return - array of ints [row, col] of move made by ai
+   */
   int* moveHard(Board* p1Board);
+
   //arguments - difficulty (1-3), numShips
   Ai(int diff, int numberShips);
   ~Ai();
