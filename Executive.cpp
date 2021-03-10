@@ -7,7 +7,8 @@
 #include "Executive.h"
 Executive::Executive()
 {
-	numberOfShips=numberOfShipsChoice;
+	//numberOfShips=numberOfShipsChoice;
+	numberOfShips = 2;
 	gameConfigured = false;
 	p1shipsSelected = false;
 	p2shipsSelected = false;
@@ -106,7 +107,7 @@ void Executive::printMenu()
 	{
 		/*blankGrid.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
 			(W/24)*(j+2)-1, (H/12)*(i+3)-1, defaultTile);*/
-		shipNumSelect.draw_rectangle( (W/5)*j+1, 1, (W/5)*(j+1)-1, H-1, shipColors[i]);
+		shipNumSelect.draw_rectangle( (W/5)*i+1, 1, (W/5)*(i+1)-1, H-1, shipColors[i]);
 	}
 	disp.display(shipNumSelect);
 	disp.wait();
