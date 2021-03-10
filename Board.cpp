@@ -111,6 +111,7 @@ int Board::attack(int row, int col)
   }
   else {
     piecesLeft[shipSpace-1]--;
+    hitsToWin--;
     shipGrid[row][col] = -1;
     return -1;
   }

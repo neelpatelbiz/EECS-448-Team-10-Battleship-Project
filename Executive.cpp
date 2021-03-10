@@ -7,8 +7,7 @@
 #include "Executive.h"
 Executive::Executive()
 {
-	
-	numberOfShips=5;
+	numberOfShips=numberOfShipsChoice;
 	gameConfigured = false;
 	p1shipsSelected = false;
 	p2shipsSelected = false;
@@ -30,9 +29,10 @@ Executive::Executive()
 
 	W=1008;
 	H=504;
+	shipNumSelect.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+	blank.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
 	inter.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
 	youWin.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
-	//inter.draw_text(0,0,"* Press a RMB to start turn Player:*",white);
 	blankGrid.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
 	for(int i=0;i<10;i++)
 	{
@@ -66,10 +66,6 @@ void Executive::run()
 		{
 			selectionPhase(p1Board);
 		}
-		/*if(switchPlayer == true)
-		{
-			switchScreen();
-		}*/
 		if(p1shipsSelected && !p2shipsSelected /*&& switchPlayer == false*/)
 		{
 			selectionPhase(p2Board);
@@ -105,21 +101,18 @@ void Executive::run()
 
 void Executive::printMenu()
 {
-	/*if(cimg::dialog("BASIC RULES",
-	"The goal of the game is to eliminate all of your opponent's ships\n"
-	"by selecting spots on the game board to see if you hit or miss.\n"
-	"The game is over when one player loses all of their ships.\n\n"
-	"At the beginning of the game, each player will set up their boats on a 10x10 grid simulating a board.\n"
-	"Do NOT HIT the same coordinates more than one time when picking where to hit an enemy boat.\n"
-	"You will have the choice between playing with 1 to 6 ships that you will place on the board:\n\n"
-	"Games with 1 ship: \nSub: (1x1)\n\n"
-	"2 ships: \nSub: (1x1), Patrol Boat: (1x2)\n\n"
-	"3 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3)\n\n"
-	"4 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4)\n\n"
-	"5 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5)\n\n"
-	"6 ships: \nSub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5), Carrier: (1x6)\n\n",
-   	"Start", "Quit",0,0,0,0,
-  	background, true))std::exit(0);*/
+
+	for(int i=0; i<5; i++)
+	{
+		/*blankGrid.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+			(W/24)*(j+2)-1, (H/12)*(i+3)-1, defaultTile);*/
+		shipNumSelect.draw_rectangle( (W/5)*j+1, 1, (W/5)*(j+1)-1, H-1, shipColors[i]);
+	}
+	disp.display(shipNumSelect);
+	disp.wait();
+	disp.wait(1000);
+	disp.flush();
+	
 	gameConfigured = true;
 }
 void Executive::attackPhase(Board& playerBoard)
@@ -132,79 +125,145 @@ void Executive::attackPhase(Board& playerBoard)
 		{
 			row = ((disp.mouse_y())/(H/12));
 			col = ((disp.mouse_x())/(W/24));
+			
 			if(playerBoard.getPlayer() == 1)
 			{
-				if(p2Board.attack(row-2, col-13) == 6)
+				attackStatus = p2Board.attack(row-2, col-13);
+				switch(attackStatus)
 				{
-					//youwin
+					case(6):
+						youWin.draw_text(W/2-8, H/2-4, "YOU WIN P1", white, 0, 33);
+						disp.display(youWin);
+						p1CanAttack = false;
+						break;
+					case(5):
+						background.draw_text(W/2-8, H/2-4, "Sunk 5!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(4):
+						background.draw_text(W/2-8, H/2-4, "Sunk 4!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(3):
+						background.draw_text(W/2-8, H/2-4, "Sunk 3!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(2):
+						background.draw_text(W/2-8, H/2-4, "Sunk 2!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(1):
+						background.draw_text(W/2-8, H/2-4, "Sunk 1!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(0):
+						background.draw_text(W/2-8, H/2-4, "Miss :(", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(-1):
+						background.draw_text(W/2-8, H/2-4, "Hit ;)!", white, 0, 33);
+						disp.display(background);
+						//disp.wait();
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					default:
+						break;
 				}
-				else if(p2Board.attack(row-2, col-13) == 5)
-				{
-					
-				}
-				else if(p2Board.attack(row-2, col-13) == 4)
-				{
-					
-				}
-				else if(p2Board.attack(row-2, col-13) == 3)
-				{
-					
-				}
-				else if(p2Board.attack(row-2, col-13) == 2)
-				{
-					
-				}
-				else if(p2Board.attack(row-2, col-13) == 2)
-				{
-					
-				}
-				else if(p2Board.attack(row-2, col-13) == 1)
-				{
-					
-				}
-				else if(p2Board.attack(row-2, col-13) == -1)
-				{
-					
-					//hit
-				}
-				attackComplete = true;
 			}
 			else if(playerBoard.getPlayer() == 2 )
 			{
-				if(p1Board.attack(row-2, col-13) == 6)
+				attackStatus = p1Board.attack(row-2, col-13);
+				switch(attackStatus)
 				{
-					//youwin
+					case(6):
+						youWin.draw_text(W/2-8, H/2-4, "YOU WIN P2", white, 0, 33);
+						disp.display(youWin);
+						p2CanAttack = false;
+						break;
+					case(5):
+						background.draw_text(W/2-8, H/2-4, "Sunk 5!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(4):
+						background.draw_text(W/2-8, H/2-4, "Sunk 4!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(3):
+						background.draw_text(W/2-8, H/2-4, "Sunk 3!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(2):
+						background.draw_text(W/2-8, H/2-4, "Sunk 2!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(1):
+						background.draw_text(W/2-8, H/2-4, "Sunk 1!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(0):
+						background.draw_text(W/2-8, H/2-4, "Miss :(", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(-1):
+						background.draw_text(W/2-8, H/2-4, "Hit ;)!", white, 0, 33);
+						disp.display(background);
+						//disp.wait();
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					default:
+						break;
 				}
-				else if(p1Board.attack(row-2, col-13) == 5)
-				{
-				}
-				else if(p1Board.attack(row-2, col-13) == 4)
-				{
-				}
-				else if(p1Board.attack(row-2, col-13) == 3)
-				{
-				}
-				else if(p1Board.attack(row-2, col-13) == 2)
-				{
-				}
-				else if(p1Board.attack(row-2, col-13) == 2)
-				{
-				}
-				else if(p1Board.attack(row-2, col-13) == 1)
-				{
-				}
-				else if(p1Board.attack(row-2, col-13) == -1)
-				{	
-					//hit
-				}
-					attackComplete = true;
+				
 			}
 		}
 	}
 	else
 	{
+		//disp.wait();
+		//disp.wait(1000);
 		disp.display(inter);
 		disp.wait();
+		
 		if(playerBoard.getPlayer() == 1)
 		{
 			//inter.draw_text(0,0,"* Press RMB to start turn Player 2:*",white);
@@ -217,6 +276,7 @@ void Executive::attackPhase(Board& playerBoard)
 				disp.display(background);
 				p2CanAttack = true;
 				attackComplete = false;
+				disp.flush();
 			}
 			
 		}
@@ -232,6 +292,7 @@ void Executive::attackPhase(Board& playerBoard)
 				disp.display(background);
 				p1CanAttack = true;
 				attackComplete = false;
+				disp.flush();
 			}	
 		}
 	}
@@ -297,8 +358,9 @@ void Executive::selectionPhase(Board& playerBoard)
 			disp.wait();
 			if((disp.button()&2))
 			{
+				disp.flush();
 				//cleanUp();
-				numberOfShips = 5;
+				numberOfShips = 2;
 				p1shipsSelected = true;
 				loadBoard(p2Board);
 			}
@@ -311,8 +373,9 @@ void Executive::selectionPhase(Board& playerBoard)
 			disp.wait();
 			if((disp.button()&2))
 			{
+				disp.flush();
 				//cleanUp();
-				numberOfShips = 5;
+				//numberOfShips = 5;
 				p2shipsSelected = true;
 				p1CanAttack = true;
 				loadBoard(p1Board);

@@ -27,10 +27,12 @@ public:
 
 private:
 	unsigned int W, H; 
+	CImg<unsigned char> shipNumSelect;
 	CImg<unsigned char> background;
 	CImg<unsigned char> blankGrid;
 	CImg<unsigned char> infoAdds;
 	CImg<unsigned char> inter;
+	CImg<unsigned char> blank;
 	CImg<unsigned char> youWin;
 	CImgDisplay disp;
 	const unsigned char** shipColors;
@@ -48,6 +50,7 @@ private:
 	bool p1CanAttack;
 	bool p2CanAttack;
 	bool attackComplete;
+	int attackStatus;
 	bool switchPlayer;
 	Board p1Board;
 	Board p2Board;
