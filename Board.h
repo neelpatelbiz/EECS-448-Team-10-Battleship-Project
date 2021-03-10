@@ -64,7 +64,7 @@ public:
   /** 
   * @return int corresponding to the player to whom the board belongs
   */
-  int getPlayer();
+  int getPlayer()const;
 
   /** 
   * @param int corresponding to the player to whom the board belongs

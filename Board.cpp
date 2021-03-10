@@ -122,7 +122,7 @@ int Board::getEntry(int row, int col)const
   return(shipGrid[row][col]);
 }
 
-int Board::getPlayer()
+int Board::getPlayer()const
 {
   return playerNum;
 }

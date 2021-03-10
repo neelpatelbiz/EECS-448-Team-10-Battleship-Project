@@ -8,7 +8,7 @@
 Executive::Executive()
 {
 	//numberOfShips=numberOfShipsChoice;
-	numberOfShips = 2;
+	//numberOfShips = 2;
 	gameConfigured = false;
 	p1shipsSelected = false;
 	p2shipsSelected = false;
@@ -46,6 +46,11 @@ Executive::Executive()
 			(W/24)*(j+14)-1, (H/12)*(i+3)-1, defaultTile);
 		}
 	}
+	for(int i=0; i<5; i++)
+	{
+		shipNumSelect.draw_rectangle( (W/5)*i+1, 1, (W/5)*(i+1)-1, H-1, shipColors[i]);
+		shipNumSelect.draw_text((W/5)*i+(W/10), H/2-4, "%d ship(s)",white, 0, 1, 13, i+1);
+	}
 	background = blankGrid;
 	disp.assign(background,"BattleShip",0,false,false);
 
@@ -63,7 +68,7 @@ void Executive::run()
 		{
 			printMenu();
 		}
-		if(!p1shipsSelected)
+		if(gameConfigured&&!p1shipsSelected)
 		{
 			selectionPhase(p1Board);
 		}
@@ -102,19 +107,19 @@ void Executive::run()
 
 void Executive::printMenu()
 {
-
-	for(int i=0; i<5; i++)
-	{
-		/*blankGrid.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
-			(W/24)*(j+2)-1, (H/12)*(i+3)-1, defaultTile);*/
-		shipNumSelect.draw_rectangle( (W/5)*i+1, 1, (W/5)*(i+1)-1, H-1, shipColors[i]);
-	}
+	//disp.flush();
 	disp.display(shipNumSelect);
 	disp.wait();
-	disp.wait(1000);
-	disp.flush();
+	if(disp.button()&1)
+	{
+		numberOfShipsChoice = (disp.mouse_x()/(W/5))+1;
+		numberOfShips = numberOfShipsChoice;
+		shipNumSelect.draw_text(W/2-8, H/2-4, "%d ship(s) selected",white, 0, 1, 13, numberOfShipsChoice);
+		disp.wait(1000);
+		disp.flush();
+		gameConfigured = true;
+	}
 	
-	gameConfigured = true;
 }
 void Executive::attackPhase(Board& playerBoard)
 {
@@ -133,11 +138,18 @@ void Executive::attackPhase(Board& playerBoard)
 				switch(attackStatus)
 				{
 					case(6):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
 						youWin.draw_text(W/2-8, H/2-4, "YOU WIN P1", white, 0, 33);
 						disp.display(youWin);
 						p1CanAttack = false;
 						break;
 					case(5):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Sunk 5!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -145,6 +157,8 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(4):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Sunk 4!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -152,6 +166,8 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(3):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Sunk 3!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -159,6 +175,8 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(2):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Sunk 2!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -166,6 +184,8 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(1):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Sunk 1!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -173,6 +193,8 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(0):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, yellow);
 						background.draw_text(W/2-8, H/2-4, "Miss :(", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -180,9 +202,10 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(-1):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Hit ;)!", white, 0, 33);
 						disp.display(background);
-						//disp.wait();
 						disp.wait(2000);
 						disp.flush();
 						attackComplete = true;
@@ -197,11 +220,18 @@ void Executive::attackPhase(Board& playerBoard)
 				switch(attackStatus)
 				{
 					case(6):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
 						youWin.draw_text(W/2-8, H/2-4, "YOU WIN P2", white, 0, 33);
 						disp.display(youWin);
 						p2CanAttack = false;
 						break;
 					case(5):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Sunk 5!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -209,6 +239,8 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(4):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Sunk 4!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -216,6 +248,8 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(3):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Sunk 3!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -223,6 +257,8 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(2):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Sunk 2!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -230,6 +266,8 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(1):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Sunk 1!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -237,6 +275,8 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(0):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, yellow);
 						background.draw_text(W/2-8, H/2-4, "Miss :(", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
@@ -244,9 +284,10 @@ void Executive::attackPhase(Board& playerBoard)
 						attackComplete = true;
 						break;
 					case(-1):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
 						background.draw_text(W/2-8, H/2-4, "Hit ;)!", white, 0, 33);
 						disp.display(background);
-						//disp.wait();
 						disp.wait(2000);
 						disp.flush();
 						attackComplete = true;
@@ -262,14 +303,14 @@ void Executive::attackPhase(Board& playerBoard)
 	{
 		//disp.wait();
 		//disp.wait(1000);
-		disp.display(inter);
-		disp.wait();
+		//disp.display(inter);
+		//disp.wait();
 		
 		if(playerBoard.getPlayer() == 1)
 		{
-			//inter.draw_text(0,0,"* Press RMB to start turn Player 2:*",white);
-			//disp.display(inter);
-			//disp.wait();
+			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
+			disp.display(inter);
+			disp.wait();
 			if((disp.button()&2))
 			{
 				p1CanAttack = false;
@@ -278,14 +319,15 @@ void Executive::attackPhase(Board& playerBoard)
 				p2CanAttack = true;
 				attackComplete = false;
 				disp.flush();
+				inter = blank;
 			}
 			
 		}
 		else if(playerBoard.getPlayer() == 2)
 		{
-			//inter.draw_text(0,0,"* Press RMB to start turn Player 1:*",white);
-			//disp.display(inter);
-			//disp.wait();
+			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
+			disp.display(inter);
+			disp.wait();
 			if((disp.button()&2))
 			{
 				p2CanAttack = false;
@@ -294,6 +336,7 @@ void Executive::attackPhase(Board& playerBoard)
 				p1CanAttack = true;
 				attackComplete = false;
 				disp.flush();
+				inter = blank;
 			}	
 		}
 	}
@@ -303,8 +346,6 @@ void Executive::attackPhase(Board& playerBoard)
 }
 void Executive::selectionPhase(Board& playerBoard)
 {
-	//disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
-	
 	if(numberOfShips > 0)
 	{
 		row = ((disp.mouse_y())/(H/12));
@@ -347,40 +388,45 @@ void Executive::selectionPhase(Board& playerBoard)
 			infoAdds = background;
 			infoAdds.draw_text(0,0,"Player:%d Orientation: %d tile=%d,%d",gridLines,0,1,13,playerBoard.getPlayer(),vert,row,col);
 			disp.display(infoAdds);
+			if(numberOfShips == 0)
+			{
+				disp.wait(1000);
+				disp.flush();
+			}
 			
 		}
 	}
 	else
 	{
+		//disp.wait(1000);
+		//disp.flush();
 		if(playerBoard.getPlayer() == 1)
 		{
-			//inter.draw_text(0,0,"* Press RMB to start turn Player 2:*",white);
+			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
 			disp.display(inter);
 			disp.wait();
 			if((disp.button()&2))
 			{
 				disp.flush();
-				//cleanUp();
-				numberOfShips = 2;
+				numberOfShips = numberOfShipsChoice;
 				p1shipsSelected = true;
 				loadBoard(p2Board);
+				inter = blank;
 			}
 			
 		}
 		else if(playerBoard.getPlayer() == 2)
 		{
-			//inter.draw_text(0,0,"* Press RMB to start turn Player 1:*",white);
+			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P1", white, 0, 33);
 			disp.display(inter);
 			disp.wait();
 			if((disp.button()&2))
 			{
 				disp.flush();
-				//cleanUp();
-				//numberOfShips = 5;
 				p2shipsSelected = true;
 				p1CanAttack = true;
 				loadBoard(p1Board);
-				//disp.display(background);
+				inter = blank;
 			}	
 		}
 		
@@ -409,34 +455,39 @@ void Executive::loadBoard(const Board& board)
 				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
 				(W/24)*(j+2)-1, (H/12)*(i+3)-1, shipColors[board.getEntry(i,j)%5]);
 			}
+
+
+			if(board.getPlayer() == 1)
+			{
+				if(p2Board.getEntry(i,j) == -2)
+				{
+					background.draw_rectangle((W/24)*(j+13)+1,(H/12)*(i+2)+1, (W/24)*(j+14)-1, 
+					(H/12)*(i+3)-1, yellow);
+				}
+				else if(p2Board.getEntry(i,j) == -1)
+				{
+					background.draw_rectangle((W/24)*(j+13)+1,(H/12)*(i+2)+1, (W/24)*(j+14)-1, 
+					(H/12)*(i+3)-1, attacked);
+				}
+
+			}
+			else if(board.getPlayer() == 2)
+			{
+				if(p1Board.getEntry(i,j) == -2)
+				{
+					background.draw_rectangle((W/24)*(j+13)+1,(H/12)*(i+2)+1, (W/24)*(j+14)-1, 
+					(H/12)*(i+3)-1, yellow);
+				}
+				else if(p1Board.getEntry(i,j) == -1)
+				{
+					background.draw_rectangle((W/24)*(j+13)+1,(H/12)*(i+2)+1, (W/24)*(j+14)-1, 
+					(H/12)*(i+3)-1, attacked);
+				}
+			}
+
 		}
 	}
 	disp.display(background);
-	/*background = blankGrid;
-	for(int i=0; i<10; i++)
-	{
-		for(int j=0; j<10; j++)
-		{
-			if(board.getEntry(i,j) == -2)
-			{
-				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
-				(W/24)*(j+2)-1, (H/12)*(i+3)-1, missedAttack);
-			}
-			else if(board.getEntry(i,j) == -1)
-			{
-				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
-				(W/24)*(j+2)-1, (H/12)*(i+3)-1, attacked);
-			}
-			else if(board.getEntry(i,j) > 0)
-			{
-				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
-				(W/24)*(j+2)-1, (H/12)*(i+3)-1, shipColors[board.getEntry(i,j)%5]);
-			}
-			
-		}
-	}
-	disp.display(background);
-	*/
 }
 void Executive::cleanUp()
 {

@@ -43,6 +43,7 @@ private:
 	const unsigned char blue[3] = { 128,200,255}, red[3] = { 255,0,0 }, white[3] = { 255,255,255 },
 	yellow[3] = {255,255, 0};
 
+	int numberOfShipsChoice;
 	int numberOfShips;
 	bool gameConfigured;
 	bool p1shipsSelected;
