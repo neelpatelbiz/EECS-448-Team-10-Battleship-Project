@@ -7,10 +7,13 @@ Ai::Ai(int difficulty, int numberShips){
   numShips = numberShips;
   pos[0] = 0;
   pos[1] = 0;
+  last_hit[0] = -1;
+  last_hit[1] = -1;
 }
 
 Ai::~Ai(){
   delete[] pos;
+  delete[] last_hit;
 }
 
 void Ai::placeShips(){
@@ -53,6 +56,12 @@ int* Ai::moveEasy(){
 
 
 int* Ai::moveMedium(Board* p1Board){
+  //if lastpos == -1,-1
+  //random
+  //else
+  //  ++
+  //
+  //          
   return pos;
 }
 
@@ -60,7 +69,7 @@ int* Ai::moveMedium(Board* p1Board){
 int* Ai::moveHard(Board* p1Board){
   for(int i = 0; i < 10; i ++){
     for(int j = 0; j < 10; j ++){
-      if(p1Board->checkHit(i,j)=='s'){
+      if(p1Board->getEntry(i,j)>0){
 	pos[0] = i; pos[1] = j;
       }
     }

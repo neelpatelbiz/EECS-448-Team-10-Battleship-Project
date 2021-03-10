@@ -49,8 +49,9 @@ class Ai{
   int diff;
   int numShips;
   Board aiBoard;
-
+  
   int* pos = new int[2];//the next position the ai plays
+  int* last_hit = new int[2];//stores the last position that was a hit, and the size of the boat - Initially and after sinking a ship, the array holds [-1,-1]
   
   Board pBoard;
 };
