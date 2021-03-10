@@ -26,17 +26,36 @@ public:
     ~Executive();
 
 private:
-	int numberOfShips;
 	unsigned int W, H; 
+	CImg<unsigned char> shipNumSelect;
 	CImg<unsigned char> background;
 	CImg<unsigned char> blankGrid;
+	CImg<unsigned char> infoAdds;
+	CImg<unsigned char> inter;
+	CImg<unsigned char> blank;
+	CImg<unsigned char> youWin;
 	CImgDisplay disp;
-	const unsigned char gridLines[3]= { 128,200,255};
-	const unsigned char attacked[3] = { 255,0,0 };
-	const unsigned char defaultTile[3] = { 255,255,255 };
+	const unsigned char** shipColors;
+	const unsigned char gridLines[3]= { 128,200,255}, defaultTile[3] = { 255,255,255 };
+	const unsigned char attacked[3] = { 255,0,0 }, missedAttack[3] = {255,255, 0}, pendingAttack[3] = {201,72,194};
+	const unsigned char ship1[3] = { 203,174,124}, ship2[3] = { 189,203,106 }, ship3[3] = {141,203,106 },
+	ship4[3] = {106,203,168}, ship5[3] = {106, 189, 203};
+	const unsigned char blue[3] = { 128,200,255}, red[3] = { 255,0,0 }, white[3] = { 255,255,255 },
+	yellow[3] = {255,255, 0};
 
+	int numberOfShips;
+	bool gameConfigured;
+	bool p1shipsSelected;
+	bool p2shipsSelected;
+	bool p1CanAttack;
+	bool p2CanAttack;
+	bool attackComplete;
+	int attackStatus;
+	bool switchPlayer;
 	Board p1Board;
 	Board p2Board;
+
+	int vert,row,col;
 
 
 	/// Outputs a choice for instructions for the game
@@ -46,10 +65,27 @@ private:
 	void printMenu();
 
 	/**
-	 * opens CImgDisplay allowing plpayer to select ship positions
+	 * opens CImgDisplay allowing player to select ship positions
 	 */
 	void selectionPhase(Board& playerBoard);
 
+	/**
+	 * opens CImgDisplay allowing player to select attack positions
+	 * @param playerBoard of player attacking
+	 */
+	void attackPhase(Board& playerBoard);
+
+	/**
+	 * displays board which must be right-clicked to switch player turn
+	 */
+	//void switchScreen();
+
+	/**
+	 * loads colored tiles onto CImg of battleship boards
+	 * @param board of player being attacked
+	 */
+	void loadBoard(const Board& board);
+	
 
 	/**
 	 * Restores background to its original state with blank grids.
