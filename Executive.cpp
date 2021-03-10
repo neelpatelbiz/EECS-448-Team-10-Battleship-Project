@@ -7,8 +7,6 @@
 #include "Executive.h"
 Executive::Executive()
 {
-	//numberOfShips=numberOfShipsChoice;
-	//numberOfShips = 2;
 	gameConfigured = false;
 	p1shipsSelected = false;
 	p2shipsSelected = false;
@@ -84,26 +82,11 @@ void Executive::run()
 		{
 			attackPhase(p2Board);
 		}
-		/*
-		if(p1shipsSelected && p2shipsSelected)
-		{
-			attackPhase()
-		}
-		*/
+		
 	}
 	
 }
 
-/*void Executive::switchScreen()
-{
-	disp.display(inter);
-	disp.wait();
-	if((disp.button()&2))
-	{
-		cleanUp();
-		disp.display(background);
-	}
-}*/
 
 void Executive::printMenu()
 {
@@ -301,11 +284,7 @@ void Executive::attackPhase(Board& playerBoard)
 	}
 	else
 	{
-		//disp.wait();
-		//disp.wait(1000);
-		//disp.display(inter);
-		//disp.wait();
-		
+
 		if(playerBoard.getPlayer() == 1)
 		{
 			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
@@ -398,8 +377,6 @@ void Executive::selectionPhase(Board& playerBoard)
 	}
 	else
 	{
-		//disp.wait(1000);
-		//disp.flush();
 		if(playerBoard.getPlayer() == 1)
 		{
 			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
