@@ -17,6 +17,12 @@ Executive::Executive()
 	p1Board.setPlayer(1);
 	p2Board.setPlayer(2);
 
+	shipColors[0] = ship1;
+	shipColors[1] = ship2;
+	shipColors[2] = ship3;
+	shipColors[3] = ship4;
+	shipColors[4] = ship5;
+
 	vert = 0;
 	row = 0;
 	col = 0;
@@ -162,6 +168,9 @@ void Executive::attackPhase(Board& playerBoard)
 			// //disp.wait();
 			
 			p1CanAttack = false;
+			//disp.wait();
+			//disp.wait(1000);
+			//disp.wait();
 			loadBoard(p2Board);
 			disp.display(background);
 			p2CanAttack = true;
@@ -198,13 +207,16 @@ void Executive::attackPhase(Board& playerBoard)
 			}
 			// disp.display(inter);
 			// //disp.wait();
-			if((disp.button()&2))
-			{
+			//if((disp.button()&2))
+			//{
 				p2CanAttack = false;
+				// disp.wait();
+				// disp.wait(1000);
+				// disp.wait();
 				loadBoard(p1Board);
 				disp.display(background);
 				p1CanAttack = true;
-			}
+			//}
 			
 		}
 	}
@@ -225,7 +237,7 @@ void Executive::selectionPhase(Board& playerBoard)
 		if(disp.is_keyARROWDOWN())vert = 0;        
 		if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10 ) ||
 		(((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22))
-		&& ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y()-4)/(H/12)) >=2
+		&& ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y())/(H/12)) >=2
 		&& disp.button()&1)
 		{
 			row = ((disp.mouse_y())/(H/12));
@@ -235,21 +247,20 @@ void Executive::selectionPhase(Board& playerBoard)
 			disp.display(infoAdds);
 			if(vert == 1)//draw vertically
 			{
-				if(((disp.mouse_y()/(W/12))/*+i*/+numberOfShips)<=11 && playerBoard.addShip(row-2,col-1,vert,numberOfShips) ) 
+				if( playerBoard.addShip(row-2,col-1,vert,numberOfShips) ) 
 				{ 
 					for(int j=0; j<numberOfShips; j++)
-						background.draw_rectangle((col*(W/24))+1, (row+j)*(H/12)+1, (col*(W/24))+(W/24)-1, (row+j)*(H/12)+(H/12)-1, attacked);
+						background.draw_rectangle((col*(W/24))+1, (row+j)*(H/12)+1, (col*(W/24))+(W/24)-1, (row+j)*(H/12)+(H/12)-1, shipColors[numberOfShips%5]);
 					numberOfShips--;
 					//disp.wait();
 				}           
 			}
 			else if(vert == 0)//draw horizontally
 			{
-				if(((((disp.mouse_x()/(H/12))/*+i*/+numberOfShips)<=23 && ((disp.mouse_x()/(H/12))>=13))|| ((disp.mouse_x()/(H/12))/*+i*/+numberOfShips)<=11)
-				&& playerBoard.addShip(row-2,col-1,vert,numberOfShips) ) 
+				if( playerBoard.addShip(row-2,col-1,vert,numberOfShips) ) 
 				{
 					for(int j=0; j<numberOfShips; j++)
-						background.draw_rectangle((col+j)*(W/24)+1, row*(H/12)+1, (col+j)*(W/24)+(W/24)-1, row*(H/12)+(H/12)-1, attacked);
+						background.draw_rectangle((col+j)*(W/24)+1, row*(H/12)+1, (col+j)*(W/24)+(W/24)-1, row*(H/12)+(H/12)-1, shipColors[numberOfShips%5]);
 					numberOfShips--;
 					//disp.wait();
 				}
@@ -264,30 +275,31 @@ void Executive::selectionPhase(Board& playerBoard)
 	{
 		if(playerBoard.getPlayer() == 1)
 		{
-			inter.draw_text(0,0,"* Press RMB to start turn Player 2:*",white);
+			//inter.draw_text(0,0,"* Press RMB to start turn Player 2:*",white);
 			disp.display(inter);
 			disp.wait();
 			if((disp.button()&2))
 			{
-				cleanUp();
+				//cleanUp();
 				numberOfShips = 5;
 				p1shipsSelected = true;
+				loadBoard(p2Board);
 			}
 			
 		}
 		else if(playerBoard.getPlayer() == 2)
 		{
-			inter.draw_text(0,0,"* Press RMB to start turn Player 1:*",white);
+			//inter.draw_text(0,0,"* Press RMB to start turn Player 1:*",white);
 			disp.display(inter);
 			disp.wait();
 			if((disp.button()&2))
 			{
-				cleanUp();
+				//cleanUp();
 				numberOfShips = 5;
 				p2shipsSelected = true;
 				p1CanAttack = true;
 				loadBoard(p1Board);
-				disp.display(background);
+				//disp.display(background);
 			}	
 		}
 		
@@ -314,11 +326,36 @@ void Executive::loadBoard(const Board& board)
 			else if(board.getEntry(i,j) > 0)
 			{
 				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
-				(W/24)*(j+2)-1, (H/12)*(i+3)-1, blue);
+				(W/24)*(j+2)-1, (H/12)*(i+3)-1, shipColors[board.getEntry(i,j)%5]);
 			}
 		}
 	}
 	disp.display(background);
+	/*background = blankGrid;
+	for(int i=0; i<10; i++)
+	{
+		for(int j=0; j<10; j++)
+		{
+			if(board.getEntry(i,j) == -2)
+			{
+				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+				(W/24)*(j+2)-1, (H/12)*(i+3)-1, missedAttack);
+			}
+			else if(board.getEntry(i,j) == -1)
+			{
+				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+				(W/24)*(j+2)-1, (H/12)*(i+3)-1, attacked);
+			}
+			else if(board.getEntry(i,j) > 0)
+			{
+				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+				(W/24)*(j+2)-1, (H/12)*(i+3)-1, shipColors[board.getEntry(i,j)%5]);
+			}
+			
+		}
+	}
+	disp.display(background);
+	*/
 }
 void Executive::cleanUp()
 {

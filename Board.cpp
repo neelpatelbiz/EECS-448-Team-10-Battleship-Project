@@ -47,9 +47,9 @@ bool Board::addShip(int row, int column, int v, int size)
   bool canAdd = true;
   if(v == 1)
   {
-    if ((size + row) > 9)
+    if ((size + row) > 10)
     {
-      canAdd = false;
+      return false;
     }
     for (int i = 0; i < size; i++)
     {
@@ -69,7 +69,7 @@ bool Board::addShip(int row, int column, int v, int size)
   }
   else if (v == 0)
   {
-    if ((size + column) > 9)
+    if ((size + column) > 10)
     {
         canAdd = false;
     }
@@ -95,7 +95,7 @@ bool Board::addShip(int row, int column, int v, int size)
 int Board::attack(int row, int col)
 {
   int shipSpace = shipGrid[row][col];
-  if(shipSpace == -2) {
+  if(shipSpace == -2 || shipSpace == -1) {
     return -2;
   }
   else if(shipSpace == 0) {

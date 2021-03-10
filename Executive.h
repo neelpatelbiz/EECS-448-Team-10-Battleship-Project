@@ -32,9 +32,11 @@ private:
 	CImg<unsigned char> infoAdds;
 	CImg<unsigned char> inter;
 	CImgDisplay disp;
-	const unsigned char gridLines[3]= { 128,200,255};
-	const unsigned char attacked[3] = { 255,0,0 };
-	const unsigned char defaultTile[3] = { 255,255,255 };
+	const unsigned char** shipColors;
+	const unsigned char gridLines[3]= { 128,200,255}, defaultTile[3] = { 255,255,255 };
+	const unsigned char attacked[3] = { 255,0,0 }, missedAttack[3] = {255,255, 0};
+	const unsigned char ship1[3] = { 128,200,255}, ship2[3] = { 255,100,100 }, ship3[3] = { 40,75,255 },
+	ship4[3] = {125,255, 0}, ship5[3] = {240, 0, 250};
 	const unsigned char blue[3] = { 128,200,255}, red[3] = { 255,0,0 }, white[3] = { 255,255,255 },
 	yellow[3] = {255,255, 0};
 
