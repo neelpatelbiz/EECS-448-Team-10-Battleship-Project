@@ -208,7 +208,7 @@ void Executive::attackPhase(Board& playerBoard)
 		if(playerBoard.getPlayer() == 1)
 		{
 			//inter.draw_text(0,0,"* Press RMB to start turn Player 2:*",white);
-			disp.display(inter);
+			//disp.display(inter);
 			//disp.wait();
 			if((disp.button()&2))
 			{
@@ -223,7 +223,7 @@ void Executive::attackPhase(Board& playerBoard)
 		else if(playerBoard.getPlayer() == 2)
 		{
 			//inter.draw_text(0,0,"* Press RMB to start turn Player 1:*",white);
-			disp.display(inter);
+			//disp.display(inter);
 			//disp.wait();
 			if((disp.button()&2))
 			{
