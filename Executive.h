@@ -31,6 +31,7 @@ private:
 	CImg<unsigned char> blankGrid;
 	CImg<unsigned char> infoAdds;
 	CImg<unsigned char> inter;
+	CImg<unsigned char> youWin;
 	CImgDisplay disp;
 	const unsigned char** shipColors;
 	const unsigned char gridLines[3]= { 128,200,255}, defaultTile[3] = { 255,255,255 };
@@ -46,6 +47,7 @@ private:
 	bool p2shipsSelected;
 	bool p1CanAttack;
 	bool p2CanAttack;
+	bool attackComplete;
 	bool switchPlayer;
 	Board p1Board;
 	Board p2Board;

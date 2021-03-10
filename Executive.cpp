@@ -14,6 +14,7 @@ Executive::Executive()
 	p2shipsSelected = false;
 	p1CanAttack = false;
 	p2CanAttack = false;
+	attackComplete = false;
 	p1Board.setPlayer(1);
 	p2Board.setPlayer(2);
 
@@ -30,6 +31,7 @@ Executive::Executive()
 	W=1008;
 	H=504;
 	inter.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+	youWin.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
 	//inter.draw_text(0,0,"* Press a RMB to start turn Player:*",white);
 	blankGrid.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
 	for(int i=0;i<10;i++)
@@ -122,104 +124,119 @@ void Executive::printMenu()
 }
 void Executive::attackPhase(Board& playerBoard)
 {
-	
-	if((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22)
-	&& ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y()-4)/(H/12)) >=2
-	&& disp.button()&1)
+	if(!attackComplete)
 	{
-		row = ((disp.mouse_y())/(H/12));
-		col = ((disp.mouse_x())/(W/24));
+		if((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22)
+		&& ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y()-4)/(H/12)) >=2
+		&& disp.button()&1)
+		{
+			row = ((disp.mouse_y())/(H/12));
+			col = ((disp.mouse_x())/(W/24));
+			if(playerBoard.getPlayer() == 1)
+			{
+				if(p2Board.attack(row-2, col-13) == 6)
+				{
+					//youwin
+				}
+				else if(p2Board.attack(row-2, col-13) == 5)
+				{
+					
+				}
+				else if(p2Board.attack(row-2, col-13) == 4)
+				{
+					
+				}
+				else if(p2Board.attack(row-2, col-13) == 3)
+				{
+					
+				}
+				else if(p2Board.attack(row-2, col-13) == 2)
+				{
+					
+				}
+				else if(p2Board.attack(row-2, col-13) == 2)
+				{
+					
+				}
+				else if(p2Board.attack(row-2, col-13) == 1)
+				{
+					
+				}
+				else if(p2Board.attack(row-2, col-13) == -1)
+				{
+					
+					//hit
+				}
+				attackComplete = true;
+			}
+			else if(playerBoard.getPlayer() == 2 )
+			{
+				if(p1Board.attack(row-2, col-13) == 6)
+				{
+					//youwin
+				}
+				else if(p1Board.attack(row-2, col-13) == 5)
+				{
+				}
+				else if(p1Board.attack(row-2, col-13) == 4)
+				{
+				}
+				else if(p1Board.attack(row-2, col-13) == 3)
+				{
+				}
+				else if(p1Board.attack(row-2, col-13) == 2)
+				{
+				}
+				else if(p1Board.attack(row-2, col-13) == 2)
+				{
+				}
+				else if(p1Board.attack(row-2, col-13) == 1)
+				{
+				}
+				else if(p1Board.attack(row-2, col-13) == -1)
+				{	
+					//hit
+				}
+					attackComplete = true;
+			}
+		}
+	}
+	else
+	{
+		disp.display(inter);
+		disp.wait();
 		if(playerBoard.getPlayer() == 1)
 		{
-			if(p2Board.attack(row-2, col-13) == 6)
+			//inter.draw_text(0,0,"* Press RMB to start turn Player 2:*",white);
+			disp.display(inter);
+			disp.wait();
+			if((disp.button()&2))
 			{
-				//youwin
+				p1CanAttack = false;
+				loadBoard(p2Board);
+				disp.display(background);
+				p2CanAttack = true;
+				attackComplete = false;
 			}
-			else if(p2Board.attack(row-2, col-13) == 5)
-			{
-				
-			}
-			else if(p2Board.attack(row-2, col-13) == 4)
-			{
-				
-			}
-			else if(p2Board.attack(row-2, col-13) == 3)
-			{
-				
-			}
-			else if(p2Board.attack(row-2, col-13) == 2)
-			{
-				
-			}
-			else if(p2Board.attack(row-2, col-13) == 2)
-			{
-				
-			}
-			else if(p2Board.attack(row-2, col-13) == 1)
-			{
-				
-			}
-			else if(p2Board.attack(row-2, col-13) == -1)
-			{
-				
-				//hit
-			}
-			// disp.display(inter);
-			// //disp.wait();
-			
-			p1CanAttack = false;
-			//disp.wait();
-			//disp.wait(1000);
-			//disp.wait();
-			loadBoard(p2Board);
-			disp.display(background);
-			p2CanAttack = true;
 			
 		}
-		else if(playerBoard.getPlayer() == 2 )
+		else if(playerBoard.getPlayer() == 2)
 		{
-			if(p1Board.attack(row-2, col-13) == 6)
+			//inter.draw_text(0,0,"* Press RMB to start turn Player 1:*",white);
+			disp.display(inter);
+			disp.wait();
+			if((disp.button()&2))
 			{
-				//youwin
-			}
-			else if(p1Board.attack(row-2, col-13) == 5)
-			{
-			}
-			else if(p1Board.attack(row-2, col-13) == 4)
-			{
-			}
-			else if(p1Board.attack(row-2, col-13) == 3)
-			{
-			}
-			else if(p1Board.attack(row-2, col-13) == 2)
-			{
-			}
-			else if(p1Board.attack(row-2, col-13) == 2)
-			{
-			}
-			else if(p1Board.attack(row-2, col-13) == 1)
-			{
-			}
-			else if(p1Board.attack(row-2, col-13) == -1)
-			{
-				
-				//hit
-			}
-			// disp.display(inter);
-			// //disp.wait();
-			//if((disp.button()&2))
-			//{
 				p2CanAttack = false;
-				// disp.wait();
-				// disp.wait(1000);
-				// disp.wait();
 				loadBoard(p1Board);
 				disp.display(background);
 				p1CanAttack = true;
-			//}
-			
+				attackComplete = false;
+			}	
 		}
 	}
+		
+	
 	
 }
 void Executive::selectionPhase(Board& playerBoard)
