@@ -61,27 +61,50 @@ void Executive::run()
 	while (!disp.is_closed() && !disp.is_keyESC() && !disp.is_keyQ())
 	{
 		
+		if(botGame)
+		{
+			if(!gameConfigured)
+			{
+				printMenu();
+			}
+			if(gameConfigured&&!p1shipsSelected)
+			{
+				selectionPhase(p1Board);
+			}
+			if(p1CanAttack == true)
+			{
+				attackPhase(p1Board);
+			}
+			/*if(p1CanAttack == true)
+			{
+				attackPhase(p1Board);
+			}*/
+		}
+		else
+		{
+			if(!gameConfigured)
+			{
+				printMenu();
+			}
+			if(gameConfigured&&!p1shipsSelected)
+			{
+				selectionPhase(p1Board);
+			}
+			if(p1shipsSelected && !p2shipsSelected /*&& switchPlayer == false*/)
+			{
+				selectionPhase(p2Board);
+			}
+			if(p1CanAttack == true)
+			{
+				attackPhase(p1Board);
+			}
+			if(p2CanAttack == true)
+			{
+				attackPhase(p2Board);
+			}
+		}
 		
-		if(!gameConfigured)
-		{
-			printMenu();
-		}
-		if(gameConfigured&&!p1shipsSelected)
-		{
-			selectionPhase(p1Board);
-		}
-		if(p1shipsSelected && !p2shipsSelected /*&& switchPlayer == false*/)
-		{
-			selectionPhase(p2Board);
-		}
-		if(p1CanAttack == true)
-		{
-			attackPhase(p1Board);
-		}
-		if(p2CanAttack == true)
-		{
-			attackPhase(p2Board);
-		}
+		
 		
 	}
 	
@@ -95,8 +118,14 @@ void Executive::printMenu()
 	disp.wait();
 	if(disp.button()&1)
 	{
+		//temporarily hard-coded botGame
+		botGame = true;
 		numberOfShipsChoice = (disp.mouse_x()/(W/5))+1;
 		numberOfShips = numberOfShipsChoice;
+		if(botGame)
+		{
+			bot.placeShips(numberOfShipsChoice, p2Board);
+		}
 		shipNumSelect.draw_text(W/2-8, H/2-4, "%d ship(s) selected",white, 0, 1, 13, numberOfShipsChoice);
 		disp.wait(1000);
 		disp.flush();
@@ -287,20 +316,33 @@ void Executive::attackPhase(Board& playerBoard)
 
 		if(playerBoard.getPlayer() == 1)
 		{
-			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
-			disp.display(inter);
-			disp.wait();
-			if((disp.button()&2))
+			if(botGame)
 			{
-				p1CanAttack = false;
-				loadBoard(p2Board);
+				loadBoard(p1Board);
+				background.draw_text(W/2-30, H/2-4, "Bot is attacking", white, 0, 33);
 				disp.display(background);
-				p2CanAttack = true;
-				attackComplete = false;
+				bot.botAttack(1,p1Board);
+				disp.wait(1000);
 				disp.flush();
-				inter = blank;
+				loadBoard(p1Board);
+				attackComplete = false;
 			}
-			
+			else
+			{
+				inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
+				disp.display(inter);
+				disp.wait();
+				if((disp.button()&2))
+				{
+					p1CanAttack = false;
+					loadBoard(p2Board);
+					disp.display(background);
+					p2CanAttack = true;
+					attackComplete = false;
+					disp.flush();
+					inter = blank;
+				}
+			}
 		}
 		else if(playerBoard.getPlayer() == 2)
 		{
@@ -379,7 +421,14 @@ void Executive::selectionPhase(Board& playerBoard)
 	{
 		if(playerBoard.getPlayer() == 1)
 		{
-			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
+			if(botGame == true)
+            {
+                inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Attack Phase", white, 0, 33);
+            }
+            else
+            {
+                inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
+            }
 			disp.display(inter);
 			disp.wait();
 			if((disp.button()&2))
@@ -387,10 +436,17 @@ void Executive::selectionPhase(Board& playerBoard)
 				disp.flush();
 				numberOfShips = numberOfShipsChoice;
 				p1shipsSelected = true;
-				loadBoard(p2Board);
+                if(botGame == true)
+                {
+                    background.draw_text(W/2-30, 4, "Attack!", white, 0, 33);
+					disp.display(background);
+					p1CanAttack = true;
+                }
+				else{
+                    loadBoard(p2Board);
+                }
 				inter = blank;
 			}
-			
 		}
 		else if(playerBoard.getPlayer() == 2)
 		{
@@ -465,10 +521,6 @@ void Executive::loadBoard(const Board& board)
 		}
 	}
 	disp.display(background);
-}
-void Executive::cleanUp()
-{
-	background = blankGrid;
 }
 
 void Executive::Game()

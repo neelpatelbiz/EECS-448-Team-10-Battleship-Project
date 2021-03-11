@@ -5,7 +5,7 @@
 #include <string>
 #include "CImg.h"
 #include "Board.h"
-#include "Ships.h"
+#include "Bot.h"
 
 using namespace cimg_library;
 class Executive
@@ -43,6 +43,8 @@ private:
 	const unsigned char blue[3] = { 128,200,255}, red[3] = { 255,0,0 }, white[3] = { 255,255,255 },
 	yellow[3] = {255,255, 0};
 
+	Bot bot;
+	bool botGame;
 	int numberOfShipsChoice;
 	int numberOfShips;
 	bool gameConfigured;
@@ -87,11 +89,6 @@ private:
 	 */
 	void loadBoard(const Board& board);
 	
-
-	/**
-	 * Restores background to its original state with blank grids.
-	 */
-	void cleanUp();
 
 	/// Main function that runs initializes the multidimensional array and guides the user through the game
 	/**  Function initializes integers numberOfShips, row, vert amd character column. 

@@ -1,3 +1,123 @@
+#include "Bot.h"
+Bot::Bot()
+{
+	iterations = 0;
+	lastXhit = -1;
+	lastYhit = -1;
+	nextX = 0;
+	nextY = 0;
+}
+void Bot::placeShips(int numShips, Board& board)
+{
+	int vert, x, y;
+	bool canPlace = false;
+	std::srand(time(NULL));
+	for(int i=numShips; i>0; i--)
+	{
+		do
+		{
+			vert = std::rand()%2;
+			x = std::rand()%10;
+			y = std::rand()%10;
+			canPlace = board.addShip(x,y,vert,i);
+		} while(!canPlace);
+	}
+}
+void Bot::botAttack(int difficulty, Board& board)
+{
+	if(difficulty == 1)
+	{
+		easyAttack(board);
+	}
+	else if(difficulty == 2)
+	{
+
+	}
+	else if (difficulty == 3)
+	{
+
+	}
+}
+
+void Bot::easyAttack(Board& board)
+{
+	srand (time(NULL));
+	do
+	{
+		attackStatus = board.attack(std::rand()%10, std::rand()%10);
+	} while (attackStatus == -2);
+}
+
+bool Bot::mediumAttack(Board& board)
+{
+	
+	if(lastXhit == -1)
+	{
+		do
+		{
+			nextX = std::rand()%10;
+			nextY = std::rand()%10;
+			attackStatus = board.attack(std::rand()%10, std::rand()%10);
+		} while (attackStatus == -2);
+		if(attackStatus == -1)
+		{
+			lastXhit = nextX;
+			lastYhit = nextY;
+			iterations++;
+		}
+		else if(attackStatus == 6)
+		{
+			return true;
+		}
+	}
+	else
+	{
+		findNext();
+
+	}
+}
+bool Bot::findNext()
+{
+	if(iterations == 1)
+	{
+		if(nextY-1>0)
+		{
+			nextX=lastXhit;
+			nextY=lastYhit-1;
+		}
+	}
+	else if(iterations == 2)
+	{	
+		if(nextX+1<9)
+		{
+			nextX=lastXhit+1;
+			nextY= lastYhit;
+		}
+	}
+	else if(iterations == 3)
+	{
+		if(nextY+1<9)
+		{
+			nextX=lastXhit;
+			nextY= lastYhit+1;
+		}
+	}
+	else if(iterations == 4)
+	{
+		if(nextX+1<9)
+		{
+			nextX=lastXhit+1;
+			nextY= lastYhit;
+		}
+	}
+}
+void Bot::cheatAttack(Board& board)
+{
+	
+}
+
+
+/*
 void Executive::botRun()
 {
 	disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
@@ -78,7 +198,7 @@ void Executive::botSelectionPhase(Board& playerBoard)
 		{
 			if(botGame == true)
             {
-                inter.draw_text(W/2-30, H/2-4, "Right Click To Attack Phase", white, 0, 33);
+                inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Attack Phase", white, 0, 33);
             }
             else
             {
@@ -334,3 +454,4 @@ void Executive::attackPhase(Board& playerBoard)
 			}	
 		}
 	}
+	*/
