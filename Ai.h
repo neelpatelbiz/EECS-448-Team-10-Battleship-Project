@@ -25,7 +25,7 @@ class Ai{
     @param - Board ptr p1Board, player's board
     @return - array of ints [row, col] of move made by ai
    */
-  int* moveEasy();
+  int* moveEasy(Board* p1Board);
 
    /*
      
@@ -41,7 +41,20 @@ class Ai{
    */
   int* moveHard(Board* p1Board);
 
-  //arguments - difficulty (1-3), numShips
+
+  /**
+   *method used by moveMedium to attack, then if a ship is hit the last_hit array is updated
+   *@param Board* p1Board - the player board
+   *@param int* pos - the position to attack
+   */
+  void attackMed(Board* p1Board, int* pos);
+
+  
+  /**
+   *constructor
+   *@param int diff - the difficulty of bot player - 1 is easy, 2 medium, 3 hard
+   *@param int numberShips - the number of ships to add to aiBoard
+   */
   Ai(int diff, int numberShips);
   ~Ai();
  private:

@@ -35,7 +35,7 @@ void Ai::placeShips(){
 int* Ai::move(Board* p1Board){
   switch(diff){
   case 1:
-    pos = moveEasy();
+    pos = moveEasy(p1Board);
     break;
   case 2:
     pos = moveMedium(p1Board);
@@ -48,9 +48,10 @@ int* Ai::move(Board* p1Board){
 }
 
 
-int* Ai::moveEasy(){
+int* Ai::moveEasy(Board* p1Board){
   pos[0] = rand()%10;
   pos[1] = rand()%10;
+  p1Board->attack(pos[0], pos[1]);
   return pos;
 }
 
@@ -59,10 +60,61 @@ int* Ai::moveMedium(Board* p1Board){
   //if lastpos == -1,-1
   //random
   //else
-  //  ++
+  //check entry of up right down left
+  //if not attacked or sunk attack, then if result is hit make lastpos the hit
   //
-  //          
+
+  if(last_hit[0]==-1 && last_hit[1]==-1){
+    pos[0] = rand()%10;
+    pos[1] = rand()%10;
+    attackMed(p1Board, pos);
+  }else{
+    //up
+    pos[0] = last_hit[0]-1;
+    if(pos[0]>=0){
+      if(p1Board->getEntry(pos[0], pos[1])>=0){
+	attackMed(p1Board, pos);
+	return pos;
+      }
+    }
+    //right
+    pos[1] = last_hit[1]+1;
+    if(pos[1]<10){
+      if(p1Board->getEntry(pos[0], pos[1])>=0){
+	attackMed(p1Board, pos);
+	return pos;
+      }
+    }
+    //down
+    pos[0] = last_hit[0]+1;
+    if(pos[0]<10){
+      if(p1Board->getEntry(pos[0], pos[1])>=0){
+	attackMed(p1Board, pos);
+	return pos;
+      }
+    }
+    //left
+    pos[1] = last_hit[1]-1;
+    if(pos[1]>=0){
+      if(p1Board->getEntry(pos[0], pos[1])>=0){
+	attackMed(p1Board, pos);
+	return pos;
+      }
+    }
+    
+    //if no empy spaces
+    last_hit[0] = -1;
+    last_hit[1] = -1;
+  }
   return pos;
+}
+
+void Ai::attackMed(Board* p1Board, int* pos){
+  int result = p1Board->attack(pos[0], pos[1]);
+  if(result == -1){
+    last_hit[0] = pos[0];
+    last_hit[1] = pos[1];
+  }
 }
 
  
@@ -74,5 +126,6 @@ int* Ai::moveHard(Board* p1Board){
       }
     }
   }
+  p1Board->attack(pos[0], pos[1]);
   return pos;
 }

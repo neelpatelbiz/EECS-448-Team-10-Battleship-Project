@@ -74,9 +74,6 @@ bool Board::addShip(int row, int column, int v, int size)
     {
         for (int i = 0; i < size; i++)
         {
-	  char cSize = size;
-	  shipGrid[row+i][column] = 's';//will change this back to size, 
-	}
           shipGrid[row+i][column] = size;
           hitsToWin++;
         }

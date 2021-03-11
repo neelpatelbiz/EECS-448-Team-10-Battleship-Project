@@ -16,7 +16,7 @@ Board.o: Board.cpp Board.h
 Ai.o: Ai.cpp Ai.h MedAiTree.h
 	g++ -std=gnu++11 -g -Wall -c Ai.cpp
 
-MedAiTree.o: MedAiTree.cpp MedAiTree.h Node.h
+MedAiTree.o: MedAiTree.cpp MedAiTree.h Node.h Board.h
 	g++ -std=gnu++11 -g -Wall -c MedAiTree.cpp
 
 Node.o: Node.cpp Node.h
