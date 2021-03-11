@@ -1,174 +1,156 @@
 #include "Board.h"
+#include "CImg.h"
+
 Board::Board()
 {
-  size = 11;
-  grid = new std::string*[size];
+  //W=500;
+  //H=500;
+  score = 0;
+  size = 10;
+  hitsToWin=0;
+  shipGrid = new int*[size];
+  attackGrid = new int*[size];
 
   for (int i = 0; i < size; i++)
   {
-    grid[i] = new std::string[size];
+    shipGrid[i] = new int[size];
+    attackGrid[i] = new int[size];
   }
 
   for (int i = 0; i < size; i++)
   {
     for (int j = 0; j < size; j++)
     {
-      if (i == 0)
-      {
-        grid[i][0] = '|';
-        grid[i][1] = " A";
-        grid[i][2] = "B";
-        grid[i][3] = "C";
-        grid[i][4] = "D";
-        grid[i][5] = "E";
-        grid[i][6] = "F";
-        grid[i][7] = "G";
-        grid[i][8] = "H";
-        grid[i][9] = "I";
-        grid[i][10] = "J";
-       }
-       else if (j == 0)
-       {
-        grid[1][j] = "1 ";
-        grid[2][j] = "2 ";
-        grid[3][j] = "3 ";
-        grid[4][j] = "4 ";
-        grid[5][j] = "5 ";
-        grid[6][j] = "6 ";
-        grid[7][j] = "7 ";
-        grid[8][j] = "8 ";
-        grid[9][j] = "9 ";
-        grid[10][j] = "10";
-       }
-       else
-       {
-        grid[i][j] = '.';
-       }
-     }
-   }
+      shipGrid[i][j] = 0;
+      attackGrid[i][j] = 0;  
+    }
+  }
+  for(int i =1; i<=5; i++)
+  {
+    piecesLeft[i-1]=i;
+  }
 }
 
 Board::~Board()
 {
   for (int i = 0; i < size; i++)
   {
- 	  delete[] grid[i];
+ 	delete[] shipGrid[i];
+    delete[] attackGrid[i];
   }
-    delete[] grid;
+  delete[] shipGrid;
+  delete[] attackGrid;
 }
 
-void Board::Display()
+bool Board::addShip(int row, int column, int v, int size)
 {
-  for(int i = 0; i < size; i++)
-  {
-    for(int j = 0; j < size; j++)
-    {
-      cout << grid[i][j];
-    }
-    cout << endl;
-  }
-}
-
-void Board::clearScreen()
-{
-  for(int i = 0; i < 70; i++)
-  {
-    cout << endl;
-  }
-}
-
-bool Board::addShip(int row, int column, int v, int size, int type)
-{
-  bool added = false;
-  bool tested = true;
-  int testRow = row;
-  int testColumn = column;
-  string ship = "0";
-  switch (type)
-  {
-    case 0:
-        ship = "S";
-        break;
-    case 1:
-        ship = "P";
-        break;
-    case 2:
-        ship = "c";
-        break;
-    case 3:
-        ship = "D";
-        break;
-    case 4:
-        ship = "B";
-        break;
-    case 5:
-        ship = "C";
-        break;
-
-  }
+  bool canAdd = true;
   if(v == 1)
   {
-      if ((size + row) > 11)
-      {
-          tested = false;
-      }
-      if (tested == true)
-      {
-          for (int i = 0; i < size; i++)
-          {
-              if (grid[testRow][column] != ".")
-              {
-                  tested = false;;
-              }
-              testRow++;
-          }
-      }
-      if (tested == true)
-      {
-          for (int i = 0; i < size; i++)
-          {
-              grid[row][column] = ship;
-              row++;
-          }
-          added = true;
-      }
+    if ((size + row) > 10)
+    {
+      return false;
+    }
+    for (int i = 0; i < size; i++)
+    {
+        if (shipGrid[row+i][column] != 0)
+        {
+          canAdd = false;
+        }
+    }
+    if (canAdd == true)
+    {
+        for (int i = 0; i < size; i++)
+        {
+          shipGrid[row+i][column] = size;
+          hitsToWin++;
+        }
+    }
   }
-  else
+  else if (v == 0)
   {
-      if ((size + column) > 11)
-      {
-          tested = false;
-      }
-      if (tested == true)
-      {
-          for (int i = 0; i < size; i++)
-          {
-              if (grid[row][testColumn] != ".")
-              {
-                  tested = false;
-              }
-              testColumn++;
-          }
-      }
-      if (tested == true)
-      {
-          for (int i = 0; i < size; i++)
-          {
-              grid[row][column] = ship;
-              column++;
-          }
-          added = true;
-      }
+    if ((size + column) > 10)
+    {
+        canAdd = false;
+    }
+    for (int i = 0; i < size; i++)
+    {
+        if (shipGrid[row][column+i] != 0)
+        {
+          canAdd = false;
+        }
+    }
+    if (canAdd == true)
+    {
+        for (int i = 0; i < size; i++)
+        {
+          shipGrid[row][column+i] = size;
+          hitsToWin++;
+        }
+    }
   }
-  return added;
+  return canAdd;
 }
 
-string Board::checkHit(int row, int column)
+int Board::attack(int row, int col)
 {
-    return grid[row][column];
+  int shipSpace = shipGrid[row][col];
+  if(shipSpace == -2 || shipSpace == -1) {
+    return -2;
+  }
+  else if(shipSpace == 0) {
+    shipGrid[row][col] = -2;
+    return 0;
+  } 
+  else if(piecesLeft[shipSpace-1]-1 == 0) {
+    piecesLeft[shipSpace-1]--;
+    shipGrid[row][col] = -1;
+    hitsToWin--;
+    if(hitsToWin == 0)return 6;
+      else return shipSpace;
+  }
+  else {
+    piecesLeft[shipSpace-1]--;
+    hitsToWin--;
+    shipGrid[row][col] = -1;
+    return -1;
+  }
 }
 
-void Board::update(int row, int column, string u)
+int Board::getEntry(int row, int col)const
 {
-    grid[row][column] = u;
+  return(shipGrid[row][col]);
+}
+
+int Board::getPlayer()const
+{
+  return playerNum;
+}
+
+void Board::setPlayer(int num)
+{
+  playerNum = num;
+}
+
+int Board::getScore()
+{
+  return score;
+}
+
+void Board::incScore()
+{
+  score++;
+}
+
+void Board::printBoard()
+{
+  for(int i=0; i<10; i++)
+  {
+    for(int j=0; j<10; j++)
+    {
+      std::cout<<shipGrid[i][j]<<" ";
+
+    }
+    std::cout<<'\n';
+  }
 }

@@ -1,734 +1,595 @@
 /**
-*	@author
-*	@date
-*	@file
-*	@brief
+*	@author Team 9 and 10
+*	@date 3/6/21
+*	@file Executive.cpp
+*	@brief member methods for game loops and features
 */
-#include "Board.h"
 #include "Executive.h"
-#include "Ships.h"
-#include <string>
-#include <iostream>
-#include <chrono>
-#include <thread>
 Executive::Executive()
 {
-	p1Carrier.buildShip(6);
-	p2Carrier.buildShip(6);
-	p1BattleShip.buildShip(5);
-	p2BattleShip.buildShip(5);
-	p1Destroyer.buildShip(4);
-	p2Destroyer.buildShip(4);
-	p1Cruiser.buildShip(3);
-	p2Cruiser.buildShip(3);
-	p1Patrol.buildShip(2);
-	p2Patrol.buildShip(2);
-	p1Sub.buildShip(1);
-	p2Sub.buildShip(1);
+	gameTypeChosen = false;
+	gameConfigured = false;
+	difficultyChosen = false;
+	p1shipsSelected = false;
+	p2shipsSelected = false;
+	p1CanAttack = false;
+	p2CanAttack = false;
+	attackComplete = false;
+	p1Board.setPlayer(1);
+	p2Board.setPlayer(2);
+
+	shipColors[0] = ship1;
+	shipColors[1] = ship2;
+	shipColors[2] = ship3;
+	shipColors[3] = ship4;
+	shipColors[4] = ship5;
+
+	vert = 0;
+	row = 0;
+	col = 0;
+
+	W=1008;
+	H=504;
+	shipNumSelect.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+	botDifficultySelect.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+	gameTypeSelect.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+	blank.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+	inter.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+	youWin.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+	blankGrid.assign(64,64,1,3,0).noise(60).draw_plasma().resize(W,H).blur(2).normalize(0,128);
+
+
+	for(int i=0;i<10;i++)
+	{
+		for(int j=0;j<10;j++)
+		{
+			blankGrid.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+			(W/24)*(j+2)-1, (H/12)*(i+3)-1, defaultTile);
+			
+			blankGrid.draw_rectangle((W/24)*(j+13)+1,(H/12)*(i+2)+1, 
+			(W/24)*(j+14)-1, (H/12)*(i+3)-1, defaultTile);
+		}
+	}
+	for(int i=0; i<5; i++)
+	{
+		shipNumSelect.draw_rectangle( (W/5)*i+1, 1, (W/5)*(i+1)-1, H-1, shipColors[i]);
+		shipNumSelect.draw_text((W/5)*i+(W/10), H/2-4, "%d ship(s)",white, 0, 1, 13, i+1);
+	}
+	for(int i=0; i<2; i++)
+	{
+		gameTypeSelect.draw_rectangle( (W/2)*i+1, 1, (W/2)*(i+1)-1, H-1, shipColors[i]);
+		if(i==0)gameTypeSelect.draw_text((W/2)*i+(W/4), H/2-4, "Local Game",white, 0, 1, 13);
+		if(i==1)gameTypeSelect.draw_text((W/2)*i+(W/4), H/2-4, "Bot Game",white, 0, 1, 13);
+	}
+	for(int i=0; i<3; i++)
+	{
+		botDifficultySelect.draw_rectangle( (W/3)*i+1, 1, (W/3)*(i+1)-1, H-1, shipColors[i]);
+		if(i==0)botDifficultySelect.draw_text((W/3)*i+(W/6), H/2-4, "Easy",white, 0, 1, 13);
+		if(i==1)botDifficultySelect.draw_text((W/3)*i+(W/6), H/2-4, "Medium",white, 0, 1, 13);
+		if(i==2)botDifficultySelect.draw_text((W/3)*i+(W/6), H/2-4, "Hard",white, 0, 1, 13);
+	}
+	background = blankGrid;
+	disp.assign(background,"BattleShip",0,false,false);
+
 }
 
 void Executive::run()
 {
-	PrintMenu();
-	Game();
-}
-
-void Executive::PrintMenu()
-{
-	bool loop = true;
-	int selection = 0;
-	cout << "  WELCOME TO" << endl;
-	cout << " //BATTLESHIP//" << endl << endl << endl;
-	while (loop)
+	disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
+	
+	while (!disp.is_closed() && !disp.is_keyESC() && !disp.is_keyQ())
 	{
-		cout << endl << "Enter in number to navigate menu" << endl;
-		cout << "1: Start Game" << endl;
-		cout << "2: How to Play" << endl;
-		cin >> selection;
-		switch (selection)
+		
+		if(!gameTypeChosen)
 		{
-		case 1:
-			loop = false;
-			break;
-		case 2:
-			cout << "BASIC RULES" << endl << endl;
-			cout << "The goal of the game is to eliminate all of your opponent's ships ";
-			cout << "by selecting spots on the game board to see if you hit or miss." << endl;
-			cout << "The game is over when one player loses all of their ships." << endl << endl;
-			cout << "At the beginning of the game, each player will set up their boats on a 10x10 grid simulating a board." << endl;
-			cout << "Do NOT HIT the same coordinates more than one time when picking where to hit an enemy boat." << endl;
-			cout << "You will have the choice between playing with 1 to 6 ships that you will place on the board:" << endl << endl;
-			cout << "Games with 1 ship: " << endl << "Sub: (1x1)" << endl << endl;
-			cout << "2 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2)" << endl << endl;
-			cout << "3 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3)" << endl << endl;
-			cout << "4 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4)" << endl << endl;
-			cout << "5 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), Battleship: (1x5)" << endl << endl;
-			cout << "6 ships: " << endl << "Sub: (1x1), Patrol Boat: (1x2), Cruiser: (1x3), Destroyer: (1x4), ";
-			cout << "Battleship: (1x5), Carrier: (1x6)" << endl << endl;
-			cout << "On the board, there is a few symbols that represent ships, hits, misses, and the board itself:" << endl << endl;
-			cout << "'.' = PORTION OF BOARD NOT INTERACTED WITH, 'H'= HIT, 'M' = MISS" << endl;
-			cout << "'S' = SUB, 'P' = PATROL BOAT, 'c' = CRUISER, 'D' = DESTROYER, 'B' = BATTLESHIP, 'C' = CARRIER" << endl << endl;
-
-
-			break;
-		default:
-			cout << selection << " is not a valid choice, try again." << endl;
-		}
-	}
-}
-
-void Executive::Game()
-{
-	int numberOfShips = 0;
-	int row;
-	char column;
-	int vert;
-	bool destroyedbeforesub1 = false;
-	bool destroyedbeforesub2 = false;
-	bool destroyedbeforepatrol1 = false;
-	bool destroyedbeforepatrol2 = false;
-	bool destroyedbeforecruiser1 = false;
-	bool destroyedbeforecruiser2 = false;
-	bool destroyedbeforedestroyer1 = false;
-	bool destroyedbeforedestroyer2 = false;
-	bool destroyedbeforebattleship1 = false;
-	bool destroyedbeforebattleship2 = false;
-	bool destroyedbeforecarrier1 = false;
-	bool destroyedbeforecarrier2 = false;
-
-
-	cout << "Enter the number of ships you would like to play with, up to a total of 6." << endl;
-	cin >> numberOfShips;
-	cout << "HIDE THE SCREEN SO ONLY ONE PLAYER CAN SEE IT" << endl;
-	cout << "PLAYER 1" << endl;
-	for (int i = 0; i < numberOfShips; i++)
-	{
-		cout << "Enter in the position of where you would like to place your 1x" << i + 1 << " ship." << endl;
-		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
-		cout << "Enter in the row value." << endl;
-		cin >> row;
-		while (row < 1 || row > 10)
-		{
-			cout << "Not a valid row position, try again." << endl;
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cin >> row;
-		}
-		cout << "Enter in the column value." << endl;
-		cin >> column;
-		while (column < 'A' || column > 'J')
-		{
-			cout << "Not a valid column position, try again." << endl;
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cin >> column;
-		}
-		int trueColumn = 0;
-		if (column == 'A')
-		{
-			trueColumn = 1;
-		}
-		else if (column == 'B')
-		{
-			trueColumn = 2;
-		}
-		else if (column == 'C')
-		{
-			trueColumn = 3;
-		}
-		else if (column == 'D')
-		{
-			trueColumn = 4;
-		}
-		else if (column == 'E')
-		{
-			trueColumn = 5;
-		}
-		else if (column == 'F')
-		{
-			trueColumn = 6;
-		}
-		else if (column == 'G')
-		{
-			trueColumn = 7;
-		}
-		else if (column == 'H')
-		{
-			trueColumn = 8;
-		}
-		else if (column == 'I')
-		{
-			trueColumn = 9;
-		}
-		else if (column == 'J')
-		{
-			trueColumn = 10;
-		}
-		cout << "Enter a 1 if you want the ship to be oriented vertically, 0 for horizontal." << endl;
-		cin >> vert;
-		while (cin.fail() || vert > 1 || vert < 0)
-		{
-			cout << "Not a valid orientation, try again." << endl;
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cin >> vert;
-		}
-
-		if ((p1Ships.addShip(row, trueColumn, vert, i + 1, i)) == false)
-		{
-			cout << "SHIP WAS UNABLE TO BE ADDED, TRY AGAIN." << endl;
-			i--;
-		}
-		p1Ships.Display();
-		//std::this_thread::sleep_for(7s);
-	}
-	p1Ships.clearScreen();
-	cout << "SWITCH PLAYERS" << endl;
-	cout << "PLAYER 2" << endl;
-	for (int i = 0; i < numberOfShips; i++)
-	{
-		cout << "Enter in the position of where you would like to place your 1x" << i + 1 << " ship." << endl;
-		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
-		cout << "Enter in the row value." << endl;
-		cin >> row;
-		while (row < 1 || row > 10)
-		{
-			cout << "Not a valid row position, try again." << endl;
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cin >> row;
-		}
-		cout << "Enter in the column value." << endl;
-		cin >> column;
-		while (column < 'A' || column > 'J')
-		{
-			cout << "Not a valid column position, try again." << endl;
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cin >> column;
-		}
-		int trueColumn = 0;
-		if (column == 'A')
-		{
-			trueColumn = 1;
-		}
-		else if (column == 'B')
-		{
-			trueColumn = 2;
-		}
-		else if (column == 'C')
-		{
-			trueColumn = 3;
-		}
-		else if (column == 'D')
-		{
-			trueColumn = 4;
-		}
-		else if (column == 'E')
-		{
-			trueColumn = 5;
-		}
-		else if (column == 'F')
-		{
-			trueColumn = 6;
-		}
-		else if (column == 'G')
-		{
-			trueColumn = 7;
-		}
-		else if (column == 'H')
-		{
-			trueColumn = 8;
-		}
-		else if (column == 'I')
-		{
-			trueColumn = 9;
-		}
-		else if (column == 'J')
-		{
-			trueColumn = 10;
-		}
-		cout << "Enter a 1 if you want the ship to be oriented vertically, 0 for horizontal." << endl;
-		cin >> vert;
-		while (cin.fail() || vert > 1 || vert < 0)
-		{
-			cout << "Not a valid orientation, try again." << endl;
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cin >> vert;
-		}
-		if ((p2Ships.addShip(row, trueColumn, vert, i + 1, i)) == false)
-		{
-			cout << "SHIP WAS UNABLE TO BE ADDED, TRY AGAIN." << endl;
-			i--;
-		}
-		p2Ships.Display();
-		//std::this_thread::sleep_for(7s);
-	}
-	p2Ships.clearScreen();
-	cout << "Great, both players' boats have now been placed on the board. Now, it is time to attack the enemy!";
-	cout << endl << endl;
-
-	bool winner = false;
-	int turn = 1;
-	int totalDestroyed1 = 0;
-	int totalDestroyed2 = 0;
-
-	std::string ready = "";
-	do
-	{
-		cout << "Are you ready to begin the game? (y/n)";
-		cout << endl;
-		cin >> ready;
-
-	} while (ready != "yes" && ready != "y");
-
-	cout << endl << endl;
-
-	while (winner == false)
-	{
-		cout << "PLAYER 1 TURN [" << turn << "]";
-		cout << endl << endl;
-
-		cout << "YOUR SHIPS:";
-		cout << endl << endl;
-
-		p1Ships.Display();
-
-		cout << endl << endl;
-
-		cout << "ENEMY SHIPS:";
-		cout << endl << endl;
-
-		p1HitOrMiss.Display();
-		cout << endl << endl;
-		cout << "Enter in the position of where you would like to attack." << endl;
-		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
-		cout << "Enter in the row value." << endl;
-		cin >> row;
-		while (row < 1 || row > 10)
-		{
-			cout << "Not a valid row position, try again." << endl;
-			cin >> row;
-		}
-		cout << "Enter in the column value." << endl;
-		cin >> column;
-		while (column < 'A' || column > 'J')
-		{
-			cout << "Not a valid column position, try again." << endl;
-			cin >> column;
-		}
-		int trueColumn = 0;
-		if (column == 'A')
-		{
-			trueColumn = 1;
-		}
-		else if (column == 'B')
-		{
-			trueColumn = 2;
-		}
-		else if (column == 'C')
-		{
-			trueColumn = 3;
-		}
-		else if (column == 'D')
-		{
-			trueColumn = 4;
-		}
-		else if (column == 'E')
-		{
-			trueColumn = 5;
-		}
-		else if (column == 'F')
-		{
-			trueColumn = 6;
-		}
-		else if (column == 'G')
-		{
-			trueColumn = 7;
-		}
-		else if (column == 'H')
-		{
-			trueColumn = 8;
-		}
-		else if (column == 'I')
-		{
-			trueColumn = 9;
-		}
-		else if (column == 'J')
-		{
-			trueColumn = 10;
-		}
-		string spot = p2Ships.checkHit(row, trueColumn);
-		if (spot != ".")
-		{
-			cout << "HIT!";
-			cout << endl;
-			if (spot == "S")
-			{
-				p2Sub.hit();
-				if (p2Sub.isDestroyed() == true)
-				{
-					if (destroyedbeforesub2 == false)
-					{
-						destroyedbeforesub2 = true;
-						totalDestroyed1++;
-						cout << "YOU SUNK A SUBMARINE!";
-						cout << endl;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-				}
-			}
-			if (spot == "P")
-			{
-				p2Patrol.hit();
-				if (p2Patrol.isDestroyed() == true)
-				{
-					if (destroyedbeforepatrol2 == false)
-					{
-						destroyedbeforepatrol2 = true;
-						totalDestroyed1++;
-						cout << "YOU SUNK A PATROL BOAT!";
-						cout << endl;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-				}
-			}
-			if (spot == "c")
-			{
-				p2Cruiser.hit();
-				if (p2Cruiser.isDestroyed() == true)
-				{
-					if (destroyedbeforecruiser2 == false)
-					{
-
-						totalDestroyed1++;
-						cout << "YOU SUNK A CRUISER!";
-						cout << endl;
-						destroyedbeforecruiser2 = true;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-
-				}
-			}
-			if (spot == "D")
-			{
-				p2Destroyer.hit();
-				if (p2Destroyer.isDestroyed() == true)
-				{
-					if (destroyedbeforedestroyer2 == false)
-					{
-						totalDestroyed1++;
-						cout << "YOU SUNK A DESTROYER!";
-						cout << endl;
-						destroyedbeforedestroyer2 = true;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-
-				}
-			}
-			if (spot == "B")
-			{
-				p2BattleShip.hit();
-				if (p2BattleShip.isDestroyed() == true)
-				{
-					if (destroyedbeforebattleship2 == false)
-					{
-						totalDestroyed1++;
-						cout << "YOU SUNK A BATTLESHIP!";
-						cout << endl;
-						destroyedbeforebattleship2 = true;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-				}
-			}
-			if (spot == "C")
-			{
-				p2Carrier.hit();
-				if (p2Carrier.isDestroyed() == true)
-				{
-					if (destroyedbeforecarrier2 == false)
-					{
-						totalDestroyed1++;
-						cout << "YOU SUNK A CARRIER!";
-						cout << endl;
-						destroyedbeforecarrier2 = true;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-
-				}
-			}
-			p1HitOrMiss.update(row, trueColumn, "H");
+			gameType();
 		}
 		else
 		{
-			cout << "MISS!";
-			cout << endl;
-			p1HitOrMiss.update(row, trueColumn, "M");
-		}
-
-		if (totalDestroyed1 == numberOfShips)
-		{
-			winner = true;
-		}
-
-		cout << "PLAYER 2 TURN [" << turn << "]";
-		cout << endl;
-		//std::this_thread::sleep_for(7s);
-
-		cout << "YOUR SHIPS:";
-		cout << endl << endl;
-
-		p2Ships.Display();
-
-		cout << endl << endl;
-
-		cout << "ENEMY SHIPS:";
-		cout << endl << endl;
-
-		p2HitOrMiss.Display();
-		cout << endl << endl;
-		cout << "Enter in the position of where you would like to attack." << endl;
-		cout << "Columns are labeled A-J, and rows are 1-10" << endl;
-		cout << "Enter in the row value." << endl;
-		cin >> row;
-		while (row < 1 || row > 10)
-		{
-			cout << "Not a valid row position, try again." << endl;
-			cin >> row;
-		}
-		cout << "Enter in the column value." << endl;
-		cin >> column;
-		while (column < 'A' || column > 'J')
-		{
-			cout << "Not a valid column position, try again." << endl;
-			cin >> column;
-		}
-		trueColumn = 0;
-		if (column == 'A')
-		{
-			trueColumn = 1;
-		}
-		else if (column == 'B')
-		{
-			trueColumn = 2;
-		}
-		else if (column == 'C')
-		{
-			trueColumn = 3;
-		}
-		else if (column == 'D')
-		{
-			trueColumn = 4;
-		}
-		else if (column == 'E')
-		{
-			trueColumn = 5;
-		}
-		else if (column == 'F')
-		{
-			trueColumn = 6;
-		}
-		else if (column == 'G')
-		{
-			trueColumn = 7;
-		}
-		else if (column == 'H')
-		{
-			trueColumn = 8;
-		}
-		else if (column == 'I')
-		{
-			trueColumn = 9;
-		}
-		else if (column == 'J')
-		{
-			trueColumn = 10;
-		}
-		spot = p1Ships.checkHit(row, trueColumn);
-		if (spot != ".")
-		{
-			cout << "HIT!";
-			cout << endl;
-			if (spot == "S")
+			if(botGame)
 			{
-				p1Sub.hit();
-				if (p1Sub.isDestroyed() == true)
+				if(!gameConfigured)
 				{
-					if (destroyedbeforesub1 == false)
-					{
-						totalDestroyed1++;
-						cout << "YOU SUNK A SUBMARINE!";
-						cout << endl;
-						destroyedbeforesub1 = true;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-
+					printMenu();
+				}
+				if(gameConfigured && !difficultyChosen)
+				{
+					botDifficulty();
+				}
+				if(difficultyChosen&&!p1shipsSelected)
+				{
+					selectionPhase(p1Board);
+				}
+				if(p1CanAttack == true)
+				{
+					attackPhase(p1Board);
+				}
+				
+			}
+			else
+			{
+				if(!gameConfigured)
+				{
+					printMenu();
+				}
+				if(gameConfigured&&!p1shipsSelected)
+				{
+					selectionPhase(p1Board);
+				}
+				if(p1shipsSelected && !p2shipsSelected /*&& switchPlayer == false*/)
+				{
+					selectionPhase(p2Board);
+				}
+				if(p1CanAttack == true)
+				{
+					attackPhase(p1Board);
+				}
+				if(p2CanAttack == true)
+				{
+					attackPhase(p2Board);
 				}
 			}
-			if (spot == "P")
-			{
-				p1Patrol.hit();
-				if (p1Patrol.isDestroyed() == true)
-				{
-					if (destroyedbeforepatrol1 == false)
-					{
-						totalDestroyed1++;
-						cout << "YOU SUNK A PATROL BOAT!";
-						cout << endl;
-						destroyedbeforepatrol1 = true;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-
-				}
-			}
-			if (spot == "c")
-			{
-				p1Cruiser.hit();
-				if (p1Cruiser.isDestroyed() == true)
-				{
-					if (destroyedbeforecruiser1 == false)
-					{
-						totalDestroyed1++;
-						cout << "YOU SUNK A CRUISER!";
-						cout << endl;
-						destroyedbeforecruiser1 = true;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-
-				}
-			}
-			if (spot == "D")
-			{
-				p1Destroyer.hit();
-				if (p1Destroyer.isDestroyed() == true)
-				{
-					if (destroyedbeforedestroyer1 == false)
-					{
-						totalDestroyed1++;
-						cout << "YOU SUNK A DESTROYER!";
-						cout << endl;
-						destroyedbeforedestroyer1 = true;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-
-				}
-			}
-			if (spot == "B")
-			{
-				p1BattleShip.hit();
-				if (p1BattleShip.isDestroyed() == true)
-				{
-					if (destroyedbeforebattleship1 == false)
-					{
-						totalDestroyed1++;
-						cout << "YOU SUNK A BATTLESHIP!";
-						cout << endl;
-						destroyedbeforebattleship1 = true;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-
-				}
-			}
-			if (spot == "C")
-			{
-				p1Carrier.hit();
-				if (p1Carrier.isDestroyed() == true)
-				{
-					if (destroyedbeforecarrier1 == false)
-					{
-						totalDestroyed1++;
-						cout << "YOU SUNK A CARRIER!";
-						cout << endl;
-						destroyedbeforecarrier1 = true;
-					}
-					else
-					{
-						cout << "YOU HAVE ALREADY HIT THIS SPOT.";
-						cout << endl;
-					}
-
-				}
-			}
-			p2HitOrMiss.update(row, trueColumn, "H");
 		}
-		else
-		{
-			cout << "MISS!";
-			cout << endl;
-			p2HitOrMiss.update(row, trueColumn, "M");
-		}
+		
+	}
+	
+}
 
-		if (totalDestroyed2 == numberOfShips)
-		{
-			winner = true;
-		}
-		//std::this_thread::sleep_for(7s);
-		turn++;
+void Executive::botDifficulty()
+{
+	disp.display(botDifficultySelect);
+	disp.wait();
+	if(disp.button()&1)
+	{
+		difficulty = (disp.mouse_x()/(W/3))+1;
+		gameTypeSelect.draw_text(W/2-8, 4, "Difficulty Selected!",white, 0, 1, 13, numberOfShipsChoice);
+		difficultyChosen = true;
+		disp.display(botDifficultySelect);
+		disp.wait(1000);
+		disp.flush();
 	}
 
-	if (totalDestroyed1 == numberOfShips)
+}
+void Executive::gameType()
+{
+	disp.display(gameTypeSelect);
+	disp.wait();
+	if(disp.button()&1)
 	{
-		cout << "PLAYER 2 LOST!";
-		cout << endl;
-
-		cout << "PLAYER 1 WON!";
-		cout << endl;
+		botGame = (disp.mouse_x()/(W/2));
+		gameTypeSelect.draw_text(W/2-8, 4, "Game Type Selected!",white, 0, 1, 13, numberOfShipsChoice);
+		gameTypeChosen = true;
+		disp.display(gameTypeSelect);
+		disp.wait(1000);
+		disp.flush();
+	}
+}
+void Executive::printMenu()
+{
+	//disp.flush();
+	disp.display(shipNumSelect);
+	disp.wait();
+	if(disp.button()&1)
+	{
+		numberOfShipsChoice = (disp.mouse_x()/(W/5))+1;
+		numberOfShips = numberOfShipsChoice;
+		if(botGame)
+		{
+			bot.placeShips(numberOfShipsChoice, p2Board);
+		}
+		shipNumSelect.draw_text(W/2-8, 4, "%d ship(s) selected",white, 0, 1, 13, numberOfShipsChoice);
+		disp.display(shipNumSelect);
+		disp.wait(1000);
+		disp.flush();
+		gameConfigured = true;
+	}
+	
+}
+void Executive::attackPhase(Board& playerBoard)
+{
+	if(!attackComplete)
+	{
+		if((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22)
+		&& ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y()-4)/(H/12)) >=2
+		&& disp.button()&1)
+		{
+			row = ((disp.mouse_y())/(H/12));
+			col = ((disp.mouse_x())/(W/24));
+			
+			if(playerBoard.getPlayer() == 1)
+			{
+				attackStatus = p2Board.attack(row-2, col-13);
+				switch(attackStatus)
+				{
+					case(6):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						youWin.draw_text(W/2-8, H/2-4, "YOU WIN P1", white, 0, 33);
+						disp.display(youWin);
+						p1CanAttack = false;
+						break;
+					case(5):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Sunk 5!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(4):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Sunk 4!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(3):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Sunk 3!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(2):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Sunk 2!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(1):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Sunk 1!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(0):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, yellow);
+						background.draw_text(W/2-8, H/2-4, "Miss :(", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(-1):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Hit ;)!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					default:
+						break;
+				}
+			}
+			else if(playerBoard.getPlayer() == 2 )
+			{
+				attackStatus = p1Board.attack(row-2, col-13);
+				switch(attackStatus)
+				{
+					case(6):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						youWin.draw_text(W/2-8, H/2-4, "YOU WIN P2", white, 0, 33);
+						disp.display(youWin);
+						p2CanAttack = false;
+						break;
+					case(5):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Sunk 5!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(4):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Sunk 4!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(3):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Sunk 3!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(2):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Sunk 2!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(1):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Sunk 1!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(0):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, yellow);
+						background.draw_text(W/2-8, H/2-4, "Miss :(", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					case(-1):
+						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
+						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
+						background.draw_text(W/2-8, H/2-4, "Hit ;)!", white, 0, 33);
+						disp.display(background);
+						disp.wait(2000);
+						disp.flush();
+						attackComplete = true;
+						break;
+					default:
+						break;
+				}
+				
+			}
+		}
 	}
 	else
 	{
-		cout << "PLAYER 1 LOST!";
-		cout << endl;
 
-		cout << "PLAYER 2 WON!";
-		cout << endl;
+		if(playerBoard.getPlayer() == 1)
+		{
+			if(botGame)
+			{
+				loadBoard(p1Board);
+				background.draw_text(W/2-30, H/2-4, "Bot is attacking", white, 0, 33);
+				disp.display(background);
+				disp.wait(1000);
+				disp.flush();
+
+				if(bot.botAttack(difficulty,p1Board))
+				{
+					loadBoard(p1Board);
+					disp.wait(1000);
+					disp.flush();
+					p1CanAttack = false;
+					youWin.draw_text(W/2-8, H/2-4, "BOT HAS WON", white, 0, 33);
+					disp.display(youWin);
+				}
+				else
+				{
+					loadBoard(p1Board);
+					attackComplete = false;
+				}
+			}
+			else
+			{
+				inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
+				disp.display(inter);
+				disp.wait();
+				if((disp.button()&2))
+				{
+					p1CanAttack = false;
+					loadBoard(p2Board);
+					disp.display(background);
+					p2CanAttack = true;
+					attackComplete = false;
+					disp.flush();
+					inter = blank;
+				}
+			}
+		}
+		else if(playerBoard.getPlayer() == 2)
+		{
+			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
+			disp.display(inter);
+			disp.wait();
+			if((disp.button()&2))
+			{
+				p2CanAttack = false;
+				loadBoard(p1Board);
+				disp.display(background);
+				p1CanAttack = true;
+				attackComplete = false;
+				disp.flush();
+				inter = blank;
+			}	
+		}
+	}
+		
+	
+	
+}
+
+void Executive::selectionPhase(Board& playerBoard)
+{
+	if(numberOfShips > 0)
+	{
+		row = ((disp.mouse_y())/(H/12));
+		col = ((disp.mouse_x())/(W/24));
+		infoAdds = background;
+		if(vert == 1)infoAdds.draw_text(0,0,"Player:%d Orientation: %s Placing Ship of Length:%d",gridLines,0,1,13,playerBoard.getPlayer(),"Vertical",numberOfShips);
+				else infoAdds.draw_text(0,0,"Player:%d Orientation: %s Placing Ship of Length:%d",gridLines,0,1,13,playerBoard.getPlayer(),"Horizontal",numberOfShips);
+		disp.display(infoAdds);
+		if(disp.is_keyARROWUP())vert = 1;
+		if(disp.is_keyARROWDOWN())vert = 0;        
+		if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10 ) ||
+		(((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22))
+		&& ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y())/(H/12)) >=2
+		&& disp.button()&1)
+		{
+			row = ((disp.mouse_y())/(H/12));
+			col = ((disp.mouse_x())/(W/24));
+			infoAdds = background;
+			if(vert == 1)infoAdds.draw_text(0,0,"Player:%d Orientation: %s Placing Ship of Length:%d",gridLines,0,1,13,playerBoard.getPlayer(),"Vertical",numberOfShips);
+				else infoAdds.draw_text(0,0,"Player:%d Orientation: %s Placing Ship of Length:%d",gridLines,0,1,13,playerBoard.getPlayer(),"Horizontal",numberOfShips);
+			disp.display(infoAdds);
+			if(vert == 1)//draw vertically
+			{
+				if( playerBoard.addShip(row-2,col-1,vert,numberOfShips) ) 
+				{ 
+					for(int j=0; j<numberOfShips; j++)
+						background.draw_rectangle((col*(W/24))+1, (row+j)*(H/12)+1, (col*(W/24))+(W/24)-1, (row+j)*(H/12)+(H/12)-1, shipColors[numberOfShips%5]);
+					numberOfShips--;
+					//disp.wait();
+				}           
+			}
+			else if(vert == 0)//draw horizontally
+			{
+				if( playerBoard.addShip(row-2,col-1,vert,numberOfShips) ) 
+				{
+					for(int j=0; j<numberOfShips; j++)
+						background.draw_rectangle((col+j)*(W/24)+1, row*(H/12)+1, (col+j)*(W/24)+(W/24)-1, row*(H/12)+(H/12)-1, shipColors[numberOfShips%5]);
+					numberOfShips--;
+					//disp.wait();
+				}
+			}
+			infoAdds = background;
+			if(vert == 1)infoAdds.draw_text(0,0,"Player:%d Orientation: %s Placing Ship of Length:%d",gridLines,0,1,13,playerBoard.getPlayer(),"Vertical",numberOfShips);
+				else infoAdds.draw_text(0,0,"Player:%d Orientation: %s Placing Ship of Length:%d",gridLines,0,1,13,playerBoard.getPlayer(),"Horizontal",numberOfShips);
+			disp.display(infoAdds);
+			if(numberOfShips == 0)
+			{
+				disp.wait(1000);
+				disp.flush();
+			}
+			
+		}
+	}
+	else
+	{
+		if(playerBoard.getPlayer() == 1)
+		{
+			if(botGame == true)
+            {
+                inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Attack Phase", white, 0, 33);
+            }
+            else
+            {
+                inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
+            }
+			disp.display(inter);
+			disp.wait();
+			if((disp.button()&2))
+			{
+				disp.flush();
+				numberOfShips = numberOfShipsChoice;
+				p1shipsSelected = true;
+                if(botGame == true)
+                {
+                    background.draw_text(W/2-30, 4, "Attack!", white, 0, 33);
+					disp.display(background);
+					p1CanAttack = true;
+                }
+				else{
+                    loadBoard(p2Board);
+                }
+				inter = blank;
+			}
+		}
+		else if(playerBoard.getPlayer() == 2)
+		{
+			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P1", white, 0, 33);
+			disp.display(inter);
+			disp.wait();
+			if((disp.button()&2))
+			{
+				disp.flush();
+				p2shipsSelected = true;
+				p1CanAttack = true;
+				loadBoard(p1Board);
+				inter = blank;
+			}	
+		}
+		
 	}
 }
 
+void Executive::loadBoard(const Board& board)
+{
+	background = blankGrid;
+	for(int i=0; i<10; i++)
+	{
+		for(int j=0; j<10; j++)
+		{
+			if(board.getEntry(i,j) == -2)
+			{
+				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+				(W/24)*(j+2)-1, (H/12)*(i+3)-1, yellow);
+			}
+			else if(board.getEntry(i,j) == -1)
+			{
+				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+				(W/24)*(j+2)-1, (H/12)*(i+3)-1, attacked);
+			}
+			else if(board.getEntry(i,j) > 0)
+			{
+				background.draw_rectangle((W/24)*(j+1)+1,(H/12)*(i+2)+1, 
+				(W/24)*(j+2)-1, (H/12)*(i+3)-1, shipColors[board.getEntry(i,j)%5]);
+			}
+
+
+			if(board.getPlayer() == 1)
+			{
+				if(p2Board.getEntry(i,j) == -2)
+				{
+					background.draw_rectangle((W/24)*(j+13)+1,(H/12)*(i+2)+1, (W/24)*(j+14)-1, 
+					(H/12)*(i+3)-1, yellow);
+				}
+				else if(p2Board.getEntry(i,j) == -1)
+				{
+					background.draw_rectangle((W/24)*(j+13)+1,(H/12)*(i+2)+1, (W/24)*(j+14)-1, 
+					(H/12)*(i+3)-1, attacked);
+				}
+
+			}
+			else if(board.getPlayer() == 2)
+			{
+				if(p1Board.getEntry(i,j) == -2)
+				{
+					background.draw_rectangle((W/24)*(j+13)+1,(H/12)*(i+2)+1, (W/24)*(j+14)-1, 
+					(H/12)*(i+3)-1, yellow);
+				}
+				else if(p1Board.getEntry(i,j) == -1)
+				{
+					background.draw_rectangle((W/24)*(j+13)+1,(H/12)*(i+2)+1, (W/24)*(j+14)-1, 
+					(H/12)*(i+3)-1, attacked);
+				}
+			}
+
+		}
+	}
+	disp.display(background);
+}
 
 Executive::~Executive()
 {
