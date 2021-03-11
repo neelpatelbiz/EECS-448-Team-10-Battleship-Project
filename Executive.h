@@ -27,6 +27,8 @@ public:
 
 private:
 	unsigned int W, H; 
+	CImg<unsigned char> gameTypeSelect;
+	CImg<unsigned char> botDifficultySelect;
 	CImg<unsigned char> shipNumSelect;
 	CImg<unsigned char> background;
 	CImg<unsigned char> blankGrid;
@@ -45,6 +47,9 @@ private:
 
 	Bot bot;
 	bool botGame;
+	bool difficultyChosen;
+	bool gameTypeChosen;
+	int difficulty;
 	int numberOfShipsChoice;
 	int numberOfShips;
 	bool gameConfigured;
@@ -60,11 +65,19 @@ private:
 
 	int vert,row,col;
 
+	/** 
+	 * Bot Game or Local Game Screen 
+	 */ 
+	void gameType();
 
-	/// Outputs a choice for instructions for the game
-	/** Main Menu fuction for the Game, Show a intro screen and how to play with the rules. 
-		Has a loop built into it that shows the rules.
-		*/ 
+	/** 
+	 * Select Bot Difficulty
+	 */ 
+	void botDifficulty();
+	
+	/** 
+	 * ShipSelection Screen 
+	  */ 
 	void printMenu();
 
 	/**

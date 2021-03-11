@@ -15,7 +15,7 @@ class Bot
          *@param difficulty determines method bot will use to determine attack position
          *@param toAttack the board the bot will attack
         */
-        void botAttack(int difficulty, Board& toAttack);
+        bool botAttack(int difficulty, Board& toAttack);
 
         /**
          *Bot places their ships on the board provided
@@ -31,7 +31,7 @@ class Bot
          *Bot is given p1's board to attack. Based on the difficulty of the bot, it will decide where to attack.
          *@param toAttack the board the bot will attack
         */
-        void easyAttack(Board& toAttack);
+        bool easyAttack(Board& toAttack);
 
         /**
          *Bot is given p1's board to attack. Based on the difficulty of the bot, it will decide where to attack.

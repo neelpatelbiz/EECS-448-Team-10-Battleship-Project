@@ -80,6 +80,12 @@ public:
   * @return int corresponding to the player to whom the board belongs
   */
   void incScore();
+
+  /**
+   * Debugging function for printing game Arrays
+   */ 
+  void printBoard();
+  
 private:
   int piecesLeft[5];
   int playerNum, score, hitsToWin;

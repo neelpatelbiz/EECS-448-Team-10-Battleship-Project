@@ -142,7 +142,15 @@ void Board::incScore()
   score++;
 }
 
-/*void Board::update(int row, int column, char u)
+void Board::printBoard()
 {
-    grid[row][column] = u;
-}*/
+  for(int i=0; i<10; i++)
+  {
+    for(int j=0; j<10; j++)
+    {
+      std::cout<<shipGrid[i][j]<<" ";
+
+    }
+    std::cout<<'\n';
+  }
+}

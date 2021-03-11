@@ -23,11 +23,11 @@ void Bot::placeShips(int numShips, Board& board)
 		} while(!canPlace);
 	}
 }
-void Bot::botAttack(int difficulty, Board& board)
+bool Bot::botAttack(int difficulty, Board& board)
 {
 	if(difficulty == 1)
 	{
-		easyAttack(board);
+		return(easyAttack(board));
 	}
 	else if(difficulty == 2)
 	{
@@ -39,13 +39,17 @@ void Bot::botAttack(int difficulty, Board& board)
 	}
 }
 
-void Bot::easyAttack(Board& board)
+bool Bot::easyAttack(Board& board)
 {
 	srand (time(NULL));
 	do
 	{
 		attackStatus = board.attack(std::rand()%10, std::rand()%10);
 	} while (attackStatus == -2);
+	if(attackStatus == 6)
+	{
+		return (true);
+	}
 }
 
 bool Bot::mediumAttack(Board& board)
