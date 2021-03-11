@@ -17,6 +17,7 @@ class Ai{
     calls the move function corresponding with the difficulty of the ai
     @param - Board ptr p1board - a copy of the player's board
     @return - the array of ints [row, col] of the move made by ai
+    @post - the player Board will be attacked
    */
   int* move(Board* p1Board);
 
@@ -24,21 +25,24 @@ class Ai{
     chooses random location to shoot at
     @param - Board ptr p1Board, player's board
     @return - array of ints [row, col] of move made by ai
-   */
+    @post - the player Board will be attacked
+  */
   int* moveEasy(Board* p1Board);
 
    /*
      
     @param - Board ptr p1Board, player's board
     @return - array of ints [row, col] of move made by ai
-   */
+    @post - the player Board will be attacked
+*/
   int* moveMedium(Board* p1Board);
 
    /*
     checks every location in player's board, if there is a ship there, that position is returned. Does not update any boards
     @param - Board ptr p1Board, player's board
     @return - array of ints [row, col] of move made by ai
-   */
+    @post - the player Board will be attacked
+*/
   int* moveHard(Board* p1Board);
 
 
@@ -46,6 +50,7 @@ class Ai{
    *method used by moveMedium to attack, then if a ship is hit the last_hit array is updated
    *@param Board* p1Board - the player board
    *@param int* pos - the position to attack
+   @post - the player Board will be attacked
    */
   void attackMed(Board* p1Board, int* pos);
 
