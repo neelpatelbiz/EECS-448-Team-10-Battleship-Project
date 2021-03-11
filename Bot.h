@@ -43,7 +43,7 @@ class Bot
          *Bot is given p1's board to attack. Based on the difficulty of the bot, it will decide where to attack.
          *@param toAttack the board the bot will attack
         */
-        void cheatAttack(Board& toAttack);
+        bool cheatAttack(Board& toAttack);
 
         /**
          *Find the next X any Y positions to attack (mediumAttack helper function)

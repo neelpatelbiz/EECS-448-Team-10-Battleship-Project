@@ -35,7 +35,7 @@ bool Bot::botAttack(int difficulty, Board& board)
 	}
 	else if (difficulty == 3)
 	{
-
+		return(cheatAttack(board));
 	}
 }
 
@@ -115,9 +115,27 @@ bool Bot::findNext()
 		}
 	}
 }
-void Bot::cheatAttack(Board& board)
+bool Bot::cheatAttack(Board& board)
 {
-	
+	for(int i=0; i<10; i++)
+	{
+		for(int j=0; j<10; j++)
+		{
+			if(board.getEntry(i,j)>0)
+			{
+				if(board.attack(i,j) == 6)
+				{
+					return (true);
+				}
+				else
+				{
+					return (false);
+				}
+				break;
+				break;
+			}
+		}
+	}
 }
 
 
