@@ -1,11 +1,10 @@
 #include "Bot.h"
 Bot::Bot()
 {
-	iterations = 0;
-	lastXhit = -1;
-	lastYhit = -1;
-	nextX = 0;
-	nextY = 0;
+	botState = 'W';
+	surroundCount = 0;
+	bothDirections = false;
+	i=0;
 }
 void Bot::placeShips(int numShips, Board& board)
 {
@@ -31,7 +30,7 @@ bool Bot::botAttack(int difficulty, Board& board)
 	}
 	else if(difficulty == 2)
 	{
-
+		return(mediumAttack(board));
 	}
 	else if (difficulty == 3)
 	{
@@ -55,66 +54,313 @@ bool Bot::easyAttack(Board& board)
 bool Bot::mediumAttack(Board& board)
 {
 	
-	if(lastXhit == -1)
+	if(botState == 'W')//bot is waiting for a hit
 	{
+		srand(time(NULL));
 		do
 		{
-			nextX = std::rand()%10;
-			nextY = std::rand()%10;
-			attackStatus = board.attack(std::rand()%10, std::rand()%10);
-		} while (attackStatus == -2);
+			firstXHit = std::rand()%10;
+			firstYHit = std::rand()%10;
+			attackStatus = board.attack(firstYHit, firstXHit);
+		} while (attackStatus == -2);//keep looking for possible attack tiles
+		if(attackStatus == -1)//bot recognizes a hit
+		{
+			botState = 'S';//bot will now check surrounding tiles
+		}
+		else if(attackStatus == 6)//bot won the game off its random hit
+		{
+			return (true);
+		}
+		else//bot either sunk a ship or missed -> does not need to remember anything
+		{
+			firstXHit = 0;
+			firstYHit = 0;
+		}
+		return (false);
+	}
+	else if(botState == 'S')//bot has a single hit and needs to check surrounding tiles
+	{
+		return(checkSurround(board));
+	}
+	else if(botState == 'P')//bot has registered a second hit and must attempt to sink entire ship
+	{
+		attackStatus = -3;//if attackStatus does not change before evaluation, go back to firing randomly
+		if(orientation == 0)
+		{
+			if( (direction == 0 && firstXHit+i>=0) || (direction == 1 && firstXHit+i<=9) )
+			{
+				attackStatus = board.attack(firstYHit, firstXHit+i);
+				
+			}
+			if(attackStatus == -2 || attackStatus == -3)//could not attack in the original direction
+			{
+				if(!bothDirections && direction == 0 && firstXHit+1<=9){
+					i=2;
+					direction = (direction +1)%2;
+					attackStatus = board.attack(firstYHit, firstXHit+1);
+					bothDirections = true;
+				}
+				else if(!bothDirections && direction == 1 && firstXHit-1>=0){
+					i=-2;
+					direction = (direction +1)%2;
+					attackStatus = board.attack(firstYHit, firstXHit-1);
+					bothDirections = true;
+				}
+				else // could not attack in either direction
+				{
+					botState = 'W';
+					surroundCount = 0;
+					bothDirections = false;
+					return false;
+				}
+			}
+			
+		}
+		else if(orientation == 1)
+		{
+			if( (direction == 0 && firstYHit+i>=0) || (direction == 1 && firstYHit+i<=9) )
+			{
+				attackStatus = board.attack(firstYHit+i, firstXHit);
+				
+			}
+			if(attackStatus == -2 || attackStatus == -3)//could not attack in the original direction
+			{
+				if(!bothDirections && direction == 0 && firstYHit+1<=9){
+					i=2;
+					direction = (direction +1)%2;
+					attackStatus = board.attack(firstYHit+1, firstXHit);
+					bothDirections = true;
+				}
+				else if(!bothDirections && direction == 1 && firstYHit-1>=0){
+					i=-2;
+					direction = (direction +1)%2;
+					attackStatus = board.attack(firstYHit-1, firstXHit);
+					bothDirections = true;
+				}
+				else // could not attack in either direction
+				{
+					botState = 'W';
+					surroundCount = 0;
+					bothDirections = false;
+					return false;
+				}
+			}
+		}
+		
 		if(attackStatus == -1)
 		{
-			lastXhit = nextX;
-			lastYhit = nextY;
-			iterations++;
+			if(direction == 0){
+				i--;
+			}
+			else{
+				i++;
+			}
+			return false;
 		}
 		else if(attackStatus == 6)
 		{
-			return true;
+			return (true);
 		}
-	}
-	else
-	{
-		findNext();
+		else if(attackStatus > 0)
+		{
+			surroundCount = 0;
+			bothDirections = false;
+			botState = 'W';
+			return false;
+		}
+		else if(attackStatus == 0)
+		{
+			if(bothDirections == false)
+			{
+				if(direction == 0){
+					i = 1;
+				}
+				else{
+					i = -1;
+				}
+				bothDirections = true;
+			}
+			else
+			{
+				botState = 'W';
+				surroundCount = 0;
+				bothDirections = false;
+			}
+			return false;
+		}
 
 	}
+
 }
-bool Bot::findNext()
+
+bool Bot::checkSurround(Board& board)
 {
-	if(iterations == 1)
+	switch(surroundCount)
 	{
-		if(nextY-1>0)
-		{
-			nextX=lastXhit;
-			nextY=lastYhit-1;
-		}
-	}
-	else if(iterations == 2)
-	{	
-		if(nextX+1<9)
-		{
-			nextX=lastXhit+1;
-			nextY= lastYhit;
-		}
-	}
-	else if(iterations == 3)
-	{
-		if(nextY+1<9)
-		{
-			nextX=lastXhit;
-			nextY= lastYhit+1;
-		}
-	}
-	else if(iterations == 4)
-	{
-		if(nextX+1<9)
-		{
-			nextX=lastXhit+1;
-			nextY= lastYhit;
-		}
+		case(0):
+			if(firstYHit-1>=0)
+			{
+				attackStatus = board.attack(firstYHit-1, firstXHit);
+				if(attackStatus == -1)
+				{
+					botState = 'P';
+					orientation = 1;
+					direction = 0;
+					i=-2;
+					return false;
+					//surroundCount = 0;
+					break;
+				}
+				else if(attackStatus == 6)
+				{
+					return (true);
+					break;
+				}
+				else if(attackStatus > 0)
+				{
+					botState = 'W';
+					return false;
+					break;
+				}
+				else if(attackStatus == -2)
+				{
+					surroundCount++;
+				}
+				else if(attackStatus == 0)
+				{
+					surroundCount++;
+					return false;
+					break;
+				}
+			}
+			else
+			{
+				surroundCount++;
+			}
+		case(1):
+			if(firstXHit+1<=9)
+			{
+				attackStatus = board.attack(firstYHit, firstXHit+1 );
+				if(attackStatus == -1)
+				{
+					botState = 'P';
+					orientation = 0;
+					direction = 0;
+					i=2;
+					return false;
+					//surroundCount = 0;
+					break;
+				}
+				else if(attackStatus == 6)
+				{
+					return (true);
+					break;
+				}
+				else if(attackStatus > 0)
+				{
+					botState = 'W';
+					return false;
+					break;
+				}
+				else if(attackStatus == -2)
+				{
+					surroundCount++;
+				}
+				else if(attackStatus == 0)
+				{
+					surroundCount++;
+					return false;
+					break;
+				}
+			}
+			else
+			{
+				surroundCount++;
+			}
+		case(2):
+			if(firstYHit+1<=9)
+			{
+				attackStatus = board.attack(firstYHit+1, firstXHit);
+				if(attackStatus == -1)
+				{
+					botState = 'P';
+					orientation = 1;
+					direction = 0;
+					i=2;
+					return false;
+					//surroundCount = 0;
+					break;
+				}
+				else if(attackStatus == 6)
+				{
+					return (true);
+					break;
+				}
+				else if(attackStatus > 0)
+				{
+					botState = 'W';
+					return false;
+					break;
+				}
+				else if(attackStatus == -2)
+				{
+					surroundCount++;
+				}
+				else if(attackStatus == 0)
+				{
+					surroundCount++;
+					return false;
+					break;
+				}
+			}
+			else
+			{
+				surroundCount++;
+			}
+		case(3):
+			if(firstXHit-1>=0)
+			{
+				attackStatus = board.attack(firstYHit, firstXHit-1);
+				if(attackStatus == -1)
+				{
+					botState = 'P';
+					orientation = 0;
+					direction = 0;
+					i=-2;
+					return false;
+					//surroundCount = 0;
+					break;
+				}
+				else if(attackStatus == 6)
+				{
+					return (true);
+					break;
+				}
+				else if(attackStatus > 0)
+				{
+					botState = 'W';
+					return false;
+					break;
+				}
+				else if(attackStatus == 0 || attackStatus == -2)
+				{
+					surroundCount=0;
+					botState = 'W';
+					return false;
+					break;
+				}
+			}
+			else
+			{
+				surroundCount=0;
+				botState = 'W';
+				break;
+			}
+		default:
+			break;
 	}
 }
+
 bool Bot::cheatAttack(Board& board)
 {
 	for(int i=0; i<10; i++)
@@ -137,343 +383,3 @@ bool Bot::cheatAttack(Board& board)
 		}
 	}
 }
-
-
-/*
-void Executive::botRun()
-{
-	disp.move((CImgDisplay::screen_width() - disp.width())/2,(CImgDisplay::screen_height() - disp.height())/2);
-	
-	while (!disp.is_closed() && !disp.is_keyESC() && !disp.is_keyQ())
-	{
-		if(!gameConfigured)
-		{
-			printMenu();
-		}
-		if(gameConfigured&&!p1shipsSelected)
-		{
-			botSelectionPhase(p1Board);
-		}
-		if(p1CanAttack == true)
-		{
-			attackPhase(p1Board);
-		}
-	}
-}
-void Executive::botSelectionPhase(Board& playerBoard)
-{
-	if(numberOfShips > 0)
-	{
-		row = ((disp.mouse_y())/(H/12));
-		col = ((disp.mouse_x())/(W/24));
-		infoAdds = background;
-		infoAdds.draw_text(0,0,"Player:%d Orientation: %d tile=%d,%d",gridLines,0,1,13,playerBoard.getPlayer(),vert,row,col);
-		disp.display(infoAdds);
-		if(disp.is_keyARROWUP())vert = 1;
-		if(disp.is_keyARROWDOWN())vert = 0;        
-		if( ((((disp.mouse_x())/(W/24)) >= 1 && ((disp.mouse_x())/(W/24)) <=10 ) ||
-		(((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22))
-		&& ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y())/(H/12)) >=2
-		&& disp.button()&1)
-		{
-			row = ((disp.mouse_y())/(H/12));
-			col = ((disp.mouse_x())/(W/24));
-			infoAdds = background;
-			infoAdds.draw_text(0,0,"Player:%d Orientation: %d tile=%d,%d",gridLines,0,1,13,playerBoard.getPlayer(),vert,row,col);
-			disp.display(infoAdds);
-			if(vert == 1)//draw vertically
-			{
-				if( playerBoard.addShip(row-2,col-1,vert,numberOfShips) ) 
-				{ 
-					for(int j=0; j<numberOfShips; j++)
-						background.draw_rectangle((col*(W/24))+1, (row+j)*(H/12)+1, (col*(W/24))+(W/24)-1, (row+j)*(H/12)+(H/12)-1, shipColors[numberOfShips%5]);
-					numberOfShips--;
-					//disp.wait();
-				}           
-			}
-			else if(vert == 0)//draw horizontally
-			{
-				if( playerBoard.addShip(row-2,col-1,vert,numberOfShips) ) 
-				{
-					for(int j=0; j<numberOfShips; j++)
-						background.draw_rectangle((col+j)*(W/24)+1, row*(H/12)+1, (col+j)*(W/24)+(W/24)-1, row*(H/12)+(H/12)-1, shipColors[numberOfShips%5]);
-					numberOfShips--;
-					//disp.wait();
-				}
-			}
-			infoAdds = background;
-			infoAdds.draw_text(0,0,"Player:%d Orientation: %d tile=%d,%d",gridLines,0,1,13,playerBoard.getPlayer(),vert,row,col);
-			disp.display(infoAdds);
-			if(numberOfShips == 0)
-			{
-				disp.wait(1000);
-				disp.flush();
-			}
-			
-		}
-	}
-	else
-	{
-		//disp.wait(1000);
-		//disp.flush();
-		if(playerBoard.getPlayer() == 1)
-		{
-			if(botGame == true)
-            {
-                inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Attack Phase", white, 0, 33);
-            }
-            else
-            {
-                inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
-            }
-			disp.display(inter);
-			disp.wait();
-			if((disp.button()&2))
-			{
-				disp.flush();
-				numberOfShips = numberOfShipsChoice;
-				p1shipsSelected = true;
-                if(botGame == true)
-                {
-                    background.draw_text(W/2-30, H/2-4, "Attack!", white, 0, 33);
-                }
-				else{
-                    loadBoard(p2Board);
-                }
-				inter = blank;
-			}
-			
-		}
-		else if(playerBoard.getPlayer() == 2)
-		{
-			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P1", white, 0, 33);
-			disp.display(inter);
-			disp.wait();
-			if((disp.button()&2))
-			{
-				disp.flush();
-				p2shipsSelected = true;
-				p1CanAttack = true;
-				loadBoard(p1Board);
-				inter = blank;
-			}	
-		}
-		
-	}
-}
-void Executive::attackPhase(Board& playerBoard)
-{
-	if(!attackComplete)
-	{
-		if((((disp.mouse_x())/(W/24)) >= 13 && ((disp.mouse_x())/(W/24)) <=22)
-		&& ((disp.mouse_y())/(H/12)) <=11 && ((disp.mouse_y()-4)/(H/12)) >=2
-		&& disp.button()&1)
-		{
-			row = ((disp.mouse_y())/(H/12));
-			col = ((disp.mouse_x())/(W/24));
-			
-			if(playerBoard.getPlayer() == 1)
-			{
-				attackStatus = p2Board.attack(row-2, col-13);
-				switch(attackStatus)
-				{
-					case(6):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						youWin.draw_text(W/2-8, H/2-4, "YOU WIN P1", white, 0, 33);
-						disp.display(youWin);
-						p1CanAttack = false;
-						break;
-					case(5):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 5!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(4):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 4!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(3):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 3!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(2):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 2!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(1):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 1!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(0):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, yellow);
-						background.draw_text(W/2-8, H/2-4, "Miss :(", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(-1):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Hit ;)!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					default:
-						break;
-				}
-			}
-			else if(playerBoard.getPlayer() == 2 )
-			{
-				attackStatus = p1Board.attack(row-2, col-13);
-				switch(attackStatus)
-				{
-					case(6):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						youWin.draw_text(W/2-8, H/2-4, "YOU WIN P2", white, 0, 33);
-						disp.display(youWin);
-						p2CanAttack = false;
-						break;
-					case(5):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 5!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(4):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 4!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(3):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 3!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(2):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 2!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(1):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 1!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(0):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, yellow);
-						background.draw_text(W/2-8, H/2-4, "Miss :(", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					case(-1):
-						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
-						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Hit ;)!", white, 0, 33);
-						disp.display(background);
-						disp.wait(2000);
-						disp.flush();
-						attackComplete = true;
-						break;
-					default:
-						break;
-				}
-				
-			}
-		}
-	}
-	else
-	{
-
-		if(playerBoard.getPlayer() == 1)
-		{
-			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
-			disp.display(inter);
-			disp.wait();
-			if((disp.button()&2))
-			{
-				p1CanAttack = false;
-				loadBoard(p2Board);
-				disp.display(background);
-				p2CanAttack = true;
-				attackComplete = false;
-				disp.flush();
-				inter = blank;
-			}
-			
-		}
-		else if(playerBoard.getPlayer() == 2)
-		{
-			inter.draw_text(W/2-30, H/2-4, "Right Click To Begin Turn P2", white, 0, 33);
-			disp.display(inter);
-			disp.wait();
-			if((disp.button()&2))
-			{
-				p2CanAttack = false;
-				loadBoard(p1Board);
-				disp.display(background);
-				p1CanAttack = true;
-				attackComplete = false;
-				disp.flush();
-				inter = blank;
-			}	
-		}
-	}
-	*/

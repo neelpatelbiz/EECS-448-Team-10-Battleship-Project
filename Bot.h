@@ -25,29 +25,34 @@ class Bot
         void placeShips(int numShips, Board& botBoard);
 
     private:
-        int lastXhit, lastYhit, iterations, attackStatus, nextX, nextY;
+        int attackStatus;
+        int firstXHit, firstYHit, surroundCount, orientation, direction, hitList[10], i;
+        char botState;
+        bool bothDirections;
 
         /**
-         *Bot is given p1's board to attack. Based on the difficulty of the bot, it will decide where to attack.
+         *Bot attacks randomly
          *@param toAttack the board the bot will attack
         */
         bool easyAttack(Board& toAttack);
 
         /**
-         *Bot is given p1's board to attack. Based on the difficulty of the bot, it will decide where to attack.
+         *Bot keeps track of hit to attack adjacent pieces
          *@param toAttack the board the bot will attack
         */
         bool mediumAttack(Board& toAttack);
 
         /**
-         *Bot is given p1's board to attack. Based on the difficulty of the bot, it will decide where to attack.
+         *mediumAttack helper function to check adjacent tiles from the original hit
+         *@param toAttack the board the bot will attack
+        */
+        bool checkSurround(Board& board);
+
+        /**
+         *Bot knows where pieces are
          *@param toAttack the board the bot will attack
         */
         bool cheatAttack(Board& toAttack);
 
-        /**
-         *Find the next X any Y positions to attack (mediumAttack helper function)
-        */
-        bool findNext();
 };
 #endif
