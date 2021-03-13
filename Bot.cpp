@@ -178,6 +178,7 @@ bool Bot::mediumAttack(Board& board)
 				else{
 					i = -1;
 				}
+				direction = (direction + 1)%2;
 				bothDirections = true;
 			}
 			else
@@ -245,7 +246,7 @@ bool Bot::checkSurround(Board& board)
 				{
 					botState = 'P';
 					orientation = 0;
-					direction = 0;
+					direction = 1;
 					i=2;
 					return false;
 					//surroundCount = 0;
@@ -285,7 +286,7 @@ bool Bot::checkSurround(Board& board)
 				{
 					botState = 'P';
 					orientation = 1;
-					direction = 0;
+					direction = 1;
 					i=2;
 					return false;
 					//surroundCount = 0;
