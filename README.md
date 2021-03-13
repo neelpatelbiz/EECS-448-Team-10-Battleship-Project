@@ -20,4 +20,4 @@ Compile and play with a friend!
 Be Best
 Team 10! (&Team 9!)
 
-*Documentation:* <file:///home/nmpatel/Documents/Uni/EECS_448/EECS_448_Team9_Project2/EECS-448-Team-10-Battleship-Project/documentation/html/annotated.html>
+*Documentation:* <https://neelpatelbiz.github.io/EECS-448-Team-10-Battleship-Project/documentation/html/annotated.html>
