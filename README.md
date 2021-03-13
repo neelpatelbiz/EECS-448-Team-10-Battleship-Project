@@ -1,4 +1,4 @@
-# EECS-448-Team-10-Battleship-Project
+# EECS-448-Team-10-Battleship-Project (TEAM_9 Modifications)
 
 Welcome to the Battleship Game in C++ :)
 
@@ -13,7 +13,11 @@ Players alternate turns calling "shots" at the other player's ships, and the obj
 
 This is a digital recreation in C++
 
+Made Using the CImg Library (see CImg.h) - used in agreement with the CeCILL-C Free Software License Agreement
+
 Compile and play with a friend!
 
 Be Best
-Team 10!
+Team 10! (&Team 9!)
+
+*Documentation:* <file:///home/nmpatel/Documents/Uni/EECS_448/EECS_448_Team9_Project2/EECS-448-Team-10-Battleship-Project/documentation/html/annotated.html>
