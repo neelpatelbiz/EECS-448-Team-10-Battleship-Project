@@ -1,0 +1,10 @@
+The Design paradigm that appears to have been utilized by the previous team was an object-oriented design. 
+Writing in C++, we continued using this paradigm to implement a Board Class, a Bot class, and an Executive Class handling loading assets for the GUI. 
+Using this design paradigm made sense because so much of the implementation was already in C++. We could have decided to change to a function oriented design based around our GUI, but this did not seem like a good use of our time.
+All of the pieces of our game fit well into the object-oriented design paradigm. 
+Creating the bot was simpler using this design strategy since we could specify an attack method, ship placement method, and various private helper methods needed to fully implement the bot's requirements. 
+Additionally, the already implemented Board object was useful for our purposes with some modifications. 
+Although we tried to get the most out of the already existing code in the repository, quite a few changes were required for the Executive object in charge of instantiating and running the game. 
+This is because of the game loop structure of our GUI. We had to use the while loop needed for modifying a CImg app with mouse and click events, as well as changing orientation of pieces. 
+This made it necessary to redesign a majority of the Executive class.
+For the most part, the Object-Oriented Design served our purposes and was well-suited to continuing the design since it was started in C++.
