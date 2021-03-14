@@ -1,0 +1,3 @@
+Estimated person-hours are 10h per person.
+
+This estimate is based on the fact that we are a 5-person team with experience in c++ programming. The majority of our time will likely be spent implementing the UI with the CImg library as well as modifying the existing code to implement this GUI. The remainder of the time will be spent implementing the AI functionality.

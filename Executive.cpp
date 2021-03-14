@@ -437,6 +437,7 @@ void Executive::selectionPhase(Board& playerBoard)
 		row = ((disp.mouse_y())/(H/12));
 		col = ((disp.mouse_x())/(W/24));
 		infoAdds = background;
+		infoAdds.draw_text(W/2-15,10,"Down/Up Arrows Change Orientation",gridLines,0,1,13,playerBoard.getPlayer(),"Vertical",numberOfShips);
 		if(vert == 1)infoAdds.draw_text(0,0,"Player:%d Orientation: %s Placing Ship of Length:%d",gridLines,0,1,13,playerBoard.getPlayer(),"Vertical",numberOfShips);
 				else infoAdds.draw_text(0,0,"Player:%d Orientation: %s Placing Ship of Length:%d",gridLines,0,1,13,playerBoard.getPlayer(),"Horizontal",numberOfShips);
 		disp.display(infoAdds);
