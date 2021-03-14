@@ -214,7 +214,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(5):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 5!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Sunk 5!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -223,7 +223,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(4):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 4!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Sunk 4!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -232,7 +232,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(3):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 3!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Sunk 3!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -241,7 +241,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(2):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 2!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Sunk 2!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -250,7 +250,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(1):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 1!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Sunk 1!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -259,7 +259,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(0):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, yellow);
-						background.draw_text(W/2-8, H/2-4, "Miss :(", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Miss :(", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -268,7 +268,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(-1):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Hit ;)!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Hit ;)!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -296,7 +296,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(5):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 5!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Sunk 5!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -305,7 +305,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(4):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 4!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Sunk 4!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -314,7 +314,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(3):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 3!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Sunk 3!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -323,7 +323,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(2):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 2!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Sunk 2!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -332,7 +332,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(1):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Sunk 1!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Sunk 1!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -341,7 +341,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(0):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, yellow);
-						background.draw_text(W/2-8, H/2-4, "Miss :(", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Miss :(", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -350,7 +350,7 @@ void Executive::attackPhase(Board& playerBoard)
 					case(-1):
 						background.draw_rectangle((W/24)*col+1,(H/12)*row+1, 
 						(W/24)*(col+1)-1, (H/12)*(row+1)-1, attacked);
-						background.draw_text(W/2-8, H/2-4, "Hit ;)!", white, 0, 33);
+						background.draw_text(W/2-8, 4, "Hit ;)!", white, 0, 33);
 						disp.display(background);
 						disp.wait(2000);
 						disp.flush();
@@ -371,7 +371,7 @@ void Executive::attackPhase(Board& playerBoard)
 			if(botGame)
 			{
 				loadBoard(p1Board);
-				background.draw_text(W/2-30, H/2-4, "Bot is attacking", white, 0, 33);
+				background.draw_text(W/2-30, 4, "Bot is attacking", white, 0, 33);
 				disp.display(background);
 				disp.wait(1000);
 				disp.flush();
@@ -506,7 +506,7 @@ void Executive::selectionPhase(Board& playerBoard)
 				p1shipsSelected = true;
                 if(botGame == true)
                 {
-                    background.draw_text(W/2-30, 4, "Attack!", white, 0, 33);
+                    //background.draw_text(W/2-30, 4, "Attack!", white, 0, 33);
 					disp.display(background);
 					p1CanAttack = true;
                 }

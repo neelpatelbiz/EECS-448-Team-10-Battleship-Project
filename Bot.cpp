@@ -49,6 +49,10 @@ bool Bot::easyAttack(Board& board)
 	{
 		return (true);
 	}
+	else
+	{
+		return(false);
+	}
 }
 
 bool Bot::mediumAttack(Board& board)
