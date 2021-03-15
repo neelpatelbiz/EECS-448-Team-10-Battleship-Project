@@ -1,0 +1,10 @@
+Our custom addition to Team 10's project was a customized GUI using the CImg Library:
+
+To make this GUI we designed a few frames that would be used often, like the ship selection screen, a screen for use between turns,
+and a few menu screens.
+
+We were able to check for user interactions with the application using events built into the CImg library. This gave us the ability to let the user
+use their mouse as an input device for interacting with the game as well as use their arrow keys for selecting the orientation of their ships.
+
+The development of the GUI necessitated a redesign of the Executive.h and Executive.cpp files since we needed to implement an event loop checking for
+user's interactions.
